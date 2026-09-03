@@ -1421,7 +1421,7 @@
       .comparison-architecture-visual .engine-tags { grid-template-columns: repeat(2,1fr); }
     }
     /* Unified comparison stage: one Lakebase mesh, two high-contrast architecture cards. */
-    .comparison-deployment-grid { position: relative; isolation: isolate; overflow: hidden; padding: 16px; gap: 16px; border-color: #fff; background: #dbeeff; grid-template-columns: minmax(0,1fr) 40px minmax(0,1fr); }
+    .comparison-deployment-grid { position: relative; isolation: isolate; overflow: hidden; padding: 16px; gap: 8px; border-color: #fff; background: #dbeeff; grid-template-columns: minmax(0,1fr) 24px minmax(0,1fr); }
     .comparison-deployment-grid > .mesh-gradient-bg { position: absolute; z-index: 0; inset: 0; }
     .comparison-deployment-grid::before { position: absolute; z-index: 1; inset: 0; content: ""; pointer-events: none; background: linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.08)); }
     .comparison-deployment-grid > article { position: relative; z-index: 2; min-height: 0; padding: 0; overflow: visible; border: 0; border-radius: 0; background: transparent; backdrop-filter: none; }
@@ -1437,7 +1437,7 @@
     .comparison-architecture-visual .system-box,
     .comparison-architecture-visual .new-engine { border-color: #fff; background: rgba(255,255,255,.3); }
     .comparison-architecture-visual .glue { border-color: #fff; background: rgba(255,255,255,.3); }
-    .comparison-versus { position: relative; z-index: 4; display: grid; align-self: center; justify-self: center; color: #04091a; background: transparent; font-size: 13px; font-weight: 600; line-height: 20px; grid-column: 2; grid-row: 1; }
+    .comparison-versus { position: relative; z-index: 4; display: grid; align-self: center; justify-self: center; color: #04091a; background: transparent; font-size: 13px; font-weight: 600; line-height: 20px; grid-column: 2; grid-row: 1; transform: translateY(28px); }
     @media (max-width: 767px) {
       .comparison-deployment-grid { padding: 12px; gap: 12px; }
       .comparison-deployment-grid > article { padding: 0; border: 0; }
