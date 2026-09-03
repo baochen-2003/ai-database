@@ -1168,14 +1168,34 @@
     .trust-number { color: #071225; font-family: Barlow, "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 40px; font-weight: 500; line-height: 1; letter-spacing: -.04em; }
     .trust-card h3 { margin: 24px 0 8px; color: #071225; font-size: 15px; font-weight: 600; line-height: 28px; }
     .trust-card p { margin: 0; color: rgba(0,0,0,.72); font-size: 14px; line-height: 24px; }
+    .value-grid { display: grid; overflow: hidden; border: .5px solid #d0d5dc; border-radius: 4px 4px 0 0; grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .value-card { display: flex; min-height: 166px; flex-direction: column; gap: 16px; padding: 40px; border-right: .5px solid #d0d5dc; background: #fff; }
+    .value-card:last-child { border-right: 0; }
+    .value-card-title { display: flex; align-items: center; gap: 12px; }
+    .value-card-icon { display: grid; width: 24px; height: 24px; flex: 0 0 auto; place-items: center; color: #0496fe; }
+    .value-card h3 { margin: 0; color: #04091a; font-size: 20px; font-weight: 600; line-height: 30px; }
+    .value-card p { margin: 0; color: rgba(0,0,0,.72); font-size: 15px; line-height: 28px; }
+    .value-metrics { position: relative; overflow: hidden; min-height: 250px; border: .5px solid #d0d5dc; border-top: 0; border-radius: 0 0 4px 4px; background: #e7f4ff; }
+    .value-metrics::after { position: absolute; z-index: 1; inset: 0; content: ""; pointer-events: none; background: linear-gradient(180deg,#fff 0%,rgba(255,255,255,.96) 32%,rgba(255,255,255,.82) 52%,rgba(255,255,255,.48) 72%,rgba(255,255,255,.12) 88%,rgba(255,255,255,0) 100%); }
+    .value-metrics > .mesh-gradient-bg { position: absolute; z-index: 0; inset: 0; }
+    .value-metrics-content { position: relative; z-index: 3; display: grid; min-height: 250px; padding: 64px 40px; align-items: end; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 28px; }
+    .value-metric { display: flex; min-width: 0; flex-direction: column; gap: 8px; }
+    .value-metric strong { color: #04091a; font-family: Barlow,"PingFang SC","Microsoft YaHei",sans-serif; font-size: 40px; font-weight: 500; line-height: 1; white-space: nowrap; }
+    .value-metric span { color: rgba(0,0,0,.72); font-size: 14px; line-height: 22px; }
     @media (max-width: 1023px) {
       #technology { padding: 80px 0; }
+      .value-metrics-content { grid-template-columns: repeat(2,minmax(0,1fr)); }
       .trust-grid { grid-template-columns: repeat(2, 1fr); }
       .trust-card:nth-child(3) { border-left: 0; border-top: .5px solid #d0d5dc; }
       .trust-card:nth-child(4) { border-top: .5px solid #d0d5dc; }
     }
     @media (max-width: 640px) {
       #technology { padding: 80px 0; }
+      .value-grid { grid-template-columns: 1fr; }
+      .value-card { min-height: 0; padding: 28px 24px; border-right: 0; border-bottom: .5px solid #d0d5dc; }
+      .value-card:last-child { border-bottom: 0; }
+      .value-metrics-content { padding: 40px 24px; grid-template-columns: 1fr; gap: 28px; }
+      .value-metric strong { font-size: 36px; }
       .trust-grid { grid-template-columns: 1fr; }
       .trust-card, .trust-card:nth-child(3), .trust-card:nth-child(4) { min-height: 0; padding: 28px 24px; border-top: .5px solid #d0d5dc; border-left: 0; }
       .trust-card:first-child { border-top: 0; }
@@ -2365,11 +2385,18 @@
           <h2 class="section-title">基于 OceanBase 构建的 AI 应用与 Agent</h2>
           <p class="section-lead">经 16 年生产验证的内核，OceanBase AI 数据库继承全部分布式内核能力，AI 场景零妥协。</p>
         </div>
-        <div class="trust-grid reveal">
-          <article class="trust-card"><div class="trust-number">3000万+</div><h3>闪应用大规模验证</h3><p>Agent 数据管理能力已在真实的大规模智能应用场景中验证。</p></article>
-          <article class="trust-card"><div class="trust-number">15年</div><h3>数据库根技术积累</h3><p>100% 自研，从分布式数据库到 AI 数据库一脉相承。</p></article>
-          <article class="trust-card"><div class="trust-number">2× No.1</div><h3>TPC-C / TPC-H</h3><p>全球唯一 TPC-C 与 TPC-H 双料冠军，交易与分析能力兼得。</p></article>
-          <article class="trust-card"><div class="trust-number">4000+</div><h3>企业客户</h3><p>覆盖金融、运营商、零售、制造等关键行业核心系统。</p></article>
+        <div class="value-grid reveal">
+          <article class="value-card"><div class="value-card-title"><span class="value-card-icon">◇</span><h3>一站式开发管理</h3></div><p>覆盖数据接入、开发、调度、运维、治理与服务全流程，在统一工作台完成数据生产。</p></article>
+          <article class="value-card"><div class="value-card-title"><span class="value-card-icon">◎</span><h3>数据闭环，服务业务与 AI</h3></div><p>通过数据 API、元数据 API、OLAP 查询和多模态检索，将治理后的数据快速交付给 BI、业务系统、模型和 Agent，形成从数据资产到业务应用的闭环。</p></article>
+        </div>
+        <div class="value-metrics reveal">
+          <div class="mesh-gradient-bg" data-mesh-colors="#ffffff,#d4ecff,#8accff,#3d8eff" aria-hidden="true"></div>
+          <div class="value-metrics-content">
+            <div class="value-metric"><strong>4000+</strong><span>客户核心系统上线</span></div>
+            <div class="value-metric"><strong>7.07 亿 tpmC</strong><span>TPC-C 打破世界纪录</span></div>
+            <div class="value-metric"><strong>1526 万 QphH</strong><span>TPC-H 全球登顶</span></div>
+            <div class="value-metric"><strong>RTO &lt; 8 秒</strong><span>RPO=0&nbsp;&nbsp;极致高可用</span></div>
+          </div>
         </div>
       </div>
     </section>
