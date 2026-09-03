@@ -477,6 +477,14 @@
       .capability-showcase-visual .code-window .code { flex: 1; min-height: 0; padding: 18px 26px; overflow: hidden; font-size: 12px; line-height: 1.55; }
       .capability-showcase-visual .code-window .security-strip { flex: 0 0 auto; }
       .capability-showcase-visual .code-window .security-strip div { padding-top: 12px; padding-bottom: 12px; }
+      #capability-panel-inference .capability-showcase-copy,
+      #capability-panel-agent .capability-showcase-copy { padding: 28px 42px; }
+      #capability-panel-inference .capability-showcase-copy > p,
+      #capability-panel-agent .capability-showcase-copy > p { margin-bottom: 18px; line-height: 1.75; }
+      #capability-panel-inference .capability-showcase-list,
+      #capability-panel-agent .capability-showcase-list { gap: 8px; }
+      #capability-panel-inference .capability-showcase-list li p,
+      #capability-panel-agent .capability-showcase-list li p { margin-top: 2px; line-height: 18px; }
     }
     @keyframes lakebaseLivePulse { 0%,100% { box-shadow: 0 0 0 3px rgba(66,213,139,.1); } 50% { box-shadow: 0 0 0 7px rgba(66,213,139,.18); } }
     @media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
@@ -2089,9 +2097,13 @@
           </article>
           <article class="capability-showcase-panel" id="capability-panel-inference" role="tabpanel" hidden>
             <div class="capability-showcase-copy">
-              <h3>库内推理：数据不出库，安全 AI</h3>
-              <p>模型不再只是外部服务 URL，而是有权限、有版本、有血缘的数据库对象。通过 AI 算子完成文档解析、切分、向量化、重排与生成。</p>
-              <ul class="capability-showcase-list"><li>权限与事务统一</li><li>审计与血缘完整</li><li>RAG Pipeline in DB</li></ul>
+              <h3>从只存不算，到即存即算</h3>
+              <p>模型注册为数据库对象，SQL 中直接调用解析、切分、向量化算子，推理结果写回原表并自动建立索引——不必在应用层维护模型调用、结果回写和索引同步。</p>
+              <ul class="capability-showcase-list">
+                <li><b>Model in DB</b><p><code>DBMS_AI_SERVICE</code> 注册嵌入式、生成式、多模态、重排序模型。模型作为数据库对象，纳入版本管理、权限控制、血缘追踪与审计。</p></li>
+                <li><b>AI 算子</b><p>解析 → 摘要 → 切分 → 向量化在 SQL 内完成，结果入表后自动创建全文与向量索引，像普通列一样被查询、索引和 Join。支持 Python UDF 扩展。</p></li>
+                <li><b>多模表</b><p>文档、图片、音视频作为 LOB 入表，按大小与访问模式自动路由到 InRow / OutRow / 对象存储，对应用透明。文件与业务字段同一事务提交或回滚、共享一致快照、统一权限。</p></li>
+              </ul>
             </div>
             <div class="capability-showcase-visual inference">
               <div class="mesh-gradient-bg" data-mesh-colors="#77D4FF,#279AFF,#C7BCFF" data-mesh-theme="table" aria-hidden="true"></div>
@@ -2100,9 +2112,14 @@
           </article>
           <article class="capability-showcase-panel" id="capability-panel-agent" role="tabpanel" hidden>
             <div class="capability-showcase-copy">
-              <h3>Agent 原生：隔离、记忆、试错</h3>
-              <p>Agent 会繁殖、有记忆、会试错。OceanBase 把这三种关键行为变成数据库原生能力，让系统从一个 Agent 平滑扩展到百万级。</p>
-              <ul class="capability-showcase-list"><li>逻辑表与五层隔离</li><li>完整上下文召回</li><li>Fork Database 数据沙箱</li></ul>
+              <h3>能隔离、有记忆、会试错</h3>
+              <p>千万级 Agent 实例共享一套物理表，记忆用一条 SQL 召回，对比实验在 Fork 出的数据分支上运行——不必为每个 Agent 建表，也不必复制整库来做实验。</p>
+              <ul class="capability-showcase-list">
+                <li><b>五层隔离</b><p>租户级（独立资源配额与权限边界）、Database 级、Namespace 级逻辑表、表级、行 / 列级 RLS。同一套物理表支撑千万级实例，元数据不随实例数膨胀。</p></li>
+                <li><b>记忆召回</b><p>长期记忆（向量 · 文本 · JSON）、短期状态、工具调用记录、多模态输入统一存储，标量过滤 + 全文 + 向量 + JSON 过滤在一条 SQL 内完成。</p></li>
+                <li><b>Fork Database</b><p>Copy-on-Write 共享基线、只存增量，毫秒级创建数据分支，支持 MERGE 与 DROP。分支间增量变更互不影响，实验结果可跨分支查询对比。</p></li>
+                <li><b>冷热分层</b><p>沉睡实例数据自动沉降到对象存储，被唤醒时从共享存储加载，RPO=0。</p></li>
+              </ul>
             </div>
             <div class="capability-showcase-visual agent">
               <div class="mesh-gradient-bg" data-mesh-colors="#ccf8ff,#8accff,#3d8eff,#e5ecff" aria-hidden="true"></div>
