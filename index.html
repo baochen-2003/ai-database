@@ -2263,9 +2263,9 @@
         </div>
 
         <div class="arch-benefits">
-          <article class="arch-benefit"><div class="metric">ELASTIC</div><h3>计算与存储独立扩展</h3><p>增加计算节点不再搬迁全量数据，新节点从共享存储加载数据并从日志服务恢复一致状态。</p></article>
-          <article class="arch-benefit"><div class="metric">TIERED</div><h3>热数据性能，冷数据成本</h3><p>高频数据和索引进入本地 SSD 缓存，低频与沉睡数据保留在低成本对象存储。</p></article>
-          <article class="arch-benefit"><div class="metric">RELIABLE</div><h3>日志与计算解耦</h3><p>事务可靠性由独立日志服务保障，计算节点故障不会丢失已经提交的数据。</p></article>
+          <article class="arch-benefit"><div class="metric">弹性</div><h3>扩容不搬数据</h3><p>计算与存储独立扩缩容。新节点从共享存储加载数据、从日志服务回放日志即可对齐一致状态。</p></article>
+          <article class="arch-benefit"><div class="metric">分层</div><h3>存储成本降约 70%</h3><p>热数据在本地 SSD 毫秒级访问，沉睡数据按访问频率自动沉降到对象存储。</p></article>
+          <article class="arch-benefit"><div class="metric">可靠</div><h3>计算节点可单副本运行</h3><p>事务可靠性由三副本日志服务保证，已提交数据不因计算节点故障丢失。</p></article>
         </div>
         </div>
         <p class="architecture-note reveal">说明：计算节点可采用单副本部署；事务日志仍由 LogService 多副本强同步，对象存储负责全量数据的高可用持久化。</p>
