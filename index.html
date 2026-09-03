@@ -315,6 +315,8 @@
     @keyframes capabilityMeshDrift { from { transform: translate3d(-3%, -2%, 0) scale(1); } to { transform: translate3d(4%, 3%, 0) scale(1.1); } }
     @keyframes capabilityMeshDriftReverse { from { transform: translate3d(4%, 3%, 0) scale(1.08); } to { transform: translate3d(-3%, -2%, 0) scale(1); } }
     @media (prefers-reduced-motion: reduce) { .capability-showcase-visual::before, .capability-showcase-visual::after { animation: none; } }
+    .mesh-gradient-canvas { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .capability-showcase-visual.mesh-ready::before, .capability-showcase-visual.mesh-ready::after { opacity: 0; animation: none; }
     .capability-showcase-visual .feature-demo { position: relative; z-index: 1; width: 100%; min-height: 480px; height: 480px; margin: 0; border: 0; border-radius: 2px; box-shadow: 0 25px 80px rgba(3,74,166,.22); }
     .capability-showcase-visual .search-demo { min-height: 480px; padding: 30px; }
     .capability-showcase-visual .code-window { min-height: 480px; }
@@ -2573,6 +2575,80 @@
       });
     });
     scheduleNextCapability();
+
+    // Dependency-free animated mesh background for the capability panels.
+    const meshPalettes = {
+      search: ['#dcecff', '#11a0ff', '#c7bcff', '#77d4ff', '#3083ff'],
+      inference: ['#f2ddff', '#c7bcff', '#9570ff', '#11a0ff', '#6f8fff'],
+      agent: ['#dcecff', '#77d4ff', '#3083ff', '#c7bcff', '#11a0ff']
+    };
+    const reducedMeshMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const hexToRgb = hex => {
+      const value = Number.parseInt(hex.slice(1), 16);
+      return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
+    };
+    document.querySelectorAll('.capability-showcase-visual').forEach((visual, visualIndex) => {
+      const canvas = document.createElement('canvas');
+      canvas.className = 'mesh-gradient-canvas';
+      canvas.setAttribute('aria-hidden', 'true');
+      visual.prepend(canvas);
+      const context = canvas.getContext('2d', { alpha: false });
+      if (!context) return;
+      const paletteName = ['search', 'inference', 'agent'].find(name => visual.classList.contains(name)) || 'search';
+      const colors = meshPalettes[paletteName].map(hexToRgb);
+      const seeds = colors.slice(1).map((color, index) => ({
+        color,
+        x: [0.16, 0.78, 0.62, 0.35][index],
+        y: [0.25, 0.22, 0.82, 0.68][index],
+        radius: [0.64, 0.58, 0.7, 0.56][index],
+        phase: index * 1.47 + visualIndex * 0.83,
+        speed: [0.17, -0.13, 0.11, -0.19][index]
+      }));
+      let width = 0;
+      let height = 0;
+      const resizeCanvas = () => {
+        const rect = visual.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+        width = Math.max(1, Math.round(rect.width));
+        height = Math.max(1, Math.round(rect.height));
+        canvas.width = Math.round(width * ratio);
+        canvas.height = Math.round(height * ratio);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      };
+      const drawMesh = time => {
+        if (!width || !height) resizeCanvas();
+        if (width && height) {
+          const base = context.createLinearGradient(0, 0, width, height);
+          base.addColorStop(0, `rgb(${colors[0].join(',')})`);
+          base.addColorStop(1, paletteName === 'inference' ? '#8b70ff' : '#62a8f7');
+          context.fillStyle = base;
+          context.fillRect(0, 0, width, height);
+          context.globalCompositeOperation = 'screen';
+          const seconds = time * 0.001;
+          seeds.forEach((blob, index) => {
+            const motion = reducedMeshMotion.matches ? 0 : seconds * blob.speed;
+            const x = (blob.x + Math.sin(motion + blob.phase) * 0.18) * width;
+            const y = (blob.y + Math.cos(motion * 1.17 + blob.phase) * 0.16) * height;
+            const radius = Math.max(width, height) * blob.radius * (1 + Math.sin(motion * .7 + index) * .08);
+            const gradient = context.createRadialGradient(x, y, 0, x, y, radius);
+            gradient.addColorStop(0, `rgba(${blob.color.join(',')},.9)`);
+            gradient.addColorStop(.46, `rgba(${blob.color.join(',')},.5)`);
+            gradient.addColorStop(1, `rgba(${blob.color.join(',')},0)`);
+            context.fillStyle = gradient;
+            context.fillRect(0, 0, width, height);
+          });
+          context.globalCompositeOperation = 'source-over';
+          visual.classList.add('mesh-ready');
+        }
+        if (!reducedMeshMotion.matches) window.requestAnimationFrame(drawMesh);
+      };
+      new ResizeObserver(resizeCanvas).observe(visual);
+      resizeCanvas();
+      window.requestAnimationFrame(drawMesh);
+    });
 
     const faqButtons = document.querySelectorAll('.faq-question');
     faqButtons.forEach(button => button.addEventListener('click', () => {
