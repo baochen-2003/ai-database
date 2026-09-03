@@ -1740,7 +1740,7 @@
     .architecture-content-layout {
       display: grid;
       width: 100%;
-      margin-top: 16px;
+      margin-top: 54px;
       gap: 16px;
       align-items: stretch;
       grid-template-columns: minmax(0,1fr) 264px;
@@ -1807,6 +1807,7 @@
         grid-template-rows: repeat(3,auto);
       }
       .architecture-content-layout .arch-benefit { min-height: 0; padding: 24px 20px; }
+      .architecture-content-layout { margin-top: 36px; }
     }
 
     /* Lakebase closingBand: one mesh background shared by FAQ and the form */
@@ -2182,18 +2183,6 @@
           <div class="eyebrow">ARCHITECTURE FOUNDATION</div>
           <h2 class="section-title">为 AI 工作负载<br>重做存储与计算架构</h2>
           <p class="section-lead">上层能力可以不断进化，底层数据不必反复迁移。OceanBase AI 数据库将计算、日志与存储解耦，让性能、成本和可靠性分别扩展。</p>
-        </div>
-
-        <div class="arch-shift reveal" aria-label="传统架构与 OceanBase AI 数据库架构变化">
-          <div class="shift-state">
-            <small>以往架构</small>
-            <b>计算与本地存储绑定 · 扩容伴随数据迁移</b>
-          </div>
-          <div class="shift-arrow">→</div>
-          <div class="shift-state new">
-            <small>OceanBase AI 数据库</small>
-            <b>无状态计算 · 日志独立 · 对象存储承载全量数据</b>
-          </div>
         </div>
 
         <div class="architecture-content-layout reveal">
