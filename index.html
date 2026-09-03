@@ -2391,67 +2391,67 @@
                 </button>
               </h3>
               <div class="faq-answer" id="faq-answer-1" role="region" aria-labelledby="faq-question-1">
-                <p>同源内核、不同定位：OceanBase Database 主要面向对响应时延、对时延的稳定性要求极高的 TP/HTAP 场景；OceanBase AI 数据库主要面向 AI 与湖仓分析场景。</p>
+                <p>两者同源内核、不同定位。OceanBase Database 面向对响应时延及稳定性要求极高的 TP / HTAP 场景；OceanBase AI 数据库面向 AI 与湖仓分析场景，继承全部分布式内核能力，共享同一套工具链。</p>
               </div>
             </article>
 
             <article class="faq-item">
               <h3>
                 <button class="faq-question" id="faq-question-2" type="button" aria-expanded="false" aria-controls="faq-answer-2">
-                  <span>容灾能力如何？</span>
+                  <span>与 OceanBase Lakebase 是什么关系？</span>
                   <img class="faq-toggle-icon" src="assets/faq-plus-icon.svg" data-open-src="assets/faq-plus-icon.svg" data-closed-src="assets/faq-plus-icon.svg" alt="">
                 </button>
               </h3>
               <div class="faq-answer" id="faq-answer-2" role="region" aria-labelledby="faq-question-2">
-                <p>日志服务三副本强同步；1F 部署 RPO=0、RTO 分钟级，2F 部署 RPO=0、RTO&lt;8 秒。</p>
+                <p>OceanBase AI 数据库是 OceanBase Lakebase 的计算引擎。它基于存算分离架构，是一个同时支撑 AI 负载、OLAP 负载与 KV 负载的多模数据库，也是湖库引擎的核心组件。需要数据库本身的能力，选 OceanBase AI 数据库；需要开箱即用的湖库一体平台，选 OceanBase Lakebase。</p>
               </div>
             </article>
 
             <article class="faq-item">
               <h3>
                 <button class="faq-question" id="faq-question-3" type="button" aria-expanded="false" aria-controls="faq-answer-3">
-                  <span>支持哪些渠道使用？</span>
+                  <span>现有的 MySQL 应用需要改造吗？</span>
                   <img class="faq-toggle-icon" src="assets/faq-plus-icon.svg" data-open-src="assets/faq-plus-icon.svg" data-closed-src="assets/faq-plus-icon.svg" alt="">
                 </button>
               </h3>
               <div class="faq-answer" id="faq-answer-3" role="region" aria-labelledby="faq-question-3">
-                <p>私有化部署与 OB Cloud 云服务均可（OB Cloud 具体可售区域、规格和上线时间以官方发布为准）。支持 x86、ARM 及主流国产操作系统。</p>
+                <p>基本不需要。支持 MySQL 模式，沿用现有驱动、ORM 和 SQL 语法。另提供 KV 模式（OBKV-Table / OBKV-HBase）承接 HBase 场景。</p>
               </div>
             </article>
 
             <article class="faq-item">
               <h3>
                 <button class="faq-question" id="faq-question-4" type="button" aria-expanded="false" aria-controls="faq-answer-4">
-                  <span>有哪些兼容模式？</span>
+                  <span>原有工具链还能用吗？</span>
                   <img class="faq-toggle-icon" src="assets/faq-plus-icon.svg" data-open-src="assets/faq-plus-icon.svg" data-closed-src="assets/faq-plus-icon.svg" alt="">
                 </button>
               </h3>
               <div class="faq-answer" id="faq-answer-4" role="region" aria-labelledby="faq-question-4">
-                <p>支持 <strong>MySQL 模式</strong> 和 <strong>KV 模式</strong>。其中 KV 模式包含 OBKV-Table 和 OBKV-HBase。</p>
+                <p>能。仍配套 ODP 与 MySQL 生态驱动，OCP、ODC、OMS、导数工具与 DataPilot 继续可用，新增 DataStudio 平台支持。</p>
               </div>
             </article>
 
             <article class="faq-item">
               <h3>
                 <button class="faq-question" id="faq-question-5" type="button" aria-expanded="false" aria-controls="faq-answer-5">
-                  <span>周边配套和 OceanBase Database 的异同？</span>
+                  <span>计算节点扩缩容需要迁移数据吗？</span>
                   <img class="faq-toggle-icon" src="assets/faq-plus-icon.svg" data-open-src="assets/faq-plus-icon.svg" data-closed-src="assets/faq-plus-icon.svg" alt="">
                 </button>
               </h3>
               <div class="faq-answer" id="faq-answer-5" role="region" aria-labelledby="faq-question-5">
-                <p>仍然配套 ODP 和 MySQL 生态驱动，配套 OCP、ODC、OMS、导数工具、DataPilot 等原有工具链。新增了 DataStudio 平台的支持。</p>
+                <p>不需要。数据持久化在对象存储，本地磁盘仅作缓存，计算节点无状态。新增节点从共享存储加载数据、从日志服务回放日志即可提供服务。</p>
               </div>
             </article>
 
             <article class="faq-item">
               <h3>
                 <button class="faq-question" id="faq-question-6" type="button" aria-expanded="false" aria-controls="faq-answer-6">
-                  <span>计算节点扩展是否灵活？</span>
+                  <span>怎么获取和部署？</span>
                   <img class="faq-toggle-icon" src="assets/faq-plus-icon.svg" data-open-src="assets/faq-plus-icon.svg" data-closed-src="assets/faq-plus-icon.svg" alt="">
                 </button>
               </h3>
               <div class="faq-answer" id="faq-answer-6" role="region" aria-labelledby="faq-question-6">
-                <p>OceanBase AI 数据库采用存算分离架构，数据持久化在对象存储上，本地磁盘仅作缓存。计算节点可以灵活按需扩缩。</p>
+                <p>支持私有化部署与 OB Cloud 云服务，可售区域、规格与上线时间以官方发布为准。支持 x86、ARM 及主流国产操作系统。</p>
               </div>
             </article>
           </div>
