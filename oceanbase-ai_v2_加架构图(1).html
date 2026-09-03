@@ -1,0 +1,2606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="OceanBase AI 数据库，从内核为 AI 应用重新设计的数据库引擎。">
+  <title>OceanBase AI 数据库｜为 AI 设计的数据库</title>
+  <style>
+    :root {
+      --orange: #0496fe;
+      --orange-deep: #0150fd;
+      --orange-soft: #e7f4ff;
+      --ink: #04091a;
+      --muted: rgba(0,0,0,.85);
+      --line: #d0d5dc;
+      --soft: #fff;
+      --white: #fff;
+      --green: #16a36a;
+      --blue: #3c6df0;
+      --purple: #7a50e8;
+      --max: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--white);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    body.menu-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .container { width: min(var(--max), calc(100% - 48px)); margin: 0 auto; }
+
+    /* Header */
+    .header {
+      height: 68px;
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 100;
+      color: #fff;
+      background: #0d3474;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      transition: background .25s ease, box-shadow .25s ease;
+    }
+    .header.scrolled { background: #092b67; box-shadow: 0 8px 24px rgba(2,19,53,.18); }
+    .global-nav {
+      width: 100%; height: 100%; display: flex; align-items: center;
+      padding: 0 22px;
+    }
+    .global-logo { width: 166px; flex: 0 0 auto; display: flex; align-items: center; }
+    .global-logo img { display: block; width: 100%; height: auto; }
+    .global-nav-links {
+      display: flex; align-items: center; gap: clamp(18px, 1.65vw, 32px);
+      margin-left: clamp(28px, 3vw, 58px); white-space: nowrap;
+    }
+    .global-nav-links > a {
+      color: rgba(255,255,255,.82); font-size: 15px; line-height: 68px;
+      transition: color .2s ease;
+    }
+    .global-nav-links > a:hover { color: #fff; }
+    .global-nav-extras {
+      display: flex; align-items: center; gap: 14px; margin-left: auto;
+      white-space: nowrap;
+    }
+    .global-search {
+      width: clamp(178px, 13.2vw, 244px); height: 44px; display: flex; align-items: center;
+      overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 4px;
+      background: rgba(255,255,255,.13);
+    }
+    .global-search input {
+      width: 100%; min-width: 0; height: 100%; padding: 0 8px 0 14px;
+      color: #fff; font-size: 14px; border: 0; outline: 0; background: transparent;
+    }
+    .global-search input::placeholder { color: rgba(255,255,255,.44); }
+    .global-search button {
+      width: 42px; height: 42px; flex: 0 0 auto; padding: 0; border: 0;
+      background: transparent; cursor: pointer;
+    }
+    .global-search button img { display: block; width: 28px; height: 28px; margin: auto; }
+    .global-tool {
+      width: 34px; height: 34px; display: grid; place-items: center; border-radius: 4px;
+    }
+    .global-tool:hover { background: rgba(255,255,255,.1); }
+    .global-tool img { display: block; width: 28px; height: 28px; }
+    .global-divider { width: 1px; height: 28px; background: rgba(255,255,255,.2); }
+    .global-console, .global-account {
+      color: rgba(255,255,255,.86); font-size: 14px;
+    }
+    .global-console:hover, .global-account:hover { color: #fff; }
+    .global-trial {
+      min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
+      padding: 0 20px; color: #fff; font-size: 14px; font-weight: 600;
+      background: #2588f5; border-radius: 4px;
+    }
+    .global-trial:hover { background: #46a0ff; }
+    .mobile-global-actions { display: none; }
+    .logo { display: flex; align-items: center; gap: 11px; min-width: 236px; font-weight: 700; }
+    .logo-mark { width: 34px; height: 26px; display: block; }
+    .logo-text { font-size: 18px; letter-spacing: -.4px; white-space: nowrap; }
+    .menu-btn {
+      display: none; margin-left: auto; width: 38px; height: 38px; padding: 9px;
+      border: 0; color: white; background: transparent;
+    }
+    .menu-btn span { display: block; height: 1px; margin: 5px 0; background: currentColor; }
+
+    /* Shared */
+    .section { padding: 112px 0; overflow: hidden; }
+    .section.soft { background: var(--soft); }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px; margin-bottom: 17px;
+      color: var(--orange); font-size: 13px; font-weight: 650; letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 22px; height: 2px; background: currentColor; }
+    .section-title {
+      max-width: 820px; margin: 0; font-size: clamp(34px, 4vw, 52px);
+      line-height: 1.16; letter-spacing: -.045em; font-weight: 600;
+    }
+    .section-lead {
+      max-width: 710px; margin: 22px 0 0; color: var(--muted);
+      font-size: 18px; line-height: 1.8;
+    }
+    .center { text-align: center; }
+    .center .section-title, .center .section-lead { margin-left: auto; margin-right: auto; }
+    .center .eyebrow::after { content: ""; width: 22px; height: 2px; background: currentColor; }
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .btn {
+      min-height: 48px; display: inline-flex; align-items: center; justify-content: center;
+      gap: 11px; padding: 0 24px; border: 1px solid transparent; border-radius: 3px;
+      font-size: 15px; font-weight: 600; cursor: pointer; transition: .22s ease;
+    }
+    .btn-primary { color: #fff; background: var(--orange); }
+    .btn-primary:hover { background: var(--orange-deep); transform: translateY(-2px); }
+    .btn-dark { color: #fff; border-color: rgba(255,255,255,.28); background: rgba(255,255,255,.05); }
+    .btn-dark:hover { border-color: #fff; background: rgba(255,255,255,.1); }
+    .btn-outline { border-color: #c7c9cd; background: #fff; }
+    .btn-outline:hover { border-color: var(--ink); transform: translateY(-2px); }
+    .arrow { font-size: 18px; transition: transform .2s; }
+    a:hover .arrow, button:hover .arrow { transform: translateX(4px); }
+
+    /* Product overview */
+    .product-overview {
+      min-height: 680px; position: relative; display: flex; align-items: center;
+      padding: 140px 0 92px; overflow: hidden; background-color: #c7e6fb;
+      background-image: url("assets/oceanbase-ai-product-hero-bg.png");
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+    }
+    .product-overview-inner {
+      position: relative; width: min(1000px, calc(100% - 48px)); margin: 0 auto;
+      text-align: center;
+    }
+    .product-overview-title {
+      margin: 0; color: #0d1015; font-size: clamp(38px, 4.2vw, 58px);
+      line-height: 1.1; letter-spacing: -.045em; font-weight: 650;
+    }
+    .product-overview-subtitle {
+      margin: 20px 0 0; color: #0d1015; font-size: clamp(30px, 3.2vw, 44px);
+      line-height: 1.2; letter-spacing: -.035em; font-weight: 650;
+    }
+    .product-overview-desc {
+      max-width: 900px; margin: 30px auto 0; color: rgba(13,16,21,.76);
+      font-size: 18px; line-height: 1.85; font-weight: 450;
+    }
+    .product-overview-actions {
+      margin-top: 40px; display: flex; align-items: center; justify-content: center;
+      flex-wrap: wrap; gap: 14px;
+    }
+    .product-overview-cta {
+      min-width: 220px; min-height: 56px; color: #fff; background: #07101f;
+      border-color: #07101f; border-radius: 4px;
+    }
+    .product-overview-cta:hover {
+      color: #fff; background: #173f7b; border-color: #173f7b; transform: translateY(-2px);
+    }
+    .product-overview-docs {
+      min-width: 180px; min-height: 56px; color: #07101f;
+      border-color: rgba(7,16,31,.42); border-radius: 4px; background: rgba(255,255,255,.4);
+    }
+    .product-overview-docs:hover {
+      color: #fff; border-color: #173f7b; background: #173f7b; transform: translateY(-2px);
+    }
+
+    /* Traditional architecture vs. OceanBase AI Database */
+    .comparison-section { background: #fff; }
+    .comparison-eyebrow { display: flex; width: max-content; margin: 0 auto 34px; }
+    .comparison-eyebrow::after { content: ""; width: 22px; height: 2px; background: currentColor; }
+    .comparison-title {
+      max-width: 1120px; margin: 0 auto 58px; text-align: center;
+    }
+    .hero-visual {
+      display: grid; grid-template-columns: 1fr 90px 1fr; align-items: stretch;
+      color: #fff; overflow: hidden; border: 1px solid #24262a; background: #0a0b0d;
+    }
+    .stack-panel { min-height: 232px; padding: 28px 30px; }
+    .stack-panel h3 { margin: 0 0 20px; font-size: 15px; font-weight: 550; color: rgba(255,255,255,.68); }
+    .old-stack { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .system-box {
+      min-height: 70px; display: flex; align-items: center; justify-content: center;
+      padding: 10px; text-align: center; color: rgba(255,255,255,.72);
+      font-size: 12px; line-height: 1.5; border: 1px solid rgba(255,255,255,.13);
+      background: rgba(255,255,255,.035);
+    }
+    .glue {
+      grid-column: 1 / -1; min-height: 36px; display: flex; align-items: center; justify-content: center;
+      color: #ff9a76; font-size: 12px; border: 1px dashed rgba(255,91,34,.4);
+      background: rgba(255,91,34,.06);
+    }
+    .versus {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.35); border-left: 1px solid rgba(255,255,255,.08);
+      border-right: 1px solid rgba(255,255,255,.08);
+    }
+    .versus span { font-size: 12px; letter-spacing: .14em; }
+    .versus::before, .versus::after {
+      content: ""; width: 1px; height: 48px; margin: 13px 0;
+      background: linear-gradient(transparent, rgba(255,255,255,.2), transparent);
+    }
+    .new-engine {
+      height: 114px; display: flex; align-items: center; position: relative;
+      padding: 20px 24px; border: 1px solid rgba(255,91,34,.48);
+      background: linear-gradient(135deg, rgba(255,91,34,.2), rgba(255,91,34,.05));
+      overflow: hidden;
+    }
+    .new-engine::after {
+      content: ""; position: absolute; width: 190px; height: 190px; right: -70px;
+      border: 1px solid rgba(255,255,255,.09); border-radius: 50%;
+    }
+    .engine-mark {
+      width: 48px; height: 48px; flex: 0 0 auto; margin-right: 16px; border-radius: 50%;
+      display: grid; place-items: center; background: var(--orange); box-shadow: 0 0 34px rgba(255,91,34,.35);
+    }
+    .engine-copy b { display: block; font-size: 18px; }
+    .engine-copy small { display: block; margin-top: 5px; color: rgba(255,255,255,.53); font-size: 12px; }
+    .engine-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 11px; }
+    .engine-tags span { padding: 5px 9px; font-size: 11px; color: #ffb49a; background: rgba(255,91,34,.09); }
+
+    .compare {
+      margin-top: 46px; overflow: hidden; border-top: 2px solid var(--ink);
+      border-bottom: 1px solid var(--line);
+    }
+    .compare-row {
+      display: grid; grid-template-columns: 160px 1fr 1fr;
+      border-top: 1px solid var(--line);
+    }
+    .compare-row:first-child { border-top: 0; }
+    .compare-row > div { padding: 23px 25px; font-size: 14px; line-height: 1.65; }
+    .compare-label { font-weight: 650; background: #fff; }
+    .compare-old { color: #777b82; background: #fafafa; border-left: 1px solid var(--line); }
+    .compare-new { color: #333; border-left: 1px solid var(--line); background: var(--orange-soft); }
+    .compare-head > div { font-weight: 650; font-size: 15px; }
+    .compare-head .compare-old { color: #777; }
+    .compare-head .compare-new { color: var(--orange-deep); }
+    .tick { color: var(--orange); margin-right: 7px; }
+    /* Lakebase-style core capability floor */
+    .core-capabilities { padding: 120px 0; background: #fff; }
+    .core-capability-header { width: min(760px, 100%); margin: 0 auto 40px; text-align: center; }
+    .core-capability-eyebrow { margin: 0 0 16px; color: #4b5563; font-size: 15px; font-weight: 500; line-height: 21px; }
+    .core-capability-eyebrow span { color: #0496fe; }
+    .core-capability-header .section-title { max-width: none; color: #000; font-size: 36px; font-weight: 600; line-height: 1.4; letter-spacing: 0; }
+    .core-capability-header .section-lead { max-width: 720px; margin: 16px auto 0; color: rgba(0,0,0,.85); font-size: 15px; line-height: 28px; }
+    .core-capability-grid { display: grid; overflow: hidden; border: .5px solid #d0d5dc; border-radius: 4px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .core-capability-card { display: flex; min-height: 274px; flex-direction: column; gap: 16px; padding: 40px; border-right: .5px solid #d0d5dc; border-bottom: .5px solid #d0d5dc; }
+    .core-capability-card:nth-child(2) { border-right: 0; }
+    .core-capability-card:last-child { min-height: 238px; border-right: 0; border-bottom: 0; grid-column: 1 / -1; }
+    .core-capability-card h3 { display: flex; align-items: center; gap: 12px; margin: 0; color: #000; font-size: 20px; font-weight: 600; line-height: 30px; }
+    .core-capability-icon { display: grid; width: 24px; height: 24px; place-items: center; flex: 0 0 24px; border: 1px solid #0496fe; border-radius: 4px; color: #0496fe; font-size: 13px; font-weight: 700; line-height: 1; }
+    .core-capability-card > p { margin: 0; color: rgba(0,0,0,.85); font-size: 15px; line-height: 28px; }
+    .core-capability-list { display: grid; gap: 8px; margin: auto 0 0; padding: 0; list-style: none; }
+    .core-capability-list li { display: flex; align-items: flex-start; gap: 8px; color: #4b5563; font-size: 14px; line-height: 22px; }
+    .core-capability-list li::before { width: 5px; height: 5px; margin-top: 8px; flex: 0 0 5px; border-radius: 50%; background: #0496fe; content: ""; }
+    .core-capability-card:last-child .core-capability-list { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 28px; }
+    /* Restored from Lakebase DataStudioFlowFloor */
+    .capability-showcase { padding: 60px 0 120px; background: #fff; color: #071225; }
+    .capability-showcase-header { width: min(760px, 100%); margin: 0 auto; text-align: center; }
+    .capability-showcase-header .section-title { max-width: none; }
+    .capability-showcase-shell { margin-top: 54px; overflow: visible; border: 0; border-radius: 0; background: transparent; }
+    .capability-showcase-tabs { display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; border: 1px solid #ebeef2; border-radius: 4px 4px 0 0; }
+    .capability-showcase-tab { position: relative; height: 75px; min-height: 0; padding: 4px 16px 0; display: flex; align-items: center; justify-content: center; border: 0; border-right: 1px solid #ebeef2; color: #0f172a; background: #fff; font: inherit; font-size: 18px; font-weight: 500; cursor: pointer; }
+    .capability-showcase-tab:last-child { border-right: 0; }
+    .capability-showcase-tab.active { color: #000; background: #fff; }
+    .capability-tab-label { position: relative; z-index: 1; }
+    .capability-tab-track { position: absolute; top: 0; right: 0; left: 0; height: 3px; overflow: hidden; pointer-events: none; }
+    .capability-tab-fill { display: block; width: 0; height: 100%; background: linear-gradient(270deg, #c49ffe 0%, #11a0ff 30.7%, #3083ff 55.88%, #0057be 100%); }
+    .capability-showcase-tab.active .capability-tab-fill { animation: capabilityTabProgress 10s linear forwards; }
+    @media (prefers-reduced-motion: reduce) { .capability-tab-fill { width: 100%; animation: none !important; } }
+    .capability-showcase-tab:focus-visible { z-index: 1; outline: 2px solid #0496fe; outline-offset: -2px; }
+    .capability-showcase-panel { display: none; min-height: 540px; grid-template-columns: 1fr 1fr; overflow: hidden; border: 1px solid #ebeef2; border-top: 0; border-radius: 0 0 4px 4px; }
+    .capability-showcase-panel.active { display: grid; }
+    @keyframes capabilityTabProgress { from { width: 0; } to { width: 100%; } }
+    .capability-showcase-copy { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 48px 56px; background: #fff; }
+    .capability-showcase-copy h3 { max-width: 100%; margin: 0 0 20px; color: #1e293b; font-size: 24px; font-weight: 600; line-height: 1.5; letter-spacing: 0; }
+    .capability-showcase-copy > p { margin: 0 0 28px; color: #4d4d4d; font-size: 15px; line-height: 1.9; }
+    .capability-showcase-list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+    .capability-showcase-list li { position: relative; padding-left: 24px; color: rgba(0,0,0,.9); font-size: 15px; line-height: 1.7; }
+    .capability-showcase-list li::before { position: absolute; left: 0; top: .25em; width: 16px; height: 16px; content: ""; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M9.5501 18L3.8501 12.3L5.2751 10.875L9.5501 15.15L18.7251 5.97498L20.1501 7.39998L9.5501 18Z' fill='%234BC77E'/%3E%3C/svg%3E"); }
+    .capability-showcase-visual { position: relative; display: flex; min-width: 0; min-height: 540px; align-items: center; justify-content: center; padding: 28px 42px; overflow: hidden; background-position: center; background-size: cover; }
+    .capability-showcase-visual.search { background-image: url("assets/capability-bg-search.png"); }
+    .capability-showcase-visual.inference { background-image: url("assets/capability-bg-inference.png"); }
+    .capability-showcase-visual.agent { background-image: url("assets/capability-bg-agent.png"); }
+    /* Dependency-free fallback for the Paper Shader mesh gradient used by Lakebase. */
+    .capability-showcase-visual::before, .capability-showcase-visual::after { position: absolute; z-index: 0; inset: -18%; content: ""; pointer-events: none; will-change: transform; }
+    .capability-showcase-visual::before { opacity: .72; background: radial-gradient(ellipse 40% 46% at 22% 30%, rgba(17,160,255,.95), transparent 68%), radial-gradient(ellipse 44% 40% at 75% 28%, rgba(199,188,255,.86), transparent 70%), radial-gradient(ellipse 46% 50% at 61% 82%, rgba(119,212,255,.82), transparent 70%); animation: capabilityMeshDrift 18s ease-in-out infinite alternate; }
+    .capability-showcase-visual::after { opacity: .5; background: radial-gradient(ellipse 38% 44% at 78% 72%, rgba(48,131,255,.78), transparent 70%), radial-gradient(ellipse 42% 42% at 31% 68%, rgba(255,255,255,.68), transparent 74%); mix-blend-mode: soft-light; animation: capabilityMeshDriftReverse 22s ease-in-out infinite alternate; }
+    .capability-showcase-visual.inference::before { background: radial-gradient(ellipse 42% 44% at 22% 30%, rgba(199,188,255,.96), transparent 68%), radial-gradient(ellipse 44% 46% at 76% 32%, rgba(17,160,255,.83), transparent 70%), radial-gradient(ellipse 48% 50% at 62% 82%, rgba(149,110,255,.76), transparent 72%); }
+    .capability-showcase-visual.agent::before { background: radial-gradient(ellipse 43% 45% at 24% 32%, rgba(119,212,255,.92), transparent 68%), radial-gradient(ellipse 44% 44% at 75% 30%, rgba(48,131,255,.7), transparent 70%), radial-gradient(ellipse 48% 50% at 58% 80%, rgba(199,188,255,.72), transparent 72%); }
+    @keyframes capabilityMeshDrift { from { transform: translate3d(-3%, -2%, 0) scale(1); } to { transform: translate3d(4%, 3%, 0) scale(1.1); } }
+    @keyframes capabilityMeshDriftReverse { from { transform: translate3d(4%, 3%, 0) scale(1.08); } to { transform: translate3d(-3%, -2%, 0) scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .capability-showcase-visual::before, .capability-showcase-visual::after { animation: none; } }
+    .capability-showcase-visual .feature-demo { position: relative; z-index: 1; width: 100%; min-height: 480px; height: 480px; margin: 0; border: 0; border-radius: 2px; box-shadow: 0 25px 80px rgba(3,74,166,.22); }
+    .capability-showcase-visual .search-demo { min-height: 480px; padding: 30px; }
+    .capability-showcase-visual .code-window { min-height: 480px; }
+    .capability-showcase-visual .agent-demo { min-height: 480px; padding: 28px; }
+    .capability-showcase-visual .agent-core { margin-bottom: 25px; }
+
+    .legacy-core-header, .legacy-core-feature { display: none; }
+    /* Core feature */
+    .feature-index {
+      position: absolute; right: 0; top: -25px; color: rgba(17,18,20,.045);
+      font-size: 180px; line-height: 1; font-weight: 700; letter-spacing: -.08em;
+    }
+    .feature { padding: 125px 0; position: relative; }
+    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 82px; align-items: center; }
+    .feature:nth-child(even) .feature-copy { order: 2; }
+    .feature:nth-child(even) .feature-demo { order: 1; }
+    .feature-num { color: var(--orange); font-size: 13px; font-weight: 650; letter-spacing: .13em; }
+    .feature h3 { margin: 16px 0 20px; font-size: clamp(33px, 4vw, 48px); line-height: 1.2; letter-spacing: -.04em; }
+    .feature h3 span { color: var(--orange); }
+    .feature-copy > p { color: var(--muted); font-size: 17px; line-height: 1.85; }
+    .feature-points { margin-top: 30px; display: grid; gap: 18px; }
+    .feature-point { display: grid; grid-template-columns: 34px 1fr; gap: 12px; }
+    .point-icon {
+      width: 28px; height: 28px; display: grid; place-items: center;
+      color: var(--orange); border-radius: 50%; background: var(--orange-soft); font-size: 13px;
+    }
+    .feature-point b { display: block; margin: 2px 0 5px; font-size: 15px; }
+    .feature-point p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .feature-demo { position: relative; min-height: 490px; }
+
+    /* Search demo */
+    .search-demo {
+      height: 100%; min-height: 490px; position: relative; padding: 36px;
+      color: #fff; background: #111316; overflow: hidden;
+    }
+    .search-demo::before {
+      content: ""; position: absolute; width: 360px; height: 360px; border-radius: 50%;
+      right: -120px; top: -120px; background: radial-gradient(circle, rgba(255,91,34,.26), transparent 65%);
+    }
+    .demo-label { position: relative; color: rgba(255,255,255,.42); font-size: 11px; letter-spacing: .12em; }
+    .query-box {
+      position: relative; margin-top: 22px; padding: 18px 20px; min-height: 58px;
+      border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.045);
+      font: 13px/1.7 "SFMono-Regular", Consolas, monospace;
+    }
+    .query-box .sql { color: #ff9a76; }
+    .search-routes { position: relative; margin-top: 30px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+    .route { padding: 16px 5px; text-align: center; border: 1px solid rgba(255,255,255,.1); }
+    .route-icon { height: 25px; color: #ff8b62; font-size: 18px; }
+    .route b { display: block; margin-top: 7px; font-size: 12px; }
+    .route small { color: rgba(255,255,255,.38); font-size: 9px; }
+    .merge-line { height: 40px; position: relative; }
+    .merge-line::before {
+      content: ""; position: absolute; left: 10%; right: 10%; top: 19px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--orange), transparent);
+    }
+    .rank-box {
+      position: relative; padding: 19px; text-align: center; border: 1px solid rgba(255,91,34,.55);
+      background: rgba(255,91,34,.1);
+    }
+    .rank-box b { display: block; font-size: 14px; }
+    .rank-box span { display: block; margin-top: 7px; color: #ffaf92; font-size: 11px; letter-spacing: .05em; }
+    .live-badge {
+      margin-top: 18px; display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,.66); font-size: 12px;
+    }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #42d58b; box-shadow: 0 0 0 5px rgba(66,213,139,.11); }
+
+    /* Code demo */
+    .code-window { min-height: 490px; color: #d7dbe2; background: #111316; box-shadow: 0 28px 70px rgba(17,18,20,.15); }
+    .window-bar {
+      height: 46px; display: flex; align-items: center; gap: 7px; padding: 0 18px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .window-dot { width: 8px; height: 8px; border-radius: 50%; background: #41454c; }
+    .window-name { margin-left: 8px; color: #6f747c; font-size: 11px; font-family: monospace; }
+    .code { padding: 27px 30px; overflow: auto; font: 12.5px/1.9 "SFMono-Regular", Consolas, monospace; }
+    .code .comment { color: #60666e; }
+    .code .kw { color: #ff8459; }
+    .code .fn { color: #7ea0ff; }
+    .code .str { color: #95cf8b; }
+    .security-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .security-strip div { padding: 15px 6px; text-align: center; color: #8e949d; font-size: 10px; border-left: 1px solid rgba(255,255,255,.06); }
+    .security-strip div:first-child { border-left: 0; }
+    .security-strip b { display: block; margin-bottom: 5px; color: #ff8d64; font-size: 12px; }
+
+    /* Agent demo */
+    .agent-demo { min-height: 510px; padding: 34px; background: #f1f2f4; border: 1px solid #e3e4e7; }
+    .agent-core {
+      width: 130px; height: 130px; margin: 7px auto 35px; position: relative;
+      display: grid; place-items: center; text-align: center; border-radius: 50%;
+      color: #fff; background: var(--ink); box-shadow: 0 0 0 12px #e4e5e8, 0 0 0 13px #d7d9dd;
+    }
+    .agent-core b { display: block; font-size: 16px; }
+    .agent-core small { color: rgba(255,255,255,.5); font-size: 10px; }
+    .agent-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .agent-card { min-height: 160px; padding: 19px 16px; background: #fff; border-top: 3px solid var(--orange); }
+    .agent-card:nth-child(2) { border-color: var(--blue); }
+    .agent-card:nth-child(3) { border-color: var(--purple); }
+    .agent-card .n { color: #afb2b8; font-size: 11px; }
+    .agent-card h4 { margin: 12px 0 9px; font-size: 16px; }
+    .agent-card p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.65; }
+    .agent-card .metric { margin-top: 15px; color: var(--orange); font-size: 11px; font-weight: 650; }
+    .agent-card:nth-child(2) .metric { color: var(--blue); }
+    .agent-card:nth-child(3) .metric { color: var(--purple); }
+    .isolation { margin-top: 12px; display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; }
+    .isolation span { padding: 4px 7px; color: #777; font-size: 9px; background: #e6e7e9; }
+
+    /* Scenarios */
+    .scenario-tabs {
+      margin-top: 53px; display: grid; grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid #dcdde0;
+    }
+    .scenario-tab {
+      padding: 20px 15px; border: 0; border-bottom: 2px solid transparent;
+      color: #8a8d93; background: transparent; cursor: pointer;
+    }
+    .scenario-tab.active { color: var(--ink); font-weight: 650; border-color: var(--orange); }
+    .scenario-panel { display: none; padding-top: 48px; grid-template-columns: .75fr 1.25fr; gap: 80px; align-items: center; }
+    .scenario-panel.active { display: grid; animation: panelIn .45s ease; }
+    @keyframes panelIn { from { opacity: 0; transform: translateY(10px); } }
+    .scenario-copy h3 { margin: 0 0 15px; font-size: 31px; letter-spacing: -.03em; }
+    .scenario-copy > p { color: var(--muted); line-height: 1.8; }
+    .scenario-list { padding: 0; margin: 25px 0 0; list-style: none; }
+    .scenario-list li { padding: 10px 0 10px 24px; position: relative; color: #43464c; font-size: 14px; }
+    .scenario-list li::before { content: "→"; position: absolute; left: 0; color: var(--orange); }
+    .flow { padding: 30px; color: #fff; background: #15171a; }
+    .flow-title { margin-bottom: 27px; color: rgba(255,255,255,.45); font-size: 11px; letter-spacing: .1em; }
+    .flow-row { display: flex; align-items: stretch; gap: 7px; }
+    .flow-node {
+      flex: 1; min-width: 0; padding: 16px 8px; display: grid; place-items: center;
+      text-align: center; font-size: 11px; line-height: 1.5; border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.035);
+    }
+    .flow-arrow { align-self: center; color: var(--orange); font-size: 17px; }
+    .flow-result {
+      margin-top: 22px; padding: 20px; display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(90deg, rgba(255,91,34,.2), rgba(255,91,34,.05));
+      border-left: 2px solid var(--orange);
+    }
+    .flow-result b { font-size: 15px; }
+    .flow-result span { color: #ff9d7b; font-size: 12px; }
+    .memory-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .memory-item { min-height: 96px; padding: 17px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.035); }
+    .memory-item b { display: block; margin-bottom: 7px; font-size: 13px; }
+    .memory-item small { color: rgba(255,255,255,.42); line-height: 1.5; }
+    .memory-query { margin-top: 8px; padding: 18px; text-align: center; color: #ffb095; background: rgba(255,91,34,.12); font-size: 12px; }
+    .media-search { position: relative; height: 290px; overflow: hidden; }
+    .media-card { position: absolute; width: 155px; height: 108px; padding: 14px; border: 1px solid rgba(255,255,255,.13); background: #25282d; }
+    .media-card:nth-child(1) { left: 0; top: 15px; transform: rotate(-4deg); }
+    .media-card:nth-child(2) { left: 27%; top: 55px; transform: rotate(2deg); }
+    .media-card:nth-child(3) { right: 20%; top: 5px; transform: rotate(-1deg); }
+    .media-card:nth-child(4) { right: 0; top: 73px; transform: rotate(4deg); }
+    .media-card span { font-size: 23px; }
+    .media-card b { display: block; margin-top: 23px; font-size: 11px; }
+    .search-bar {
+      position: absolute; left: 8%; right: 8%; bottom: 25px; z-index: 2;
+      padding: 17px 20px; color: #d5d8dd; background: #0b0c0e; border: 1px solid rgba(255,91,34,.55);
+      font-size: 12px; box-shadow: 0 10px 35px rgba(0,0,0,.35);
+    }
+
+    /* Architecture foundation */
+    .architecture-section {
+      position: relative; padding: 120px 0; color: var(--ink); overflow: hidden;
+      background: linear-gradient(180deg, #f6f7f8 0%, #fafafa 72%, #fff 100%);
+    }
+    .architecture-section::before {
+      content: ""; position: absolute; width: 720px; height: 720px; right: -360px; top: -200px;
+      border-radius: 50%; background: radial-gradient(circle, rgba(255,91,34,.07), transparent 67%);
+    }
+    .architecture-section .section-title { color: var(--ink); }
+    .architecture-section .section-lead { color: var(--muted); }
+    .arch-shift {
+      margin-top: 55px; display: grid; grid-template-columns: 1fr 80px 1fr;
+      align-items: stretch; border: 1px solid #dedfe2; background: #fff;
+    }
+    .shift-state { padding: 22px 26px; }
+    .shift-state small { display: block; margin-bottom: 8px; color: #999da4; font-size: 10px; letter-spacing: .12em; }
+    .shift-state b { font-size: 14px; font-weight: 550; }
+    .shift-state.new { color: var(--orange-deep); background: var(--orange-soft); }
+    .shift-arrow { display: grid; place-items: center; color: var(--orange); border-inline: 1px solid #e5e6e8; }
+    .architecture-map {
+      margin-top: 18px; position: relative; border: 1px solid #dfe1e4;
+      background: #fff; box-shadow: 0 28px 75px rgba(25,28,34,.08);
+    }
+    .arch-layer {
+      display: grid; grid-template-columns: 185px 1fr; min-height: 88px;
+      border-top: 1px solid #e5e6e8;
+    }
+    .arch-layer:first-child { border-top: 0; }
+    .arch-label {
+      display: flex; flex-direction: column; justify-content: center; padding: 18px 24px;
+      color: #34373c; background: #f5f6f7;
+      border-right: 1px solid #e5e6e8; font-size: 14px; font-weight: 600;
+    }
+    .arch-label small { margin-top: 5px; color: #a0a3a9; font-size: 9px; font-weight: 400; letter-spacing: .1em; }
+    .arch-content { padding: 14px; display: grid; gap: 9px; }
+    .arch-content.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .arch-content.cols-6 { grid-template-columns: repeat(6, 1fr); }
+    .arch-content.cols-7 { grid-template-columns: repeat(7, 1fr); }
+    .arch-unit {
+      min-height: 58px; padding: 10px 7px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      color: #73777f; background: #f8f8f9;
+      border: 1px solid #e7e8ea; font-size: 11px; line-height: 1.35;
+    }
+    .arch-unit strong { color: #303338; font-size: 12px; font-weight: 550; }
+    .arch-unit.accent {
+      color: var(--orange-deep); border-color: rgba(255,91,34,.27);
+      background: linear-gradient(135deg, #fff0e9, #fff8f5);
+    }
+    .arch-unit.accent strong { color: var(--orange-deep); }
+    .arch-foundation { min-height: 365px; }
+    .arch-foundation .arch-label { color: #ff9b77; }
+    .infra-path { padding: 18px; display: grid; gap: 0; }
+    .infra-node {
+      min-height: 88px; position: relative; padding: 17px 24px 17px 78px;
+      display: flex; align-items: center; justify-content: space-between; gap: 25px;
+      border: 1px solid #e1e3e6; background: #f8f8f9;
+    }
+    .infra-node.compute { border-color: rgba(255,91,34,.3); background: #fff4ef; }
+    .infra-icon {
+      position: absolute; left: 23px; width: 38px; height: 38px; display: grid; place-items: center;
+      border-radius: 50%; color: #ff9a77; background: rgba(255,91,34,.13); font-size: 17px;
+    }
+    .infra-copy b { display: block; margin-bottom: 5px; font-size: 14px; }
+    .infra-copy span { color: #858990; font-size: 11px; }
+    .infra-tags { display: flex; justify-content: flex-end; gap: 7px; flex-wrap: wrap; }
+    .infra-tags span {
+      padding: 6px 9px; color: #686c73; border: 1px solid #dfe1e4;
+      background: #fff; font-size: 10px; white-space: nowrap;
+    }
+    .infra-connector { height: 24px; position: relative; }
+    .infra-connector::before { content: ""; position: absolute; left: 42px; top: 0; bottom: 0; width: 1px; background: rgba(255,91,34,.55); }
+    .infra-connector::after {
+      content: ""; position: absolute; left: 38px; bottom: 1px; width: 7px; height: 7px;
+      border-right: 1px solid var(--orange); border-bottom: 1px solid var(--orange); transform: rotate(45deg);
+    }
+    .arch-benefits { margin-top: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #dedfe2; border: 1px solid #dedfe2; }
+    .arch-benefit { min-height: 150px; padding: 27px; background: #fff; }
+    .arch-benefit .metric { color: var(--orange); font-size: 11px; letter-spacing: .12em; }
+    .arch-benefit h3 { margin: 13px 0 9px; font-size: 17px; }
+    .arch-benefit p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.75; }
+    .architecture-note {
+      margin: 20px 0 0; color: #8c9097; font-size: 11px; line-height: 1.7;
+    }
+
+    /* Trust */
+    .trust-grid { margin-top: 58px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+    .trust-card { min-height: 245px; padding: 33px 28px; border-left: 1px solid #ddd; }
+    .trust-card:first-child { border-left: 0; }
+    .trust-number { color: var(--orange); font-size: 42px; font-weight: 600; letter-spacing: -.04em; }
+    .trust-card h3 { margin: 20px 0 12px; font-size: 16px; }
+    .trust-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.75; }
+
+    /* FAQ */
+    .faq-section { background: #f3f6ff; }
+    .faq-shell {
+      display: grid; grid-template-columns: 1fr 1fr; min-height: 720px;
+      overflow: hidden; border: 1px solid #d9dde6; border-radius: 5px; background: #fff;
+    }
+    .faq-intro { padding: 58px 48px; }
+    .faq-label { color: #1788ff; font-size: 14px; font-weight: 600; letter-spacing: .06em; }
+    .faq-intro h2 {
+      margin: 42px 0 0; font-size: clamp(40px, 4vw, 56px); line-height: 1.65;
+      letter-spacing: -.045em; font-weight: 600;
+    }
+    .faq-list { border-left: 1px solid #d9dde6; }
+    .faq-item { border-bottom: 1px solid #d9dde6; }
+    .faq-item:last-child { border-bottom: 0; }
+    .faq-question {
+      width: 100%; min-height: 108px; display: flex; align-items: center;
+      justify-content: space-between; gap: 24px; padding: 28px 34px;
+      color: var(--ink); text-align: left; font-size: 19px; line-height: 1.5;
+      font-weight: 550; border: 0; background: #fff; cursor: pointer;
+    }
+    .faq-question:hover { color: var(--orange-deep); }
+    .faq-question:focus-visible { outline: 2px solid #1788ff; outline-offset: -4px; }
+    .faq-toggle-icon { width: 20px; height: 20px; flex: 0 0 auto; object-fit: contain; }
+    .faq-item.open .faq-question { min-height: 92px; padding-bottom: 18px; }
+    .faq-answer { padding: 0 52px 34px; }
+    .faq-answer p { margin: 0; color: #3f4248; font-size: 16px; line-height: 1.85; }
+    .faq-answer strong { color: var(--ink); font-weight: 650; }
+
+    /* CTA / footer */
+    .cta-section {
+      position: relative; padding: 105px 0 110px; color: var(--ink); overflow: hidden;
+      background: linear-gradient(135deg, #f1f2ff 0%, #dce9ff 55%, #b9e3ff 100%);
+    }
+    .cta-section::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(circle at 50% 15%, rgba(255,255,255,.95), transparent 46%);
+    }
+    .cta-inner { position: relative; text-align: center; }
+    .cta-inner h2 { max-width: 840px; margin: 0 auto; font-size: clamp(38px, 5vw, 58px); line-height: 1.18; letter-spacing: -.05em; }
+    .cta-subtitle { margin: 21px auto 0; color: #5f6773; font-size: 17px; }
+    .consult-form {
+      max-width: 1040px; margin: 48px auto 28px; padding: 38px 42px 42px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 28px 30px;
+      text-align: left; background: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.92);
+      border-radius: 8px; box-shadow: 0 18px 45px rgba(53,92,141,.08);
+      backdrop-filter: blur(8px);
+    }
+    .form-field { display: flex; flex-direction: column; gap: 12px; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-field label { color: #15181d; font-size: 16px; line-height: 1.4; font-weight: 650; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; min-height: 56px; padding: 0 18px; color: #17191d;
+      font: inherit; font-size: 15px; line-height: 1.5; background: #fff;
+      border: 1px solid #d9dee8; border-radius: 5px; outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .form-field input::placeholder, .form-field textarea::placeholder { color: #a4acb9; }
+    .form-field select:invalid { color: #a4acb9; }
+    .form-field select option { color: #17191d; }
+    .form-field textarea { min-height: 112px; padding-top: 15px; resize: vertical; }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      border-color: #2176d2; box-shadow: 0 0 0 3px rgba(33,118,210,.12);
+    }
+    .consult-submit {
+      grid-column: 1 / -1; min-height: 64px; color: #fff; font: inherit; font-size: 18px;
+      border: 0; border-radius: 5px; background: #030a1c; cursor: pointer;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .consult-submit:hover { background: #102451; }
+    .consult-submit:active { transform: translateY(1px); }
+    .consult-submit:focus-visible { outline: 3px solid rgba(23,136,255,.35); outline-offset: 3px; }
+    .consult-success {
+      grid-column: 1 / -1; margin: -10px 0 0; color: #12613b;
+      text-align: center; font-size: 14px; font-weight: 600;
+    }
+    .lake-link { display: inline-flex; gap: 9px; margin-top: 28px; color: #536274; font-size: 14px; }
+    .lake-link:hover { color: #0b4d9b; }
+    .global-footer { color: #aab8d0; background: linear-gradient(105deg, #071d4a 0%, #0e2b66 62%, #193a7c 100%); }
+    .global-footer-inner {
+      padding: 66px 0 56px; display: grid;
+      grid-template-columns: minmax(310px, 1.8fr) minmax(0, 4.2fr); gap: 84px;
+    }
+    .footer-brand-overview h2 { margin: 0 0 12px; color: #fff; font-size: 27px; line-height: 1.2; }
+    .footer-brand-overview p { max-width: 370px; margin: 0; font-size: 14px; line-height: 1.82; }
+    .footer-socials { display: flex; align-items: center; gap: 14px; margin-top: 43px; }
+    .footer-social-link { width: 38px; height: 38px; display: block; border-radius: 50%; }
+    .footer-social-link img { width: 100%; height: 100%; display: block; border-radius: inherit; }
+    .footer-social-link:hover { filter: brightness(1.18); }
+    .footer-link-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); display: grid; gap: 34px; }
+    .footer-links-column h3 { margin: 0 0 10px; color: #fff; font-size: 16px; line-height: 1.4; }
+    .footer-links-column a, .footer-links-column span {
+      display: block; margin: 0 0 9px; color: #aab8d0; font-size: 14px; line-height: 1.45;
+    }
+    .footer-links-column a:hover { color: #fff; }
+    .global-footer-legal {
+      min-height: 76px; display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 20px 0; border-top: 1px solid rgba(255,255,255,.13);
+      color: #9aaac4; font-size: 11px; line-height: 1.7; text-align: center;
+    }
+    .footer-filing-icon { width: 16px; height: 16px; flex: 0 0 auto; object-fit: contain; }
+    .global-footer-legal a { color: inherit; }
+    .global-footer-legal a:hover { color: #fff; }
+
+    @media (max-width: 1180px) {
+      .global-nav-links, .global-nav-extras { display: none; }
+      .menu-btn { display: block; }
+      .global-nav-links.mobile {
+        display: flex; position: fixed; inset: 68px 0 0; padding: 35px 24px;
+        flex-direction: column; align-items: flex-start; gap: 0; margin-left: 0; overflow-y: auto;
+        background: #0d3474;
+      }
+      .global-nav-links.mobile > a {
+        width: 100%; line-height: 1.25; padding: 15px 0; color: #fff; font-size: 18px;
+        border-bottom: 1px solid rgba(255,255,255,.12);
+      }
+      .global-nav-links.mobile .mobile-global-actions {
+        width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+        padding-top: 24px;
+      }
+      .mobile-global-actions a {
+        min-height: 46px; display: flex; align-items: center; justify-content: center;
+        color: #fff; font-size: 14px; border: 1px solid rgba(255,255,255,.28);
+        border-radius: 4px;
+      }
+      .mobile-global-actions .global-trial { border-color: #2588f5; }
+      .hero-visual { grid-template-columns: 1fr; }
+      .versus { height: 65px; flex-direction: row; }
+      .versus::before, .versus::after { width: 50px; height: 1px; margin: 0 12px; }
+      .feature-grid, .scenario-panel { grid-template-columns: 1fr; gap: 45px; }
+      .faq-shell { grid-template-columns: 1fr; min-height: 0; }
+      .faq-intro { min-height: 280px; }
+      .faq-list { border-left: 0; border-top: 1px solid #d9dde6; }
+      .feature:nth-child(even) .feature-copy { order: 1; }
+      .feature:nth-child(even) .feature-demo { order: 2; }
+      .compare-row { grid-template-columns: 120px 1fr 1fr; }
+      .arch-content.cols-6, .arch-content.cols-7 { grid-template-columns: repeat(3, 1fr); }
+      .arch-layer { grid-template-columns: 150px 1fr; }
+      .trust-grid { grid-template-columns: 1fr 1fr; }
+      .trust-card:nth-child(3) { border-left: 0; border-top: 1px solid #ddd; }
+      .trust-card:nth-child(4) { border-top: 1px solid #ddd; }
+      .global-footer-inner { grid-template-columns: 1fr; gap: 50px; }
+      .footer-brand-overview p { max-width: 620px; }
+      .footer-link-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 38px; }
+    }
+
+    @media (max-width: 640px) {
+      .container { width: min(100% - 32px, var(--max)); }
+      .section { padding: 78px 0; }
+      .product-overview {
+        min-height: 640px; padding: 118px 0 72px; background-position: center bottom;
+      }
+      .product-overview-inner { width: min(100% - 32px, 1000px); }
+      .product-overview-title { font-size: 34px; }
+      .product-overview-subtitle { margin-top: 16px; font-size: 29px; line-height: 1.28; }
+      .product-overview-desc { margin-top: 24px; font-size: 16px; line-height: 1.75; }
+      .product-overview-actions { margin-top: 32px; flex-direction: column; }
+      .product-overview-actions .btn { width: min(100%, 280px); }
+      .stack-panel { padding: 22px 18px; }
+      .old-stack { grid-template-columns: 1fr 1fr; }
+      .comparison-eyebrow { margin-bottom: 22px; }
+      .comparison-title { margin-bottom: 38px; }
+      .compare { margin-top: 34px; }
+      .compare { overflow-x: auto; }
+      .compare-row { min-width: 720px; }
+      .core-capabilities { padding: 40px 0; }
+      .core-capability-header { margin-bottom: 28px; }
+      .core-capability-eyebrow { margin-bottom: 16px; font-size: 12px; }
+      .core-capability-header .section-title { font-size: 24px; line-height: 1.3; }
+      .core-capability-header .section-lead { font-size: 14px; line-height: 24px; }
+      .core-capability-grid { grid-template-columns: 1fr; }
+      .core-capability-card, .core-capability-card:last-child { min-height: 0; padding: 24px; border-right: 0; border-bottom: .5px solid #d0d5dc; grid-column: auto; }
+      .core-capability-card:last-child { border-bottom: 0; }
+      .core-capability-card:last-child .core-capability-list { grid-template-columns: 1fr; gap: 8px; }
+      .capability-showcase { padding: 40px 0; }
+      .capability-showcase-header { margin-bottom: 28px; }
+      .capability-showcase-tabs { overflow-x: auto; grid-template-columns: repeat(3, minmax(132px, 1fr)); }
+      .capability-showcase-tab { min-height: 72px; padding: 14px 10px; font-size: 15px; white-space: nowrap; }
+      .capability-showcase-panel { min-height: 0; grid-template-columns: 1fr; }
+      .capability-showcase-copy { padding: 32px 24px; }
+      .capability-showcase-copy h3 { font-size: 22px; }
+      .capability-showcase-copy > p { margin-top: 16px; font-size: 14px; line-height: 24px; }
+      .capability-showcase-list { gap: 12px; margin-top: 28px; }
+      .capability-showcase-list li { padding-left: 28px; font-size: 14px; line-height: 22px; }
+      .capability-showcase-visual { min-height: 360px; padding: 20px; }
+      .capability-showcase-visual .feature-demo { min-height: 320px; }
+      .capability-showcase-visual .search-demo { min-height: 320px; padding: 20px 16px; }
+      .capability-showcase-visual .code-window { min-height: 320px; }
+      .capability-showcase-visual .agent-demo { min-height: 320px; padding: 20px 16px; }
+      .feature { padding: 80px 0; }
+      .feature-grid { gap: 35px; }
+      .feature-demo, .search-demo, .code-window, .agent-demo { min-height: auto; }
+      .search-demo, .agent-demo { padding: 24px 18px; }
+      .search-routes { grid-template-columns: repeat(3, 1fr); }
+      .route:nth-child(4), .route:nth-child(5) { transform: translateX(50%); }
+      .code { padding: 22px 17px; font-size: 10.5px; }
+      .security-strip { grid-template-columns: 1fr 1fr; }
+      .agent-cards { grid-template-columns: 1fr; }
+      .agent-card { min-height: auto; }
+      .architecture-section { padding: 80px 0; }
+      .arch-shift { grid-template-columns: 1fr; }
+      .shift-arrow { min-height: 42px; border: 0; border-block: 1px solid #e5e6e8; transform: rotate(90deg); }
+      .arch-layer { grid-template-columns: 1fr; }
+      .arch-label { border-right: 0; border-bottom: 1px solid #e5e6e8; }
+      .arch-content.cols-2 { grid-template-columns: 1fr; }
+      .arch-content.cols-6, .arch-content.cols-7 { grid-template-columns: repeat(2, 1fr); }
+      .infra-node { padding: 65px 18px 18px; align-items: flex-start; flex-direction: column; gap: 13px; }
+      .infra-icon { top: 17px; left: 18px; }
+      .infra-tags { justify-content: flex-start; }
+      .infra-connector::before { left: 36px; }
+      .infra-connector::after { left: 32px; }
+      .arch-benefits { grid-template-columns: 1fr; }
+      .scenario-tabs { grid-template-columns: 1fr; }
+      .scenario-tab { text-align: left; border-left: 2px solid transparent; border-bottom-width: 1px; }
+      .scenario-tab.active { border-left-color: var(--orange); border-bottom-color: #ddd; }
+      .flow { padding: 22px 16px; overflow: hidden; }
+      .flow-row { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); }
+      .trust-grid { grid-template-columns: 1fr; }
+      .trust-card, .trust-card:nth-child(3), .trust-card:nth-child(4) { border-left: 0; border-top: 1px solid #ddd; }
+      .trust-card:first-child { border-top: 0; }
+      .faq-intro { min-height: 230px; padding: 36px 26px; }
+      .faq-label { font-size: 13px; }
+      .faq-intro h2 { margin-top: 25px; font-size: 30px; line-height: 1.45; }
+      .faq-question { min-height: 88px; padding: 22px 20px; font-size: 17px; }
+      .faq-item.open .faq-question { min-height: 80px; padding-bottom: 14px; }
+      .faq-answer { padding: 0 48px 26px 20px; }
+      .faq-answer p { font-size: 15px; line-height: 1.75; }
+      .cta-section { padding: 78px 0 84px; }
+      .cta-inner h2 { font-size: 36px; }
+      .cta-subtitle { margin-top: 18px; font-size: 15px; line-height: 1.7; }
+      .consult-form { margin-top: 34px; padding: 25px 20px 28px; grid-template-columns: 1fr; gap: 22px; }
+      .form-field.full, .consult-submit, .consult-success { grid-column: auto; }
+      .consult-submit { min-height: 58px; }
+      .lake-link { margin-top: 24px; line-height: 1.6; }
+      .global-footer-inner { padding: 52px 0 40px; gap: 42px; }
+      .footer-brand-overview h2 { font-size: 25px; }
+      .footer-brand-overview p { font-size: 13px; line-height: 1.75; }
+      .footer-socials { margin-top: 28px; }
+      .footer-link-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px 24px; }
+      .footer-links-column h3 { font-size: 15px; }
+      .footer-links-column a, .footer-links-column span { font-size: 13px; }
+      .global-footer-legal { justify-content: flex-start; flex-wrap: wrap; padding: 22px 0; text-align: left; }
+    }
+
+    /* Lakebase visual-system unification */
+    :root {
+      --orange: #0496fe;
+      --orange-deep: #0150fd;
+      --orange-soft: #e7f4ff;
+      --ink: #04091a;
+      --muted: rgba(0,0,0,.85);
+      --line: #d0d5dc;
+      --soft: #fff;
+      --blue: #279aff;
+      --purple: #c7bcff;
+      --max: 1200px;
+    }
+    body { color: var(--ink); font-family: "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .container { width: min(var(--max), calc(100% - 200px)); }
+    .header { height: 60px; background: #04091a; box-shadow: 0 1px 0 rgba(235,238,242,.1); }
+    .header.scrolled { background: #04091a; box-shadow: 0 1px 0 rgba(235,238,242,.1); }
+    .global-nav { padding: 0 32px; }
+    .global-logo { width: 135px; }
+    .global-nav-links > a { font-size: 14px; line-height: 60px; }
+    .global-search { width: 197px; height: 35px; border: .5px solid rgba(206,206,206,.2); background: rgba(255,255,255,.1); }
+    .global-search button { width: 35px; height: 35px; }
+    .global-search button img, .global-tool img { width: 18px; height: 18px; }
+    .global-trial { min-height: 40px; padding: 0 17px; border-radius: 4px; background: #0181fd; font-weight: 500; }
+    .global-trial:hover { background: #0496fe; }
+    .section { padding: 60px 0; }
+    .eyebrow { gap: 0; margin-bottom: 16px; color: #4b5563; font-size: 15px; font-weight: 500; line-height: 21px; letter-spacing: 0; text-transform: none; }
+    .eyebrow::before, .center .eyebrow::after, .comparison-eyebrow::after { width: auto; height: auto; background: none; color: #0496fe; content: "["; }
+    .center .eyebrow::after, .comparison-eyebrow::after { content: "]"; }
+    .section-title { max-width: 760px; color: #000; font-size: 36px; font-weight: 600; line-height: 1.4; letter-spacing: 0; }
+    .section-lead { max-width: 760px; margin-top: 16px; color: rgba(0,0,0,.85); font-size: 15px; line-height: 28px; }
+    .btn { min-height: 52px; border-radius: 4px; font-size: 16px; font-weight: 500; }
+    .btn-primary, .consult-submit { background: #04091a; }
+    .btn-primary:hover, .consult-submit:hover { background: #17223b; }
+    .btn-outline { border: .5px solid #d0d5dc; border-radius: 4px; }
+
+    .product-overview { min-height: 506px; padding: 100px 0; background-color: #dbeeff; background-image: radial-gradient(ellipse 85% 115% at 50% 0%, #c5e6ff 0%, #c5e6ff 20%, rgba(197,230,255,.48) 55%, rgba(197,230,255,0) 90%), radial-gradient(ellipse at 20% 85%, rgba(119,212,255,.75), transparent 47%), radial-gradient(ellipse at 80% 50%, rgba(199,188,255,.55), transparent 44%); }
+    .product-overview-title { color: #000; font-size: 44px; font-weight: 600; line-height: 1.4; letter-spacing: 0; }
+    .product-overview-subtitle { margin-top: 0; color: #000; font-size: 44px; font-weight: 600; line-height: 1.4; letter-spacing: 0; }
+    .product-overview-desc { max-width: 760px; margin-top: 24px; color: rgba(0,0,0,.85); font-size: 16px; font-weight: 500; line-height: 30px; }
+    .product-overview-actions { margin-top: 42px; }
+    .product-overview-cta { min-width: 212px; min-height: 52px; border-radius: 4px; }
+    .product-overview-docs { min-width: 180px; min-height: 52px; color: #04091a; border: .5px solid #d0d5dc; border-radius: 4px; background: rgba(255,255,255,.74); }
+    .product-overview-docs:hover { color: #04091a; border-color: #0496fe; background: #fff; }
+
+    .comparison-section { padding-top: 60px; background: #fff; }
+    .comparison-eyebrow { margin-bottom: 16px; }
+    .comparison-title { margin-bottom: 40px; }
+    .hero-visual { overflow: hidden; border: 1px solid #fff; border-radius: 4px; color: #04091a; background: rgba(255,255,255,.55); box-shadow: none; backdrop-filter: blur(25px); }
+    .stack-panel { padding: 28px 30px; background: rgba(255,255,255,.48); }
+    .stack-panel h3 { color: rgba(0,0,0,.85); }
+    .system-box { color: rgba(0,0,0,.85); border: .5px solid #d0d5dc; border-radius: 4px; background: rgba(255,255,255,.66); }
+    .glue { color: #0150fd; border: 1px dashed #0496fe; border-radius: 4px; background: rgba(4,150,254,.06); }
+    .versus { color: #4b5563; border-inline: 1px solid #fff; background: rgba(255,255,255,.22); }
+    .versus::before, .versus::after { background: linear-gradient(transparent, rgba(4,150,254,.45), transparent); }
+    .new-engine { border: .5px solid #d0d5dc; border-radius: 4px; background: rgba(255,255,255,.72); }
+    .engine-mark { border-radius: 4px; background: #0496fe; box-shadow: none; }
+    .engine-copy small { color: #4b5563; }
+    .engine-tags span { border: .5px solid #d0d5dc; border-radius: 4px; color: #0150fd; background: rgba(255,255,255,.72); }
+
+    .core-capabilities { padding: 60px 0 120px; }
+    .core-capability-card { border-color: #d0d5dc; }
+    .core-capability-icon { border-color: #0496fe; }
+
+    .architecture-section { padding: 60px 0; background: #dbeeff; }
+    .architecture-section::before { width: 1200px; height: 640px; right: -300px; top: 170px; background: rgba(39,154,255,.55); filter: blur(150px); }
+    .arch-shift, .architecture-map, .arch-benefits { border: 1px solid #fff; border-radius: 4px; background: rgba(255,255,255,.52); box-shadow: none; }
+    .shift-state { padding: 22px 26px; }
+    .shift-state.new { color: #04091a; background: rgba(255,255,255,.78); }
+    .shift-arrow { color: #0496fe; border-inline-color: #fff; }
+    .arch-layer { border-top-color: #fff; }
+    .arch-label { color: #04091a; border-right-color: #fff; background: rgba(255,255,255,.42); }
+    .arch-content { gap: 10px; }
+    .arch-unit { border: .5px solid #fff; border-radius: 4px; color: rgba(0,0,0,.85); background: rgba(255,255,255,.32); }
+    .arch-unit strong { color: #000; }
+    .arch-unit.accent { color: #006fff; border-color: #d0d5dc; background: rgba(255,255,255,.8); }
+    .arch-unit.accent strong { color: #006fff; }
+    .infra-node { border: .5px solid #fff; border-radius: 4px; background: rgba(255,255,255,.38); }
+    .infra-node.compute { border-color: #d0d5dc; background: rgba(255,255,255,.78); }
+    .infra-icon { border-radius: 4px; color: #0496fe; background: rgba(4,150,254,.1); }
+    .infra-connector::before { background: #0496fe; }
+    .infra-connector::after { border-color: #0496fe; }
+    .infra-tags span { border: .5px solid #d0d5dc; border-radius: 4px; }
+    .arch-benefit { background: rgba(255,255,255,.78); }
+    .arch-benefit .metric { color: #0496fe; }
+
+    .scenario-tabs { display: flex; justify-content: center; gap: 16px; border: 0; }
+    .scenario-tab { padding: 4px 10px; border: 0; border-radius: 4px; color: rgba(0,0,0,.85); font-size: 15px; font-weight: 500; line-height: 28px; }
+    .scenario-tab.active { border: 0; color: #fff; background: #04091a; font-weight: 700; }
+    .scenario-panel { margin-top: 24px; padding: 60px 0; gap: 24px; background: transparent; }
+    .scenario-copy h3 { color: #000; font-size: 24px; line-height: 1.4; }
+    .scenario-copy > p, .scenario-list li { color: rgba(0,0,0,.85); }
+    .scenario-list li::before { color: #0496fe; }
+    .flow { border: 1px solid #fff; border-radius: 4px; background: rgba(4,9,26,.9); }
+    .flow-arrow { color: #77d4ff; }
+    .flow-result { border-left: 2px solid #0496fe; background: rgba(4,150,254,.16); }
+    .flow-result span, .memory-query { color: #a8d8ff; }
+    .memory-query { background: rgba(4,150,254,.14); }
+    .search-bar { border-color: #0496fe; }
+
+    .trust-grid { border: .5px solid #d0d5dc; border-radius: 4px; }
+    .trust-card { border-left: .5px solid #d0d5dc; }
+    .trust-number { color: #0496fe; }
+    .faq-section { background: linear-gradient(180deg, #fff 0%, #e7f4ff 100%); }
+    .faq-shell { min-height: auto; border: .5px solid #d0d5dc; border-radius: 4px; background: rgba(255,255,255,.92); }
+    .faq-intro { padding: 40px 48px; }
+    .faq-intro h2 { margin-top: 24px; color: #000; font-size: 36px; line-height: 1.4; letter-spacing: 0; }
+    .faq-list, .faq-item { border-color: #d0d5dc; }
+    .faq-question { min-height: 80px; padding: 24px 32px; color: #000; font-size: 18px; font-weight: 500; }
+    .faq-question:hover { color: #0150fd; }
+    .faq-answer { padding: 0 32px 24px; }
+    .faq-answer p { color: rgba(0,0,0,.85); font-size: 15px; line-height: 26px; }
+
+    /* FAQ floor restored from the Lakebase reference layout */
+    .faq-section { position: relative; overflow: hidden; padding: 60px 0; background: #fff; }
+    .faq-section::before { position: absolute; z-index: 0; inset: 0; content: ""; background: radial-gradient(ellipse 70% 95% at 72% 100%, rgba(119,212,255,.72), transparent 58%), radial-gradient(ellipse 54% 80% at 86% 78%, rgba(199,188,255,.55), transparent 60%), linear-gradient(to bottom, #fff 0%, rgba(255,255,255,.32) 66%, rgba(231,244,255,.78) 100%); pointer-events: none; }
+    .faq-section > .container { position: relative; z-index: 1; }
+    .faq-shell { display: grid; min-height: 0; border: 0; border-radius: 0; background: transparent; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .faq-intro { display: flex; min-height: 100%; padding: 40px 48px; flex-direction: column; justify-content: flex-start; border: .5px solid #d0d5dc; border-radius: 4px 0 0 4px; background: rgba(255,255,255,.92); }
+    .faq-label { margin-bottom: 24px; color: #4b5563; font-size: 15px; font-weight: 500; letter-spacing: 0; line-height: 21px; }
+    .faq-label span { color: #0496fe; }
+    .faq-intro h2 { margin: 0; color: #000; font-size: 36px; font-weight: 600; line-height: 56px; letter-spacing: 0; }
+    .faq-list { display: flex; min-height: 0; overflow: hidden; flex-direction: column; border: .5px solid #d0d5dc; border-left: 0; border-radius: 0 4px 4px 0; background: rgba(255,255,255,.92); }
+    .faq-item { border-bottom: .5px solid #d0d5dc; }
+    .faq-item h3 { margin: 0; }
+    .faq-question { min-height: 79.5px; padding: 24px 32px; color: #000; background: #fff; font-size: 18px; font-weight: 500; line-height: 1.5; }
+    .faq-item.open .faq-question { min-height: 79.5px; padding: 24px 32px; }
+    .faq-question:hover { color: #000; }
+    .faq-toggle-icon { width: 18px; height: 18px; transition: transform 220ms ease; }
+    .faq-item.open .faq-toggle-icon { transform: rotate(45deg); }
+    .faq-answer { display: grid; padding: 0 32px; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 220ms ease, opacity 220ms ease, padding 220ms ease; }
+    .faq-answer p { overflow: hidden; margin: 0; color: rgba(0,0,0,.85); font-size: 15px; line-height: 26px; }
+    .faq-item.open .faq-answer { padding-bottom: 24px; grid-template-rows: 1fr; opacity: 1; }
+
+    .cta-section { padding: 60px 0 120px; background: #dbeeff; }
+    .cta-section::before { background: radial-gradient(ellipse 90% 90% at 50% 100%, rgba(119,212,255,.85), transparent 62%), radial-gradient(ellipse at 80% 50%, rgba(199,188,255,.72), transparent 45%); }
+    .cta-inner h2 { max-width: 870px; color: #000; font-size: 36px; font-weight: 600; line-height: 1.4; letter-spacing: 0; }
+    .cta-subtitle { color: rgba(0,0,0,.85); font-size: 15px; }
+    .consult-form { max-width: 870px; margin-top: 40px; padding: 40px; gap: 24px; border: 1px solid #fff; border-radius: 4px; box-shadow: none; backdrop-filter: blur(25px); }
+    .form-field { gap: 10px; }
+    .form-field label { color: #000; font-size: 14px; }
+    .form-field input, .form-field select, .form-field textarea { min-height: 41px; padding: 12px 16px; border: .5px solid #d0d5dc; border-radius: 4px; }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #0496fe; box-shadow: none; }
+    .consult-submit { min-height: 52px; border-radius: 4px; font-size: 16px; }
+    .global-footer { color: rgba(255,255,255,.65); background: #000; }
+    .global-footer-legal { border-top-color: rgba(255,255,255,.12); }
+
+    /* DataStudioFlowFloor source spacing and responsive layout */
+    @media (min-width: 801px) {
+      .capability-showcase-copy h3 { margin-bottom: 24px; }
+      .capability-showcase-copy > p { margin-bottom: 56px; }
+    }
+    @media (max-width: 1023px) {
+      .capability-showcase-header { margin-bottom: 25px; }
+      .capability-showcase-header .section-title { font-size: 24px; }
+      .capability-showcase-copy h3 { margin-bottom: 16px; font-size: 20px; }
+      .capability-showcase-copy { padding: 40px clamp(24px, 3vw, 32px); }
+      .capability-showcase-visual { min-height: 360px; }
+    }
+    @media (max-width: 800px) {
+      .capability-showcase { padding: 40px 0 80px; }
+      .capability-showcase-shell { margin-top: 0; }
+      .capability-showcase-panel { grid-template-columns: 1fr; }
+      .capability-showcase-copy { order: 1; padding: 28px 20px 32px; }
+      .capability-showcase-visual { order: 2; min-height: 260px; height: auto; padding: 16px 20px; }
+      .capability-showcase-copy h3 { margin-bottom: 12px; font-size: 18px; }
+      .capability-showcase-copy > p { margin-bottom: 24px; font-size: 14px; }
+      .capability-showcase-list { gap: 12px; }
+      .capability-showcase-list li { font-size: 14px; }
+      .capability-showcase-tab { height: 56px; padding: 0 8px; font-size: 13px; }
+      .capability-tab-track { height: 2px; }
+    }
+    @media (max-width: 767px) {
+      .capability-showcase { overflow-x: clip; }
+      .capability-showcase-header { margin-bottom: 28px; }
+      .capability-showcase-header .section-title { font-size: 24px; line-height: 1.3; }
+      .capability-showcase-panel { min-height: 0; }
+      .capability-showcase-copy { padding: 24px 16px 28px; }
+      .capability-showcase-visual { min-height: 0; padding: 12px 12px 16px; }
+      .capability-showcase-visual .feature-demo { min-height: 205px; height: 205px; box-shadow: none; }
+      .capability-showcase-tab { height: 48px; padding: 0 4px; font-size: 12px; }
+    }
+
+    @media (max-width: 1023px) {
+      .container { width: min(var(--max), calc(100% - 96px)); }
+      .section, .architecture-section { padding: 40px 0; }
+      .core-capabilities { padding: 40px 0; }
+      .scenario-panel { padding: 40px 0; }
+      .cta-section { padding: 40px 0; }
+    }
+    @media (max-width: 640px) {
+      .container { width: calc(100% - 32px); }
+      .header { height: 56px; }
+      .global-nav { padding: 0 16px; }
+      .product-overview { min-height: 480px; padding: 56px 0; }
+      .product-overview-title, .product-overview-subtitle { font-size: 28px; line-height: 1.3; }
+      .product-overview-desc { font-size: 14px; line-height: 24px; }
+      .product-overview-cta, .product-overview-docs { min-height: 48px; }
+      .eyebrow { margin-bottom: 16px; font-size: 12px; }
+      .section-title, .core-capability-header .section-title, .faq-intro h2, .cta-inner h2 { font-size: 24px; line-height: 1.3; }
+      .hero-visual { border-radius: 4px; }
+      .scenario-tabs { justify-content: flex-start; overflow-x: auto; gap: 8px; }
+      .scenario-tab { flex: 0 0 auto; border: .5px solid #d0d5dc; font-size: 14px; }
+      .scenario-tab.active { border-color: #04091a; color: #04091a; background: transparent; }
+      .faq-intro { padding: 24px; }
+      .faq-question { min-height: 64px; padding: 16px 20px; font-size: 15px; }
+      .faq-section { padding: 40px 0; }
+      .faq-shell { display: block; }
+      .faq-intro { border-radius: 4px 4px 0 0; }
+      .faq-list { border-left: .5px solid #d0d5dc; border-radius: 0 0 4px 4px; }
+      .faq-intro h2 { font-size: 24px; line-height: 1.3; }
+      .faq-item.open .faq-question { min-height: 64px; }
+      .faq-answer { padding: 0 20px; }
+      .faq-item.open .faq-answer { padding-bottom: 20px; }
+      .consult-form { padding: 24px; grid-template-columns: 1fr; }
+      .form-field.full, .consult-submit, .consult-success { grid-column: auto; }
+    }
+
+    /* Application scenarios restored from LakebasePage.tsx / lakebase.module.scss */
+    .scenario-section { padding: 120px 0 60px; background: #fff; }
+    .scenario-section-head { width: min(1200px, calc(100% - 200px)); margin: 0 auto; }
+    .scenario-section .center { width: min(760px, 100%); margin: 0 auto 40px; text-align: center; }
+    .scenario-section .center .eyebrow { margin-bottom: 16px; }
+    .scenario-tabs { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 0 0 24px; border: 0; }
+    .scenario-tab { display: flex; flex: 0 0 auto; align-items: center; gap: 12px; padding: 4px 10px; border: 0; border-radius: 4px; color: inherit; background: transparent; font-size: 15px; font-weight: 500; line-height: 28px; white-space: nowrap; }
+    .scenario-tab.active { border: 0; color: #fff; background: #04091a; font-weight: 700; }
+    .scenario-card { position: relative; z-index: 0; width: min(1200px, calc(100% - 200px)); margin: 24px auto 0; overflow: hidden; isolation: isolate; border-radius: 4px; background: #dbeeff; }
+    .scenario-card-bg { position: absolute; inset: 0; left: 50%; z-index: 0; width: 1440px; pointer-events: none; transform: translateX(-50%); }
+    .scenario-card-bg span { position: absolute; border-radius: 50%; pointer-events: none; }
+    .scenario-bg-ellipse-purple { width: 820px; height: 380px; left: 720px; top: -80px; background: #c7bcff; filter: blur(140px); transform: rotate(19.22deg); }
+    .scenario-bg-ellipse-blue { width: 1200px; height: 640px; left: 280px; top: -40px; background: #279aff; filter: blur(150px); transform: rotate(-20.47deg); }
+    .scenario-bg-ellipse-cyan { width: 1200px; height: 320px; left: -200px; top: 200px; background: #77d4ff; filter: blur(140px); transform: rotate(.73deg); }
+    .scenario-bg-ellipse-light { width: 900px; height: 520px; left: -280px; top: 40px; background: #dbeeff; filter: blur(140px); }
+    .scenario-panel { position: relative; z-index: 2; display: none; width: 100%; min-height: 426px; margin: 0; padding: 48px 40px; align-items: stretch; gap: 80px; grid-template-columns: minmax(0, 1fr) 556px; grid-template-rows: minmax(0, 1fr); background: transparent; }
+    .scenario-panel.active { display: grid; animation: none; }
+    .scenario-copy { display: flex; width: 100%; max-width: 560px; min-height: 0; flex-direction: column; justify-content: space-between; gap: 32px; justify-self: start; }
+    .scenario-intro { display: flex; flex-direction: column; }
+    .scenario-copy h3 { margin: 0; color: #071225; font-size: 24px; font-weight: 600; line-height: 30px; letter-spacing: 0; }
+    .scenario-copy > .scenario-intro > p { margin: 24px 0 0; color: rgba(0,0,0,.9); font-size: 15px; line-height: 28px; }
+    .scenario-list { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; }
+    .scenario-list li { display: flex; align-items: center; gap: 8px; padding: 0; color: rgba(0,0,0,.9); font-size: 15px; line-height: 28px; }
+    .scenario-list li::before { width: 16px; height: 16px; position: static; flex: 0 0 16px; content: ""; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M9.5501 18L3.8501 12.3L5.2751 10.875L9.5501 15.15L18.7251 5.97498L20.1501 7.39998L9.5501 18Z' fill='%234BC77E'/%3E%3C/svg%3E"); }
+    .flow { box-sizing: border-box; align-self: center; width: 100%; min-height: 0; aspect-ratio: 556 / 426; padding: 24px; overflow: hidden; border: .5px solid #fff; border-radius: 4px; color: #071225; background: rgba(255,255,255,.3); box-shadow: none; backdrop-filter: blur(25px); }
+    .flow-title { color: #071225; }
+    .flow-node, .memory-item, .media-card { border-color: rgba(255,255,255,.85); color: #071225; background: rgba(255,255,255,.7); }
+    .flow-node, .memory-item small, .memory-query, .search-bar { color: #071225; }
+    .flow-arrow { color: rgba(255,255,255,.92); }
+    .flow-result { border-left-color: #fff; color: #071225; background: rgba(255,255,255,.42); }
+
+    @media (min-width: 1024px) {
+      .scenario-panel { min-height: 400px; padding: 48px 40px; gap: 40px; grid-template-columns: minmax(0, 1fr) 620px; }
+      .scenario-copy { justify-content: center; gap: 28px; }
+      .flow { aspect-ratio: 620 / 360; }
+    }
+
+    @media (max-width: 1023px) {
+      .scenario-section { padding-top: 80px; }
+      .scenario-section-head, .scenario-card { width: min(1200px, calc(100% - 80px)); }
+      .scenario-panel { grid-template-columns: 1fr; min-height: 0; padding: 32px 24px; gap: 32px; }
+      .scenario-copy { max-width: none; }
+      .flow { width: 100%; max-width: none; }
+    }
+    @media (max-width: 640px) {
+      .scenario-section { padding-top: 80px; }
+      .scenario-section-head, .scenario-card { width: calc(100% - 32px); }
+      .scenario-section .center { margin-bottom: 28px; }
+      .scenario-tabs { justify-content: center; gap: 8px; overflow-x: auto; }
+      .scenario-tab { padding: 4px 8px; font-size: 13px; }
+      .scenario-panel { padding: 24px 16px; gap: 24px; }
+      .scenario-copy { gap: 16px; }
+      .scenario-copy h3 { font-size: 20px; line-height: 1.4; }
+      .flow { padding: 16px; }
+    }
+
+    /* Lakebase metrics treatment for the technology-trust floor */
+    #technology { padding: 120px 0; background: #fff; }
+    #technology .center { width: min(760px, 100%); margin: 0 auto 40px; }
+    #technology .center .eyebrow { margin-bottom: 16px; }
+    #technology .section-lead { margin-top: 16px; color: rgba(0,0,0,.72); font-size: 15px; line-height: 28px; }
+    .trust-grid { position: relative; isolation: isolate; display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 0; overflow: hidden; border: .5px solid #d0d5dc; border-radius: 4px; background: #e7f4ff; }
+    .trust-grid::before { position: absolute; z-index: 0; inset: 0; content: ""; background: radial-gradient(ellipse 52% 145% at 78% 100%, rgba(119,212,255,.94), transparent 68%), radial-gradient(ellipse 42% 130% at 100% 22%, rgba(199,188,255,.74), transparent 70%), linear-gradient(180deg, #fff 0%, rgba(255,255,255,.78) 38%, rgba(231,244,255,.72) 100%); }
+    .trust-grid::after { position: absolute; z-index: 0; inset: 0; content: ""; background: linear-gradient(180deg, rgba(255,255,255,.9) 0%, rgba(255,255,255,.48) 55%, rgba(255,255,255,0) 100%); pointer-events: none; }
+    .trust-card { position: relative; z-index: 1; min-height: 260px; padding: 48px 40px; border: 0; border-left: .5px solid #d0d5dc; background: transparent; }
+    .trust-card:first-child { border-left: 0; }
+    .trust-number { color: #071225; font-family: Barlow, "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 40px; font-weight: 500; line-height: 1; letter-spacing: -.04em; }
+    .trust-card h3 { margin: 20px 0 8px; color: #071225; font-size: 15px; font-weight: 600; line-height: 28px; }
+    .trust-card p { margin: 0; color: rgba(0,0,0,.72); font-size: 14px; line-height: 24px; }
+    @media (max-width: 1023px) {
+      #technology { padding: 80px 0; }
+      .trust-grid { grid-template-columns: repeat(2, 1fr); }
+      .trust-card:nth-child(3) { border-left: 0; border-top: .5px solid #d0d5dc; }
+      .trust-card:nth-child(4) { border-top: .5px solid #d0d5dc; }
+    }
+    @media (max-width: 640px) {
+      #technology { padding: 80px 0; }
+      .trust-grid { grid-template-columns: 1fr; }
+      .trust-card, .trust-card:nth-child(3), .trust-card:nth-child(4) { min-height: 0; padding: 28px 24px; border-top: .5px solid #d0d5dc; border-left: 0; }
+      .trust-card:first-child { border-top: 0; }
+      .trust-number { font-size: 44px; }
+    }
+
+    /* Hero restored from LakebasePage.tsx / lakebase.module.scss */
+    .lakebase-hero { position: relative; display: flex; min-height: 531px; margin-top: 60px; align-items: center; justify-content: center; padding: 100px; overflow: hidden; background: #dbeeff; }
+    .lakebase-hero-gradient { position: absolute; z-index: 0; top: 50%; left: 50%; width: max(100%, 960px); aspect-ratio: 1; min-height: 100%; transform: translate(-50%, -50%); background: radial-gradient(ellipse 48% 48% at 17% 82%, rgba(26,113,255,.56), transparent 68%), radial-gradient(ellipse 46% 50% at 84% 58%, rgba(157,141,214,.5), transparent 70%), radial-gradient(ellipse 52% 44% at 54% 100%, rgba(120,152,255,.56), transparent 72%), #dbeeff; }
+    .lakebase-hero-mask { position: absolute; z-index: 1; inset: 0; pointer-events: none; background: radial-gradient(ellipse 85% 115% at 50% 0%, #c5e6ff 0%, #c5e6ff 20%, rgba(197,230,255,.5) 55%, rgba(197,230,255,0) 90%); }
+    .lakebase-hero-scene { display: none; }
+    .lakebase-hero .product-overview-inner { position: relative; z-index: 3; display: flex; width: min(1000px, 100%); flex-direction: column; align-items: center; text-align: center; }
+    .lakebase-hero .product-overview-title { margin: 0; color: #071225; font-size: 44px; font-weight: 600; line-height: 1.4; letter-spacing: 0; }
+    .lakebase-hero .product-overview-title > span { display: block; }
+    .lakebase-hero .product-overview-desc { max-width: 760px; margin: 24px 0 0; color: rgba(0,0,0,.85); font-size: 16px; font-weight: 500; line-height: 30px; }
+    .lakebase-hero .product-overview-actions { margin-top: 42px; gap: 14px; }
+    .lakebase-hero .product-overview-cta { display: inline-flex; min-width: 212px; min-height: 52px; align-items: center; justify-content: center; border-radius: 4px; color: #fff; background: #04091a; font-size: 16px; font-weight: 500; }
+    .lakebase-hero .product-overview-docs { min-width: 180px; min-height: 52px; border: .5px solid rgba(4,9,26,.45); border-radius: 4px; color: #04091a; background: rgba(255,255,255,.45); }
+    @media (min-width: 900px) {
+      .lakebase-hero .product-overview-title { white-space: nowrap; }
+    }
+    @media (max-width: 1023px) and (min-width: 641px) {
+      .lakebase-hero .product-overview-title { font-size: 36px; }
+    }
+    @media (max-width: 640px) {
+      .lakebase-hero { min-height: 480px; margin-top: 0; padding: 56px 16px; }
+      .lakebase-hero .product-overview-title { font-size: 28px; line-height: 1.3; }
+      .lakebase-hero .product-overview-desc { font-size: 14px; line-height: 24px; }
+      .lakebase-hero .product-overview-actions { margin-top: 28px; flex-direction: column; }
+      .lakebase-hero .product-overview-actions .btn { width: min(100%, 280px); }
+    }
+
+    /* Shared Lakebase floor heading and spacing rhythm */
+    .section-title { max-width: 760px; font-size: 36px; font-weight: 600; line-height: 1.5; letter-spacing: 0; }
+    .center { width: min(760px, 100%); }
+    .eyebrow, .comparison-eyebrow { display: inline-flex; width: auto; align-items: center; gap: 4px; margin: 0 0 16px; color: #4b5563; font-size: 15px; font-weight: 500; line-height: 21px; letter-spacing: 0; text-transform: none; vertical-align: top; }
+    .eyebrow::before, .eyebrow::after { display: inline; width: auto; height: auto; color: #0496fe; background: none; font: inherit; }
+    .eyebrow::before { content: "["; }
+    .eyebrow::after { content: "]"; }
+    .center > .eyebrow, .capability-showcase-header > .eyebrow { align-self: center; }
+    .comparison-eyebrow { display: flex; width: max-content; margin-right: auto; margin-left: auto; }
+    .faq-label { display: inline-flex; align-items: center; gap: 4px; margin: 0 0 24px; color: #4b5563; font-size: 15px; font-weight: 500; line-height: 21px; letter-spacing: 0; }
+    .faq-label span { color: #0496fe; }
+    .center .eyebrow, .comparison-eyebrow, .capability-showcase-header .eyebrow, .scenario-section .center .eyebrow, #technology .center .eyebrow { margin-bottom: 16px; }
+    .section-lead { max-width: 760px; margin-top: 16px; font-size: 15px; line-height: 28px; }
+    .comparison-section { padding: 60px 0; }
+    .comparison-title { margin-bottom: 40px; }
+    .architecture-section { padding: 60px 0; }
+    .architecture-section .center { margin: 0 auto 40px; }
+    .architecture-section .section-title { line-height: 1.5; }
+    .architecture-section .section-lead { margin-top: 16px; }
+    #technology { padding: 60px 0; }
+    .faq-section { padding: 60px 0; }
+    .cta-section { padding: 60px 0 120px; }
+    @media (max-width: 1023px) {
+      .architecture-section, #technology { padding: 40px 0; }
+    }
+    @media (max-width: 640px) {
+      .section-title { font-size: 24px; line-height: 1.3; }
+      .eyebrow, .comparison-eyebrow, .faq-label { gap: 3px; font-size: 12px; line-height: 18px; }
+      .eyebrow, .comparison-eyebrow { margin-bottom: 16px; }
+      .faq-label { margin-bottom: 24px; }
+      .center .eyebrow, .comparison-eyebrow, .capability-showcase-header .eyebrow, .scenario-section .center .eyebrow, #technology .center .eyebrow { margin-bottom: 16px; }
+      .section-lead { margin-top: 16px; font-size: 14px; line-height: 24px; }
+      .architecture-section, #technology, .faq-section { padding: 40px 0; }
+      .cta-section { padding: 40px 0 80px; }
+    }
+
+    /* Comparison floor rebuilt from the Lakebase deployment-mode grid */
+    .comparison-deployment-grid {
+      display: grid;
+      overflow: hidden;
+      border: .5px solid #d0d5dc;
+      border-radius: 4px;
+      background: #fff;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+    .comparison-deployment-grid > article {
+      display: flex;
+      min-width: 0;
+      min-height: 300px;
+      flex-direction: column;
+      padding: 40px;
+      border-right: .5px solid #d0d5dc;
+    }
+    .comparison-deployment-grid > article:last-child { border-right: 0; }
+    .comparison-deployment-grid h3 {
+      margin: 0;
+      color: #000;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 30px;
+    }
+    .comparison-deployment-grid p {
+      margin: 16px 0 0;
+      color: rgba(0,0,0,.85);
+      font-size: 15px;
+      line-height: 28px;
+    }
+    .comparison-architecture-visual {
+      display: flex;
+      width: 100%;
+      height: 180px;
+      min-height: 180px;
+      margin-top: 24px;
+      flex-direction: column;
+      padding: 16px;
+      overflow: hidden;
+      border: .5px solid #d0d5dc;
+      border-radius: 4px;
+      background: rgba(231,244,255,.45);
+    }
+    .comparison-architecture-visual .old-stack {
+      height: 100%;
+      min-height: 0;
+      gap: 8px;
+      grid-template-rows: minmax(0,1fr) auto;
+    }
+    .comparison-architecture-visual .system-box {
+      min-height: 0;
+      padding: 8px;
+    }
+    .comparison-architecture-visual .glue {
+      min-height: 36px;
+      padding: 6px 10px;
+    }
+    .comparison-architecture-visual .new-engine {
+      width: 100%;
+      height: auto;
+      min-height: 0;
+      flex: 1;
+      padding: 16px 18px;
+    }
+    .comparison-architecture-visual .engine-tags {
+      display: grid;
+      margin-top: 10px;
+      gap: 8px;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+    }
+    .comparison-architecture-visual .engine-tags span {
+      display: flex;
+      min-width: 0;
+      min-height: 32px;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 7px;
+      text-align: center;
+    }
+    .comparison-deployment-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 24px;
+    }
+    .comparison-deployment-tags span {
+      padding: 6px 10px;
+      border: .5px solid #d0d5dc;
+      border-radius: 4px;
+      color: rgba(0,0,0,.72);
+      background: #fff;
+      font-size: 12px;
+      line-height: 20px;
+    }
+    .comparison-deployment-note {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: .5px solid #d0d5dc;
+      color: #0496fe;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 22px;
+    }
+    @media (max-width: 767px) {
+      .comparison-deployment-grid { grid-template-columns: 1fr; }
+      .comparison-deployment-grid > article {
+        min-height: 0;
+        padding: 32px 24px;
+        border-right: 0;
+        border-bottom: .5px solid #d0d5dc;
+      }
+      .comparison-deployment-grid > article:last-child { border-bottom: 0; }
+      .comparison-architecture-visual {
+        height: 210px;
+        min-height: 210px;
+      }
+      .comparison-architecture-visual .old-stack {
+        grid-template-columns: repeat(2,1fr);
+        grid-template-rows: repeat(2,minmax(0,1fr)) auto;
+      }
+      .comparison-architecture-visual .engine-tags { grid-template-columns: repeat(2,1fr); }
+    }
+
+    /* Architecture diagram restored from architecture-floor-clean */
+    .lakebase-architecture-diagram {
+      display: grid;
+      overflow: visible;
+      gap: 8px;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      grid-template-columns: minmax(0,1fr);
+    }
+    .lakebase-architecture-diagram .arch-layer {
+      display: grid;
+      min-height: 92px;
+      gap: 8px;
+      border: 0;
+      background: transparent;
+      grid-column: 1;
+      grid-template-columns: 144px minmax(0,1fr);
+    }
+    @media (min-width: 1024px) {
+      .lakebase-architecture-diagram > .arch-layer:not(.arch-foundation) {
+        height: 92px;
+        min-height: 92px;
+      }
+    }
+    .lakebase-architecture-diagram .arch-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 12px 10px;
+      border: .5px solid #01040d;
+      border-radius: 4px;
+      color: #fff;
+      background: #01040d;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0;
+      line-height: 20px;
+      text-align: center;
+      writing-mode: horizontal-tb;
+      text-orientation: mixed;
+    }
+    .lakebase-architecture-diagram .arch-label small { display: none; }
+    .lakebase-architecture-diagram .arch-content {
+      display: grid;
+      gap: 8px;
+      min-height: 0;
+      margin: 0;
+      padding: 8px 10px;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      background: rgba(255,255,255,.5);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+    }
+    .lakebase-architecture-diagram .arch-unit {
+      min-height: 54px;
+      padding: 6px 5px;
+      border: .5px solid #fff;
+      border-radius: 4px;
+      color: rgba(0,0,0,.85);
+      background: rgba(255,255,255,.5);
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 16px;
+    }
+    .lakebase-architecture-diagram .arch-unit strong {
+      color: #000;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 18px;
+    }
+    .lakebase-architecture-diagram .arch-unit.accent {
+      border-color: #fff;
+      color: rgba(0,0,0,.85);
+      background: rgba(255,255,255,.5);
+    }
+    .lakebase-architecture-diagram .arch-unit.accent strong { color: #000; }
+    .lakebase-architecture-diagram .arch-foundation { min-height: 326px; }
+    .lakebase-architecture-diagram .arch-foundation .arch-label { color: #fff; }
+    .lakebase-architecture-diagram .infra-path {
+      display: grid;
+      gap: 0;
+      margin: 0;
+      padding: 10px;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      background: rgba(255,255,255,.5);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+    }
+    .lakebase-architecture-diagram .infra-node,
+    .lakebase-architecture-diagram .infra-node.compute {
+      min-height: 82px;
+      border: .5px solid #fff;
+      border-radius: 4px;
+      background: rgba(255,255,255,.5);
+    }
+    .lakebase-architecture-diagram .infra-icon {
+      border-radius: 4px;
+      color: #0496fe;
+      background: rgba(4,150,254,.1);
+    }
+    .lakebase-architecture-diagram .infra-copy b { color: #000; }
+    .lakebase-architecture-diagram .infra-copy span { color: rgba(0,0,0,.65); }
+    .lakebase-architecture-diagram .infra-tags span {
+      border: .5px solid #d0d5dc;
+      border-radius: 4px;
+      color: rgba(0,0,0,.72);
+      background: rgba(255,255,255,.8);
+    }
+    .lakebase-architecture-diagram .infra-connector::before { background: #0496fe; }
+    .lakebase-architecture-diagram .infra-connector::after { border-color: #0496fe; }
+    @media (max-width: 1023px) {
+      .lakebase-architecture-diagram { grid-template-columns: minmax(0,1fr); }
+      .lakebase-architecture-diagram .arch-layer { grid-template-columns: 128px minmax(0,1fr); }
+      .lakebase-architecture-diagram > .arch-layer:not(.arch-foundation) {
+        height: 200px;
+        min-height: 200px;
+      }
+    }
+    @media (max-width: 767px) {
+      .lakebase-architecture-diagram {
+        overflow-x: auto;
+        grid-template-columns: 620px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .lakebase-architecture-diagram .arch-layer {
+        min-width: 620px;
+        grid-template-columns: 120px minmax(0,1fr);
+      }
+      .lakebase-architecture-diagram > .arch-layer:not(.arch-foundation) {
+        height: 210px;
+        min-height: 210px;
+      }
+      .lakebase-architecture-diagram .arch-foundation { min-height: 350px; }
+    }
+    @media (max-width: 640px) {
+      .lakebase-architecture-diagram > .arch-layer:not(.arch-foundation) {
+        height: 260px;
+        min-height: 260px;
+      }
+    }
+
+    /* Canonical two-column architecture layout from architecture-floor-clean */
+    .lakebase-architecture-diagram {
+      --architecture-row-height: 68px;
+      --architecture-foundation-height: 220px;
+      display: grid;
+      overflow: hidden;
+      width: 100%;
+      gap: 0;
+      align-items: stretch;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      background: rgba(255,255,255,.5);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      grid-template-columns: 144px minmax(0,1fr);
+    }
+    .architecture-layer-cards,
+    .architecture-diagram-panel {
+      display: grid;
+      min-width: 0;
+      gap: 10px;
+      grid-template-rows:
+        repeat(4, var(--architecture-row-height))
+        var(--architecture-foundation-height);
+    }
+    .architecture-layer-cards {
+      gap: 0;
+      padding: 5px 0;
+      border-right: 1px solid #fff;
+      background: #01040d;
+      grid-template-rows:
+        repeat(4, calc(var(--architecture-row-height) + 10px))
+        calc(var(--architecture-foundation-height) + 10px);
+    }
+    .architecture-layer-cards .arch-label {
+      display: flex;
+      min-width: 0;
+      margin: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 10px 8px;
+      border: 0;
+      border-bottom: 1px solid #fff;
+      border-radius: 0;
+      color: #fff;
+      background: #01040d;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0;
+      text-align: center;
+      writing-mode: horizontal-tb;
+    }
+    .architecture-layer-cards .arch-label:last-child { border-bottom: 0; }
+    .architecture-layer-cards .arch-label small {
+      display: none;
+    }
+    .architecture-diagram-panel {
+      padding: 10px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    .architecture-diagram-panel .arch-content,
+    .architecture-diagram-panel .infra-path {
+      min-width: 0;
+      min-height: 0;
+      margin: 0;
+      padding: 8px 10px;
+      border: 1px dashed rgba(255,255,255,.7);
+      border-radius: 4px;
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    .architecture-diagram-panel .arch-unit,
+    .architecture-diagram-panel .arch-unit.accent,
+    .architecture-diagram-panel .infra-node,
+    .architecture-diagram-panel .infra-node.compute,
+    .architecture-diagram-panel .infra-tags span {
+      border-color: #fff;
+      border-radius: 4px;
+      color: rgba(0,0,0,.85);
+      background: rgba(255,255,255,.3);
+    }
+    .architecture-diagram-panel .arch-unit { min-height: 38px; }
+    .architecture-diagram-panel .infra-path { gap: 8px; padding: 8px 10px; }
+    .architecture-diagram-panel .infra-node,
+    .architecture-diagram-panel .infra-node.compute {
+      min-height: 58px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    .architecture-diagram-panel .infra-connector { display: none; }
+    .architecture-diagram-panel .arch-unit strong,
+    .architecture-diagram-panel .arch-unit.accent strong { color: #000; }
+    .architecture-diagram-panel .infra-copy b { margin-bottom: 0; }
+    @media (max-width: 1023px) {
+      .lakebase-architecture-diagram {
+        --architecture-row-height: 148px;
+        --architecture-foundation-height: 250px;
+        grid-template-columns: 128px minmax(0,1fr);
+      }
+    }
+    @media (max-width: 767px) {
+      .lakebase-architecture-diagram {
+        --architecture-row-height: 174px;
+        --architecture-foundation-height: 260px;
+        overflow-x: auto;
+        width: 100%;
+        grid-template-columns: 120px 620px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .architecture-layer-cards,
+      .architecture-diagram-panel { min-width: 0; }
+    }
+    @media (max-width: 640px) {
+      .lakebase-architecture-diagram {
+        --architecture-row-height: 214px;
+        --architecture-foundation-height: 350px;
+      }
+    }
+
+    /* Lakebase architecture-floor mesh background */
+    .architecture-section {
+      position: relative;
+      isolation: isolate;
+      background: #dbeeff;
+    }
+    .architecture-section::before { display: none; }
+    .architecture-section > .container { position: relative; z-index: 1; }
+    .architecture-floor-bg {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      left: 50%;
+      width: 1440px;
+      pointer-events: none;
+      transform: translateX(-50%);
+    }
+    .architecture-floor-bg > span {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .architecture-floor-bg-purple {
+      top: 180px;
+      left: 900px;
+      width: 720px;
+      height: 340px;
+      background: #c7bcff;
+      filter: blur(140px);
+      transform: rotate(19.22deg);
+    }
+    .architecture-floor-bg-blue {
+      top: 320px;
+      left: 440px;
+      width: 1200px;
+      height: 640px;
+      background: #279aff;
+      filter: blur(150px);
+      transform: rotate(-20.47deg);
+    }
+    .architecture-floor-bg-cyan {
+      top: 420px;
+      left: -200px;
+      width: 1200px;
+      height: 320px;
+      background: #77d4ff;
+      filter: blur(140px);
+      transform: rotate(.73deg);
+    }
+
+    /* Lakebase architectureContent: diagram left, capability cards right */
+    .architecture-section .arch-shift {
+      overflow: hidden;
+      width: 100%;
+      min-height: 64px;
+      margin-top: 0;
+      gap: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      grid-template-columns: minmax(0,1fr) 48px minmax(0,1fr);
+    }
+    .architecture-section .shift-state,
+    .architecture-section .shift-state.new {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      justify-content: center;
+      padding: 14px 24px;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      color: rgba(0,0,0,.85);
+      background: rgba(255,255,255,.5);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+    }
+    .architecture-section .shift-state small {
+      margin-bottom: 6px;
+      color: #0496fe;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: .08em;
+    }
+    .architecture-section .shift-state b {
+      color: #000;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 22px;
+    }
+    .architecture-section .shift-arrow {
+      color: #000;
+      border: 0;
+      background: transparent;
+      font-size: 18px;
+    }
+    .architecture-content-layout {
+      display: grid;
+      width: 100%;
+      margin-top: 16px;
+      gap: 16px;
+      align-items: stretch;
+      grid-template-columns: minmax(0,1fr) 264px;
+    }
+    .architecture-content-layout .lakebase-architecture-diagram { margin-top: 0; }
+    .architecture-content-layout .arch-benefits {
+      display: grid;
+      min-width: 0;
+      margin: 0;
+      gap: 8px;
+      border: 0;
+      background: transparent;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(3,1fr);
+    }
+    .architecture-content-layout .arch-benefit {
+      display: flex;
+      min-height: 0;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 24px 16px;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      background: rgba(255,255,255,.5);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+    }
+    .architecture-content-layout .arch-benefit .metric {
+      color: #0496fe;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: .12em;
+    }
+    .architecture-content-layout .arch-benefit h3 {
+      margin: 12px 0 8px;
+      color: #000;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+    }
+    .architecture-content-layout .arch-benefit p {
+      margin: 0;
+      color: rgba(0,0,0,.72);
+      font-size: 12px;
+      line-height: 20px;
+    }
+    @media (max-width: 1023px) {
+      .architecture-content-layout { grid-template-columns: 1fr; }
+      .architecture-content-layout .arch-benefits {
+        grid-template-columns: repeat(3,minmax(0,1fr));
+        grid-template-rows: 1fr;
+      }
+      .architecture-content-layout .arch-benefit { min-height: 180px; }
+    }
+    @media (max-width: 640px) {
+      .architecture-section .arch-shift { grid-template-columns: 1fr; }
+      .architecture-section .shift-arrow {
+        min-height: 32px;
+        border: 0;
+      }
+      .architecture-content-layout .arch-benefits {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(3,auto);
+      }
+      .architecture-content-layout .arch-benefit { min-height: 0; padding: 24px 20px; }
+    }
+
+    /* Lakebase closingBand: one mesh background shared by FAQ and the form */
+    .closing-band { position: relative; width: 100%; overflow: hidden; background: #e7f4ff; }
+    .closing-band::before { position: absolute; z-index: 0; inset: 0; left: 50%; width: max(100vw, 1440px); height: 100%; content: ""; pointer-events: none; transform: translateX(-50%); background: radial-gradient(ellipse 45% 34% at 24% 58%, rgba(119,212,255,.84), transparent 72%), radial-gradient(ellipse 43% 37% at 77% 55%, rgba(199,188,255,.7), transparent 74%), radial-gradient(ellipse 58% 42% at 56% 92%, rgba(39,154,255,.66), transparent 72%); }
+    .closing-band::after { position: absolute; z-index: 0; top: 0; right: 0; left: 0; height: 66.67%; content: ""; pointer-events: none; background: linear-gradient(to bottom, #fff 0%, rgba(255,255,255,.96) 31%, rgba(255,255,255,0) 100%); }
+    .closing-band .faq-section, .closing-band .cta-section { position: relative; z-index: 1; background: transparent; }
+    .closing-band .faq-section::before, .closing-band .cta-section::before { display: none; }
+    .closing-band .faq-section > .container, .closing-band .cta-inner { position: relative; z-index: 1; }
+    .closing-band .cta-inner h2, .closing-band .cta-subtitle { position: relative; z-index: 1; }
+    .closing-band .consult-form { position: relative; z-index: 1; border: 1px solid #fff; background: rgba(255,255,255,.8); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
+
+    /* Lakebase demoSection / demoForm source specification */
+    .closing-band .cta-inner > h2 {
+      width: 100%;
+      max-width: 1000px;
+      margin-right: auto;
+      margin-left: auto;
+      color: #000;
+      font-size: 36px;
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    .closing-band .consult-form {
+      display: grid;
+      width: 100%;
+      max-width: 870px;
+      margin: 40px auto 0;
+      gap: 24px;
+      padding: 40px;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      background: rgba(255,255,255,.8);
+      box-shadow: none;
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      text-align: left;
+    }
+    .closing-band .consult-form .form-field { gap: 10px; }
+    .closing-band .consult-form .form-field label {
+      color: #000;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 20px;
+    }
+    .closing-band .consult-form input,
+    .closing-band .consult-form select,
+    .closing-band .consult-form textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: .5px solid #d0d5dc;
+      border-radius: 4px;
+      outline: none;
+      color: #000;
+      background: #fff;
+      box-shadow: none;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 400;
+    }
+    .closing-band .consult-form input,
+    .closing-band .consult-form select {
+      height: 41px;
+      min-height: 41px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .closing-band .consult-form select {
+      appearance: none;
+      -webkit-appearance: none;
+      padding-right: 44px;
+      color: #000;
+      background-color: #fff;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%2304091a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 14px 8px;
+      cursor: pointer;
+    }
+    .closing-band .consult-form select:invalid { color: #9ca3af; }
+    .closing-band .consult-form select:valid { color: #000; }
+    .closing-band .consult-form select option {
+      color: #000;
+      background: #fff;
+    }
+    .closing-band .consult-form select option:disabled { color: #9ca3af; }
+    .closing-band .consult-form textarea {
+      min-height: calc(1.5em * 2 + 20px);
+      padding-top: 12px;
+      line-height: 1.5;
+    }
+    .closing-band .consult-form input::placeholder,
+    .closing-band .consult-form textarea::placeholder {
+      color: #9ca3af;
+      font-size: 14px;
+      font-weight: 400;
+      opacity: 1;
+    }
+    .closing-band .consult-form input:focus,
+    .closing-band .consult-form select:focus,
+    .closing-band .consult-form textarea:focus {
+      border-color: #0496fe;
+      box-shadow: none;
+    }
+    .closing-band .consult-submit {
+      height: 52px;
+      min-height: 52px;
+      border: 0;
+      border-radius: 4px;
+      color: #fff;
+      background: #04091a;
+      font-size: 16px;
+      grid-column: 1 / -1;
+    }
+    @media (max-width: 1023px) {
+      .closing-band .cta-inner > h2 { font-size: 32px; }
+    }
+    @media (max-width: 640px) {
+      .closing-band .cta-inner > h2 {
+        max-width: none;
+        font-size: 24px;
+        white-space: normal;
+      }
+      .closing-band .consult-form {
+        width: 100%;
+        max-width: none;
+        padding: 24px;
+        grid-template-columns: 1fr;
+      }
+      .closing-band .consult-form .form-field.full,
+      .closing-band .consult-submit,
+      .closing-band .consult-success { grid-column: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      * { animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="global-nav">
+      <a class="global-logo" href="https://www.oceanbase.com/" aria-label="OceanBase 官网">
+        <img src="assets/oceanbase-global-logo.svg" alt="OceanBase">
+      </a>
+      <nav class="global-nav-links" id="navLinks" aria-label="全站导航">
+        <a href="https://www.oceanbase.com/product">产品</a>
+        <a href="https://www.oceanbase.com/solution">解决方案</a>
+        <a href="https://www.oceanbase.com/customer">客户</a>
+        <a href="https://www.oceanbase.com/partner">合作伙伴</a>
+        <a href="https://www.oceanbase.com/resource">资源与服务</a>
+        <a href="https://www.oceanbase.com/docs">文档</a>
+        <a href="https://open.oceanbase.com/">社区</a>
+        <div class="mobile-global-actions">
+          <a href="https://console.oceanbase.com/">云控制台</a>
+          <a href="https://console.oceanbase.com/">登录 / 注册</a>
+          <a class="global-trial" href="#contact">免费试用</a>
+          <a href="https://www.oceanbase.com/contactus?consultType=standalone">在线咨询</a>
+        </div>
+      </nav>
+      <div class="global-nav-extras">
+        <form class="global-search" action="https://www.oceanbase.com/search" method="get" role="search">
+          <input type="search" name="keyword" placeholder="请输入关键词" aria-label="搜索关键词">
+          <button type="submit" aria-label="搜索"><img src="assets/global-nav-search.png" alt=""></button>
+        </form>
+        <a class="global-tool" href="https://en.oceanbase.com/" aria-label="切换语言">
+          <img src="assets/global-nav-language.png" alt="">
+        </a>
+        <a class="global-tool" href="https://www.oceanbase.com/contactus?consultType=standalone" aria-label="在线咨询">
+          <img src="assets/global-nav-support.png" alt="">
+        </a>
+        <span class="global-divider" aria-hidden="true"></span>
+        <a class="global-console" href="https://console.oceanbase.com/">云控制台</a>
+        <a class="global-account" href="https://console.oceanbase.com/">登录 / 注册</a>
+        <a class="global-trial" href="#contact">免费试用</a>
+      </div>
+      <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="product-overview lakebase-hero" aria-labelledby="product-overview-title">
+      <div class="lakebase-hero-gradient" aria-hidden="true"></div>
+      <div class="lakebase-hero-mask" aria-hidden="true"></div>
+      <div class="lakebase-hero-scene" aria-hidden="true"></div>
+      <div class="product-overview-inner">
+        <h1 class="product-overview-title" id="product-overview-title">OceanBase AI 数据库<span>为 AI 时代而生的新一代多模一体数据库</span></h1>
+        <p class="product-overview-desc">
+          基于 OceanBase 大规模生产验证的分布式底座，为 AI 数据场景量身定制，融合多模一体、冷热分层与存算分离能力，带来 AI 时代的数据管理革新。
+        </p>
+        <div class="product-overview-actions">
+          <a class="btn product-overview-cta" href="#contact">业务方案咨询</a>
+          <a class="btn product-overview-docs" href="https://www.oceanbase.com/docs" target="_blank" rel="noreferrer">查看文档</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section comparison-section" id="difference">
+      <div class="container">
+        <div class="eyebrow comparison-eyebrow reveal">传统架构 vs. OceanBase AI 数据库</div>
+        <h2 class="section-title comparison-title reveal">传统方案仅能「存」<br>OceanBase「跑通」AI 应用完整链路</h2>
+        <div class="comparison-deployment-grid reveal" aria-label="传统拼装架构与 OceanBase AI 数据库对比">
+          <article>
+            <h3>传统做法 · 多系统拼接</h3>
+            <div class="comparison-architecture-visual">
+              <div class="old-stack">
+                <div class="system-box">MySQL<br>结构化数据</div>
+                <div class="system-box">ES<br>关键词搜索</div>
+                <div class="system-box">向量库<br>语义搜索</div>
+                <div class="system-box">对象存储<br>文档与图片</div>
+                <div class="glue">应用层胶水代码 · CDC 同步 · 两套权限 · 多份数据</div>
+              </div>
+            </div>
+          </article>
+          <article>
+            <h3>OceanBase AI 数据库 · 一个原生引擎</h3>
+            <div class="comparison-architecture-visual">
+              <div class="new-engine">
+                <div class="engine-mark">
+                  <svg width="25" height="25" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M6 6.5C6 4.57 8.69 3 12 3s6 1.57 6 3.5S15.31 10 12 10 6 8.43 6 6.5Z" stroke="white" stroke-width="1.5"/>
+                    <path d="M6 6.5v5C6 13.43 8.69 15 12 15s6-1.57 6-3.5v-5M6 11.5v5C6 18.43 8.69 20 12 20s6-1.57 6-3.5v-5" stroke="white" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <div class="engine-copy">
+                  <b>OceanBase AI 数据库</b>
+                  <small>一份数据 · 一套事务 · 一条 SQL</small>
+                </div>
+              </div>
+              <div class="engine-tags"><span>多模搜索</span><span>库内推理</span><span>Agent 原生</span><span>LOB 分层</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section soft center legacy-core-header" id="capabilities-legacy" aria-hidden="true">
+      <div class="container reveal">
+        <div class="eyebrow">核心能力</div>
+        <h2 class="section-title">不是给数据库加几个 AI 功能<br>而是重做 AI 时代的数据底座</h2>
+        <p class="section-lead">三种原生能力，消除跨系统数据搬运、一致性断点和应用层胶水代码。</p>
+      </div>
+    </section>
+
+    <section class="capability-showcase" id="capabilities" aria-labelledby="capability-showcase-title">
+      <div class="container">
+        <div class="capability-showcase-header reveal">
+          <div class="eyebrow">核心能力</div>
+          <h2 class="section-title" id="capability-showcase-title">不是给数据库加几个 AI 功能<br>而是重做 AI 时代的数据底座</h2>
+        </div>
+        <div class="capability-showcase-shell reveal">
+          <div class="capability-showcase-tabs" role="tablist" aria-label="核心能力">
+            <button class="capability-showcase-tab active" type="button" role="tab" aria-selected="true" aria-controls="capability-panel-search" data-capability="search"><span class="capability-tab-label">混合搜索</span><span class="capability-tab-track" aria-hidden="true"><span class="capability-tab-fill"></span></span></button>
+            <button class="capability-showcase-tab" type="button" role="tab" aria-selected="false" aria-controls="capability-panel-inference" data-capability="inference"><span class="capability-tab-label">库内推理</span><span class="capability-tab-track" aria-hidden="true"><span class="capability-tab-fill"></span></span></button>
+            <button class="capability-showcase-tab" type="button" role="tab" aria-selected="false" aria-controls="capability-panel-agent" data-capability="agent"><span class="capability-tab-label">Agent 原生</span><span class="capability-tab-track" aria-hidden="true"><span class="capability-tab-fill"></span></span></button>
+          </div>
+          <article class="capability-showcase-panel active" id="capability-panel-search" role="tabpanel">
+            <div class="capability-showcase-copy">
+              <h3>混合搜索：五路合一，库内融合</h3>
+              <p>不是简单的「向量 + 全文」，而是在同一份实时数据上，让结构化条件、关键词和语义理解共同工作。</p>
+              <ul class="capability-showcase-list"><li>一条 SQL，同时搜索五种数据</li><li>数据库内自动融合排序</li><li>事务级实时一致</li></ul>
+            </div>
+            <div class="capability-showcase-visual search">
+              <div class="feature-demo search-demo"><div class="demo-label">ONE SQL · FIVE SEARCH ROUTES</div><div class="query-box"><span class="sql">SELECT</span> * <span class="sql">FROM</span> incidents<br><span class="sql">WHERE</span> city = '北京' <span class="sql">AND</span> weather = '雨天' ...</div><div class="search-routes"><div class="route"><div class="route-icon">＝</div><b>标量</b><small>B-tree</small></div><div class="route"><div class="route-icon">Aa</div><b>全文</b><small>BM25</small></div><div class="route"><div class="route-icon">◈</div><b>向量</b><small>HNSW</small></div><div class="route"><div class="route-icon">{ }</div><b>JSON</b><small>Index</small></div><div class="route"><div class="route-icon">⌖</div><b>空间</b><small>GIS</small></div></div><div class="merge-line"></div><div class="rank-box"><b>库内多路召回与融合排序</b><span>RRF · WEIGHT SUM · MINMAX NORMALIZER</span></div><div class="live-badge"><span class="live-dot"></span> 实时索引 · 事务提交后立即可见</div></div>
+            </div>
+          </article>
+          <article class="capability-showcase-panel" id="capability-panel-inference" role="tabpanel" hidden>
+            <div class="capability-showcase-copy">
+              <h3>库内推理：数据不出库，安全 AI</h3>
+              <p>模型不再只是外部服务 URL，而是有权限、有版本、有血缘的数据库对象。通过 AI 算子完成文档解析、切分、向量化、重排与生成。</p>
+              <ul class="capability-showcase-list"><li>权限与事务统一</li><li>审计与血缘完整</li><li>RAG Pipeline in DB</li></ul>
+            </div>
+            <div class="capability-showcase-visual inference">
+              <div class="feature-demo code-window"><div class="window-bar"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span class="window-name">rag_pipeline.sql</span></div><div class="code"><div><span class="comment">-- 模型成为数据库对象</span></div><div><span class="kw">CREATE MODEL</span> my_embedding_model</div><div>&nbsp;&nbsp;TYPE <span class="str">'embedding'</span></div><div>&nbsp;&nbsp;PROVIDER <span class="str">'openai'</span>;</div><br><div><span class="comment">-- 文档入库，同时完成向量化</span></div><div><span class="kw">INSERT INTO</span> knowledge_base</div><div><span class="kw">VALUES</span> (title, content,</div><div>&nbsp;&nbsp;<span class="fn">AI_EMBED</span>(content USING my_model));</div><br><div><span class="comment">-- 搜索、重排、答案生成，一条 SQL</span></div><div><span class="kw">SELECT</span> <span class="fn">AI_COMPLETE</span>(</div><div>&nbsp;&nbsp;<span class="fn">AI_RERANK</span>(hybrid_results)</div><div>&nbsp;&nbsp;USING my_llm_model</div><div>) <span class="kw">AS</span> answer;</div></div><div class="security-strip"><div><b>统一</b>权限</div><div><b>ACID</b>事务</div><div><b>完整</b>审计</div><div><b>可追溯</b>血缘</div></div></div>
+            </div>
+          </article>
+          <article class="capability-showcase-panel" id="capability-panel-agent" role="tabpanel" hidden>
+            <div class="capability-showcase-copy">
+              <h3>Agent 原生：隔离、记忆、试错</h3>
+              <p>Agent 会繁殖、有记忆、会试错。OceanBase 把这三种关键行为变成数据库原生能力，让系统从一个 Agent 平滑扩展到百万级。</p>
+              <ul class="capability-showcase-list"><li>逻辑表与五层隔离</li><li>完整上下文召回</li><li>Fork Database 数据沙箱</li></ul>
+            </div>
+            <div class="capability-showcase-visual agent">
+              <div class="feature-demo agent-demo"><div class="agent-core"><div><b>Agent</b><small>Database Native</small></div></div><div class="agent-cards"><div class="agent-card"><span class="n">01 / ISOLATE</span><h4>会繁殖</h4><p>海量实例共享统一 Schema，数据逻辑隔离。</p><div class="metric">百万 / 千万级实例</div></div><div class="agent-card"><span class="n">02 / REMEMBER</span><h4>有记忆</h4><p>关系、文本、向量、JSON 共同构成上下文。</p><div class="metric">一条 SQL 召回</div></div><div class="agent-card"><span class="n">03 / EXPERIMENT</span><h4>会试错</h4><p>共享基线，只记录实验分支增量。</p><div class="metric">Copy-on-Write</div></div></div><div class="isolation"><span>Tenant</span><span>Database</span><span>Namespace</span><span>Table</span><span>Row / Column</span></div></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="feature legacy-core-feature" aria-hidden="true">
+      <div class="feature-index">01</div>
+      <div class="container feature-grid">
+        <div class="feature-copy reveal">
+          <div class="feature-num">CAPABILITY 01</div>
+          <h3>混合搜索<br><span>五路合一，库内融合</span></h3>
+          <p>不是简单的「向量 + 全文」，而是在同一份实时数据上，让结构化条件、关键词和语义理解共同工作。</p>
+          <div class="feature-points">
+            <div class="feature-point"><span class="point-icon">1</span><div><b>一条 SQL，同时搜索五种数据</b><p>标量、全文、向量、JSON、空间查询，在一个优化器内完成。</p></div></div>
+            <div class="feature-point"><span class="point-icon">2</span><div><b>数据库内自动融合排序</b><p>内置 RRF、WEIGHT_SUM、MINMAX_NORMALIZER，不再手写拼接逻辑。</p></div></div>
+            <div class="feature-point"><span class="point-icon">3</span><div><b>事务级实时一致</b><p>写入即更新多类索引，下一条 SQL 立刻搜到，无需等待 CDC 或 ES 刷新。</p></div></div>
+          </div>
+        </div>
+        <div class="feature-demo search-demo reveal">
+          <div class="demo-label">ONE SQL · FIVE SEARCH ROUTES</div>
+          <div class="query-box"><span class="sql">SELECT</span> * <span class="sql">FROM</span> incidents<br><span class="sql">WHERE</span> city = '北京' <span class="sql">AND</span> weather = '雨天' ...</div>
+          <div class="search-routes">
+            <div class="route"><div class="route-icon">＝</div><b>标量</b><small>B-tree</small></div><div class="route"><div class="route-icon">Aa</div><b>全文</b><small>BM25</small></div><div class="route"><div class="route-icon">◈</div><b>向量</b><small>HNSW</small></div><div class="route"><div class="route-icon">{ }</div><b>JSON</b><small>Index</small></div><div class="route"><div class="route-icon">⌖</div><b>空间</b><small>GIS</small></div>
+          </div>
+          <div class="merge-line"></div><div class="rank-box"><b>库内多路召回与融合排序</b><span>RRF · WEIGHT SUM · MINMAX NORMALIZER</span></div><div class="live-badge"><span class="live-dot"></span> 实时索引 · 事务提交后立即可见</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature soft legacy-core-feature" aria-hidden="true">
+      <div class="feature-index">02</div>
+      <div class="container feature-grid">
+        <div class="feature-copy reveal">
+          <div class="feature-num">CAPABILITY 02</div>
+          <h3>库内推理<br><span>数据不出库，安全 AI</span></h3>
+          <p>模型不再只是外部服务 URL，而是有权限、有版本、有血缘的数据库对象。通过 AI 算子完成文档解析、切分、向量化、重排与生成。</p>
+          <div class="feature-points">
+            <div class="feature-point"><span class="point-icon">✓</span><div><b>权限与事务统一</b><p>数据库权限就是 AI 权限，推理结果与业务数据一起提交或回滚。</p></div></div>
+            <div class="feature-point"><span class="point-icon">✓</span><div><b>审计与血缘完整</b><p>调用了哪个模型、处理了什么数据、产出来自哪个版本，全程可追溯。</p></div></div>
+            <div class="feature-point"><span class="point-icon">✓</span><div><b>RAG Pipeline in DB</b><p>AI_PARSE、AI_SPLIT、AI_EMBED、AI_RERANK、AI_COMPLETE 串起完整链路。</p></div></div>
+          </div>
+        </div>
+        <div class="feature-demo code-window reveal">
+          <div class="window-bar"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span class="window-name">rag_pipeline.sql</span></div>
+          <div class="code"><div><span class="comment">-- 模型成为数据库对象</span></div><div><span class="kw">CREATE MODEL</span> my_embedding_model</div><div>&nbsp;&nbsp;TYPE <span class="str">'embedding'</span></div><div>&nbsp;&nbsp;PROVIDER <span class="str">'openai'</span>;</div><br><div><span class="comment">-- 文档入库，同时完成向量化</span></div><div><span class="kw">INSERT INTO</span> knowledge_base</div><div><span class="kw">VALUES</span> (title, content,</div><div>&nbsp;&nbsp;<span class="fn">AI_EMBED</span>(content USING my_model));</div><br><div><span class="comment">-- 搜索、重排、答案生成，一条 SQL</span></div><div><span class="kw">SELECT</span> <span class="fn">AI_COMPLETE</span>(</div><div>&nbsp;&nbsp;<span class="fn">AI_RERANK</span>(hybrid_results)</div><div>&nbsp;&nbsp;USING my_llm_model</div><div>) <span class="kw">AS</span> answer;</div></div>
+          <div class="security-strip"><div><b>统一</b>权限</div><div><b>ACID</b>事务</div><div><b>完整</b>审计</div><div><b>可追溯</b>血缘</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature legacy-core-feature" aria-hidden="true">
+      <div class="feature-index">03</div>
+      <div class="container feature-grid">
+        <div class="feature-copy reveal">
+          <div class="feature-num">CAPABILITY 03</div>
+          <h3>Agent 原生<br><span>隔离、记忆、试错</span></h3>
+          <p>Agent 会繁殖、有记忆、会试错。OceanBase 把这三种关键行为变成数据库原生能力，让系统从一个 Agent 平滑扩展到百万级。</p>
+          <div class="feature-points">
+            <div class="feature-point"><span class="point-icon">隔</span><div><b>逻辑表与五层隔离</b><p>同一物理结构，Namespace 级独立空间，管理成本不随 Agent 数量线性增长。</p></div></div>
+            <div class="feature-point"><span class="point-icon">忆</span><div><b>完整上下文召回</b><p>长期记忆、短期状态和工具调用记录，一条 SQL 实时召回。</p></div></div>
+            <div class="feature-point"><span class="point-icon">验</span><div><b>Fork Database 数据沙箱</b><p>Copy-on-Write 快速创建实验分支，失败即丢弃，成功可合并。</p></div></div>
+          </div>
+        </div>
+        <div class="feature-demo agent-demo reveal">
+          <div class="agent-core"><div><b>Agent</b><small>Database Native</small></div></div>
+          <div class="agent-cards"><div class="agent-card"><span class="n">01 / ISOLATE</span><h4>会繁殖</h4><p>海量实例共享统一 Schema，数据逻辑隔离。</p><div class="metric">百万 / 千万级实例</div></div><div class="agent-card"><span class="n">02 / REMEMBER</span><h4>有记忆</h4><p>关系、文本、向量、JSON 共同构成上下文。</p><div class="metric">一条 SQL 召回</div></div><div class="agent-card"><span class="n">03 / EXPERIMENT</span><h4>会试错</h4><p>共享基线，只记录实验分支增量。</p><div class="metric">Copy-on-Write</div></div></div>
+          <div class="isolation"><span>Tenant</span><span>Database</span><span>Namespace</span><span>Table</span><span>Row / Column</span></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="architecture-section" id="architecture">
+      <div class="architecture-floor-bg" aria-hidden="true">
+        <span class="architecture-floor-bg-purple"></span>
+        <span class="architecture-floor-bg-blue"></span>
+        <span class="architecture-floor-bg-cyan"></span>
+      </div>
+      <div class="container">
+        <div class="center reveal">
+          <div class="eyebrow">ARCHITECTURE FOUNDATION</div>
+          <h2 class="section-title">为 AI 工作负载<br>重做存储与计算架构</h2>
+          <p class="section-lead">上层能力可以不断进化，底层数据不必反复迁移。OceanBase AI 数据库将计算、日志与存储解耦，让性能、成本和可靠性分别扩展。</p>
+        </div>
+
+        <div class="arch-shift reveal" aria-label="传统架构与 OceanBase AI 数据库架构变化">
+          <div class="shift-state">
+            <small>以往架构</small>
+            <b>计算与本地存储绑定 · 扩容伴随数据迁移</b>
+          </div>
+          <div class="shift-arrow">→</div>
+          <div class="shift-state new">
+            <small>OceanBase AI 数据库</small>
+            <b>无状态计算 · 日志独立 · 对象存储承载全量数据</b>
+          </div>
+        </div>
+
+        <div class="architecture-content-layout reveal">
+        <div class="architecture-map lakebase-architecture-diagram">
+          <div class="architecture-layer-cards" aria-label="架构层级">
+            <div class="arch-label">统一应用接口<small>UNIFIED INTERFACE</small></div>
+            <div class="arch-label">多模计算层<small>MIXED WORKLOAD</small></div>
+            <div class="arch-label">多模数据类型<small>MULTIMODAL DATA</small></div>
+            <div class="arch-label">多模索引层<small>MULTIMODAL INDEX</small></div>
+            <div class="arch-label">存算分离架构<small>COMPUTE · LOG · STORAGE</small></div>
+          </div>
+          <div class="architecture-diagram-panel">
+            <div class="arch-content cols-2">
+              <div class="arch-unit accent"><strong>统一 SQL 查询语言</strong>一种语法访问多模数据</div>
+              <div class="arch-unit accent"><strong>原生 Python SDK</strong>连接 Agent 与 AI 生态</div>
+            </div>
+            <div class="arch-content cols-7">
+              <div class="arch-unit"><strong>向量化</strong>执行引擎</div>
+              <div class="arch-unit"><strong>并行</strong>执行引擎</div>
+              <div class="arch-unit"><strong>混合负载</strong>自适应执行</div>
+              <div class="arch-unit"><strong>查询</strong>优化器</div>
+              <div class="arch-unit"><strong>语义</strong>搜索</div>
+              <div class="arch-unit accent"><strong>混合</strong>搜索</div>
+              <div class="arch-unit accent"><strong>AI</strong>函数</div>
+            </div>
+            <div class="arch-content cols-6">
+              <div class="arch-unit">关系表</div><div class="arch-unit">宽表</div><div class="arch-unit">向量</div>
+              <div class="arch-unit">JSON 文档</div><div class="arch-unit">文本</div><div class="arch-unit">空间 / 数组 / 映射</div>
+            </div>
+            <div class="arch-content cols-7">
+              <div class="arch-unit">二级索引</div><div class="arch-unit">向量索引</div><div class="arch-unit">JSON 索引</div>
+              <div class="arch-unit">多值索引</div><div class="arch-unit">全文索引</div><div class="arch-unit">GIS 索引</div><div class="arch-unit">搜索索引</div>
+            </div>
+            <div class="infra-path">
+              <div class="infra-node compute">
+                <span class="infra-icon">⌘</span>
+                <div class="infra-copy"><b>计算节点 · OBServer</b><span>无状态算力层，负责 SQL、事务上下文与 AI 函数执行</span></div>
+                <div class="infra-tags"><span>弹性扩缩</span><span>本地 SSD 热缓存</span><span>按需计算</span></div>
+              </div>
+              <div class="infra-connector"></div>
+              <div class="infra-node">
+                <span class="infra-icon">≋</span>
+                <div class="infra-copy"><b>独立日志服务 · LogService</b><span>Paxos 多副本强同步，持久化并复制事务日志</span></div>
+                <div class="infra-tags"><span>三副本日志</span><span>RPO = 0</span><span>快速恢复</span></div>
+              </div>
+              <div class="infra-connector"></div>
+              <div class="infra-node">
+                <span class="infra-icon">⬡</span>
+                <div class="infra-copy"><b>共享对象存储</b><span>承载全量数据、LOB、历史快照与备份</span></div>
+                <div class="infra-tags"><span>低成本</span><span>近乎无限容量</span><span>S3 兼容</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-benefits">
+          <article class="arch-benefit"><div class="metric">ELASTIC</div><h3>计算与存储独立扩展</h3><p>增加计算节点不再搬迁全量数据，新节点从共享存储加载数据并从日志服务恢复一致状态。</p></article>
+          <article class="arch-benefit"><div class="metric">TIERED</div><h3>热数据性能，冷数据成本</h3><p>高频数据和索引进入本地 SSD 缓存，低频与沉睡数据保留在低成本对象存储。</p></article>
+          <article class="arch-benefit"><div class="metric">RELIABLE</div><h3>日志与计算解耦</h3><p>事务可靠性由独立日志服务保障，计算节点故障不会丢失已经提交的数据。</p></article>
+        </div>
+        </div>
+        <p class="architecture-note reveal">说明：计算节点可采用单副本部署；事务日志仍由 LogService 多副本强同步，对象存储负责全量数据的高可用持久化。</p>
+      </div>
+    </section>
+
+    <section class="scenario-section" id="scenarios">
+      <div class="scenario-section-head">
+        <div class="center reveal">
+          <div class="eyebrow">应用场景</div>
+          <h2 class="section-title">从数据进入，到智能产生<br>一个数据库跑通完整链路</h2>
+        </div>
+        <div class="scenario-tabs reveal" role="tablist">
+          <button class="scenario-tab active" role="tab" aria-selected="true" data-tab="rag">企业 RAG / 智能客服</button>
+          <button class="scenario-tab" role="tab" aria-selected="false" data-tab="memory">AI Agent 记忆管理</button>
+          <button class="scenario-tab" role="tab" aria-selected="false" data-tab="media">多模态智能搜索</button>
+        </div>
+      </div>
+      <article class="scenario-card">
+        <div class="scenario-card-bg" aria-hidden="true"><span class="scenario-bg-ellipse-purple"></span><span class="scenario-bg-ellipse-blue"></span><span class="scenario-bg-ellipse-cyan"></span><span class="scenario-bg-ellipse-light"></span></div>
+        <div class="scenario-panel active" id="panel-rag">
+          <div class="scenario-copy">
+            <div class="scenario-intro"><h3>文档入库，答案出库</h3>
+            <p>文档解析、切分、Embedding、双索引、混合搜索、重排和生成全部在数据库内完成。</p></div>
+            <ul class="scenario-list"><li>1 个数据库替代 5 个分散系统</li><li>全文与向量索引实时一致</li><li>权限、事务、审计贯穿全链路</li></ul>
+          </div>
+          <div class="flow">
+            <div class="flow-title">RAG PIPELINE IN DATABASE</div>
+            <div class="flow-row">
+              <div class="flow-node">文档<br>入库</div><span class="flow-arrow">→</span>
+              <div class="flow-node">解析<br>切分</div><span class="flow-arrow">→</span>
+              <div class="flow-node">向量化<br>双索引</div><span class="flow-arrow">→</span>
+              <div class="flow-node">混合搜索<br>重排</div><span class="flow-arrow">→</span>
+              <div class="flow-node">模型<br>生成</div>
+            </div>
+            <div class="flow-result"><b>文档入库 → 答案出库</b><span>ONE DATABASE · ONE SQL</span></div>
+          </div>
+        </div>
+        <div class="scenario-panel" id="panel-memory">
+          <div class="scenario-copy">
+            <div class="scenario-intro"><h3>完整记忆，实时召回</h3>
+            <p>不再用 Redis、向量库、MySQL 分别保存记忆。所有上下文共享同一份数据和事务。</p></div>
+            <ul class="scenario-list"><li>短期状态与长期语义记忆统一</li><li>刚写入的记忆，下一句话即可搜到</li><li>Namespace 支撑海量 Agent 安全隔离</li></ul>
+          </div>
+          <div class="flow">
+            <div class="flow-title">COMPLETE AGENT CONTEXT</div>
+            <div class="memory-grid">
+              <div class="memory-item"><b>长期记忆</b><small>向量 · 文本 · 知识事实</small></div>
+              <div class="memory-item"><b>短期状态</b><small>任务状态 · 上下文变量</small></div>
+              <div class="memory-item"><b>对话历史</b><small>全文 · 时间 · 会话</small></div>
+              <div class="memory-item"><b>工具记录</b><small>参数 · 结果 · 运行轨迹</small></div>
+            </div>
+            <div class="memory-query">标量过滤 + 全文检索 + 向量搜索 → 完整上下文</div>
+          </div>
+        </div>
+        <div class="scenario-panel" id="panel-media">
+          <div class="scenario-copy">
+            <div class="scenario-intro"><h3>文件与数据，不再是两张皮</h3>
+            <p>文档、图片、音频和视频成为数据库对象，与业务字段共享事务、权限和版本。</p></div>
+            <ul class="scenario-list"><li>LOB 按规模自动选择分层存储</li><li>业务属性、关键词和语义组合查询</li><li>一个入口管理多模态数据全生命周期</li></ul>
+          </div>
+          <div class="flow">
+            <div class="flow-title">MULTIMODAL SEARCH</div>
+            <div class="media-search">
+              <div class="media-card"><span>▧</span><b>产品图片</b></div>
+              <div class="media-card"><span>♫</span><b>客户录音</b></div>
+              <div class="media-card"><span>▶</span><b>巡检视频</b></div>
+              <div class="media-card"><span>▤</span><b>业务文档</b></div>
+              <div class="search-bar">⌕&nbsp;&nbsp; 下雨天 · 北京海淀 · 分流口故障图片</div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="technology">
+      <div class="container">
+        <div class="center reveal">
+          <div class="eyebrow">技术信任</div>
+          <h2 class="section-title">AI 原生，但不是从零开始</h2>
+          <p class="section-lead">继承 OceanBase 经过关键业务验证的强一致、高可用与分布式能力，让 AI 应用从第一天就拥有生产级底座。</p>
+        </div>
+        <div class="trust-grid reveal">
+          <article class="trust-card"><div class="trust-number">3000万+</div><h3>闪应用大规模验证</h3><p>Agent 数据管理能力已在真实的大规模智能应用场景中验证。</p></article>
+          <article class="trust-card"><div class="trust-number">15年</div><h3>数据库根技术积累</h3><p>100% 自研，从分布式数据库到 AI 数据库一脉相承。</p></article>
+          <article class="trust-card"><div class="trust-number">2× No.1</div><h3>TPC-C / TPC-H</h3><p>全球唯一 TPC-C 与 TPC-H 双料冠军，交易与分析能力兼得。</p></article>
+          <article class="trust-card"><div class="trust-number">4000+</div><h3>企业客户</h3><p>覆盖金融、运营商、零售、制造等关键行业核心系统。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <div class="closing-band">
+    <section class="section faq-section" id="faq" aria-labelledby="faq-title">
+      <div class="container">
+        <div class="faq-shell">
+          <div class="faq-intro reveal">
+            <div class="faq-label"><span>[</span> FAQ <span>]</span></div>
+            <h2 id="faq-title">OceanBase AI 数据库<br>常见问题</h2>
+          </div>
+          <div class="faq-list reveal">
+            <article class="faq-item open">
+              <h3>
+                <button class="faq-question" id="faq-question-1" type="button" aria-expanded="true" aria-controls="faq-answer-1">
+                  <span>与 OceanBase Database 是什么关系？</span>
+                  <img class="faq-toggle-icon" src="assets/faq-plus-icon.svg" data-open-src="assets/faq-plus-icon.svg" data-closed-src="assets/faq-plus-icon.svg" alt="">
+                </button>
+              </h3>
+              <div class="faq-answer" id="faq-answer-1" role="region" aria-labelledby="faq-question-1">
+                <p>同源内核、不同定位：OceanBase Database 主要面向对响应时延、对时延的稳定性要求极高的 TP/HTAP 场景；OceanBase AI 数据库主要面向 AI 与湖仓分析场景。</p>
+              </div>
+            </article>
+
+            <article class="faq-item">
+              <h3>
+                <button class="faq-question" id="faq-question-2" type="button" aria-expanded="false" aria-controls="faq-answer-2">
+                  <span>容灾能力如何？</span>
+                  <img class="faq-toggle-icon" src="assets/faq-plus-icon.svg" data-open-src="assets/faq-plus-icon.svg" data-closed-src="assets/faq-plus-icon.svg" alt="">
+                </button>
+              </h3>
+              <div class="faq-answer" id="faq-answer-2" role="region" aria-labelledby="faq-question-2">
+                <p>日志服务三副本强同步；1F 部署 RPO=0、RTO 分钟级，2F 部署 RPO=0、RTO&lt;8 秒。</p>
+              </div>
+            </article>
+
+            <article class="faq-item">
+              <h3>
+                <button class="faq-question" id="faq-question-3" type="button" aria-expanded="false" aria-controls="faq-answer-3">
+                  <span>支持哪些渠道使用？</span>
+                  <img class="faq-toggle-icon" src="assets/faq-plus-icon.svg" data-open-src="assets/faq-plus-icon.svg" data-closed-src="assets/faq-plus-icon.svg" alt="">
+                </button>
+              </h3>
+              <div class="faq-answer" id="faq-answer-3" role="region" aria-labelledby="faq-question-3">
+                <p>私有化部署与 OB Cloud 云服务均可（OB Cloud 具体可售区域、规格和上线时间以官方发布为准）。支持 x86、ARM 及主流国产操作系统。</p>
+              </div>
+            </article>
+
+            <article class="faq-item">
+              <h3>
+                <button class="faq-question" id="faq-question-4" type="button" aria-expanded="false" aria-controls="faq-answer-4">
+                  <span>有哪些兼容模式？</span>
+                  <img class="faq-toggle-icon" src="assets/faq-plus-icon.svg" data-open-src="assets/faq-plus-icon.svg" data-closed-src="assets/faq-plus-icon.svg" alt="">
+                </button>
+              </h3>
+              <div class="faq-answer" id="faq-answer-4" role="region" aria-labelledby="faq-question-4">
+                <p>支持 <strong>MySQL 模式</strong> 和 <strong>KV 模式</strong>。其中 KV 模式包含 OBKV-Table 和 OBKV-HBase。</p>
+              </div>
+            </article>
+
+            <article class="faq-item">
+              <h3>
+                <button class="faq-question" id="faq-question-5" type="button" aria-expanded="false" aria-controls="faq-answer-5">
+                  <span>周边配套和 OceanBase Database 的异同？</span>
+                  <img class="faq-toggle-icon" src="assets/faq-plus-icon.svg" data-open-src="assets/faq-plus-icon.svg" data-closed-src="assets/faq-plus-icon.svg" alt="">
+                </button>
+              </h3>
+              <div class="faq-answer" id="faq-answer-5" role="region" aria-labelledby="faq-question-5">
+                <p>仍然配套 ODP 和 MySQL 生态驱动，配套 OCP、ODC、OMS、导数工具、DataPilot 等原有工具链。新增了 DataStudio 平台的支持。</p>
+              </div>
+            </article>
+
+            <article class="faq-item">
+              <h3>
+                <button class="faq-question" id="faq-question-6" type="button" aria-expanded="false" aria-controls="faq-answer-6">
+                  <span>计算节点扩展是否灵活？</span>
+                  <img class="faq-toggle-icon" src="assets/faq-plus-icon.svg" data-open-src="assets/faq-plus-icon.svg" data-closed-src="assets/faq-plus-icon.svg" alt="">
+                </button>
+              </h3>
+              <div class="faq-answer" id="faq-answer-6" role="region" aria-labelledby="faq-question-6">
+                <p>OceanBase AI 数据库采用存算分离架构，数据持久化在对象存储上，本地磁盘仅作缓存。计算节点可以灵活按需扩缩。</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+      <div class="container cta-inner reveal">
+        <h2>做 AI 应用，从选择一个为 AI 设计的数据库开始</h2>
+        <p class="cta-subtitle">多模搜索、库内推理、Agent 数据管理，一个引擎全部完成。</p>
+        <form class="consult-form" id="consultForm" novalidate>
+          <div class="form-field">
+            <label for="consultName">姓名</label>
+            <input id="consultName" name="name" type="text" placeholder="请输入您的姓名" autocomplete="name" required>
+          </div>
+          <div class="form-field">
+            <label for="consultPhone">手机号码</label>
+            <input id="consultPhone" name="phone" type="tel" placeholder="请输入手机号" autocomplete="tel" inputmode="tel" required>
+          </div>
+          <div class="form-field">
+            <label for="consultCompany">公司名称</label>
+            <input id="consultCompany" name="company" type="text" placeholder="请输入公司名称" autocomplete="organization" required>
+          </div>
+          <div class="form-field">
+            <label for="consultRole">职位</label>
+            <select id="consultRole" name="role" required>
+              <option value="" selected disabled>请选择您的职位</option>
+              <option value="技术/研发">技术 / 研发</option>
+              <option value="架构/运维">架构 / 运维</option>
+              <option value="数据/算法">数据 / 算法</option>
+              <option value="产品/业务">产品 / 业务</option>
+              <option value="管理者/决策者">管理者 / 决策者</option>
+              <option value="其他">其他</option>
+            </select>
+          </div>
+          <div class="form-field full">
+            <label for="consultScenario">请描述您的应用场景</label>
+            <textarea id="consultScenario" name="scenario" placeholder="请描述您的应用场景" required></textarea>
+          </div>
+          <button class="consult-submit" type="submit">业务方案咨询</button>
+          <div class="consult-success" id="consultSuccess" role="status" aria-live="polite" hidden>信息已记录，我们会尽快与您联系。</div>
+        </form>
+        <a class="lake-link" href="https://www.oceanbase.com/product/lakebase" target="_blank" rel="noreferrer">想开箱即用？看看 OceanBase Lakebase 湖库一体平台 <span class="arrow">→</span></a>
+      </div>
+    </section>
+    </div>
+  </main>
+
+  <footer class="global-footer" id="footer">
+    <div class="container global-footer-inner">
+      <section class="footer-brand-overview" aria-labelledby="footer-brand-title">
+        <h2 id="footer-brand-title">OceanBase</h2>
+        <p>OceanBase 海扬数据库始创于 2010 年，是完全自主研发的数据库公司。2020年开始独立商业化运作，历经15年大规模核心场景验证，目前是中国数据库的领军企业之一。从分布式数据库到 AI 数据库，为企业提供安全、稳定、可扩展的数据库底座，推动数据基础设施全面拥抱 AI 时代。</p>
+        <div class="footer-socials" aria-label="OceanBase 社交媒体">
+          <a class="footer-social-link" href="https://open.oceanbase.com/" target="_blank" rel="noreferrer" aria-label="OceanBase 微信社区"><img src="assets/footer-wechat.png" alt=""></a>
+          <a class="footer-social-link" href="https://www.zhihu.com/org/oceanbase" target="_blank" rel="noreferrer" aria-label="OceanBase 知乎"><img src="assets/footer-zhihu.png" alt=""></a>
+          <a class="footer-social-link" href="https://github.com/oceanbase" target="_blank" rel="noreferrer" aria-label="OceanBase GitHub"><img src="assets/footer-github.png" alt=""></a>
+        </div>
+      </section>
+
+      <nav class="footer-link-grid" aria-label="页脚导航">
+        <section class="footer-links-column">
+          <h3>关于我们</h3>
+          <a href="https://www.oceanbase.com/about">关于 OceanBase</a>
+          <a href="https://www.oceanbase.com/news">最新动态</a>
+          <a href="https://www.oceanbase.com/about">资质荣誉</a>
+          <a href="https://www.oceanbase.com/customer">客户专家委员会</a>
+          <a href="https://www.oceanbase.com/about">招贤纳士</a>
+          <a href="https://www.oceanbase.com/partner">合作伙伴</a>
+          <a href="https://www.oceanbase.com/news">年度发布会</a>
+          <a href="https://open.oceanbase.com/">开发者大会</a>
+        </section>
+        <section class="footer-links-column">
+          <h3>资源与服务</h3>
+          <a href="https://www.oceanbase.com/resource">支持与服务</a>
+          <a href="https://www.oceanbase.com/docs">文档</a>
+          <a href="https://www.oceanbase.com/resource">知识库</a>
+          <a href="https://www.oceanbase.com/resource">软件与工具下载</a>
+          <a href="https://www.oceanbase.com/resource">培训与认证</a>
+          <a href="https://www.oceanbase.com/resource">在线体验</a>
+          <a href="https://www.oceanbase.com/resource">数据库专题</a>
+          <a href="https://www.oceanbase.com/resource">视频</a>
+        </section>
+        <section class="footer-links-column">
+          <h3>社区</h3>
+          <a href="https://open.oceanbase.com/">快速上手</a>
+          <a href="https://open.oceanbase.com/">开发者中心</a>
+          <a href="https://open.oceanbase.com/blog">博客</a>
+          <a href="https://open.oceanbase.com/">活动</a>
+          <a href="https://open.oceanbase.com/">学习</a>
+          <a href="https://open.oceanbase.com/">问答</a>
+          <a href="https://github.com/oceanbase" target="_blank" rel="noreferrer">GitHub</a>
+        </section>
+        <section class="footer-links-column">
+          <h3>数据库百科</h3>
+          <a href="https://www.oceanbase.com/resource">分布式数据库</a>
+          <a href="https://www.oceanbase.com/resource">国产数据库</a>
+          <a href="https://www.oceanbase.com/resource">OLTP 数据库</a>
+          <a href="https://www.oceanbase.com/resource">OLAP 数据库</a>
+          <a href="https://www.oceanbase.com/resource">HTAP 数据库</a>
+          <a href="https://www.oceanbase.com/resource">数据库</a>
+          <a href="https://www.oceanbase.com/resource">向量数据库</a>
+          <a href="https://www.oceanbase.com/resource">向量检索</a>
+        </section>
+        <section class="footer-links-column">
+          <h3>联系我们</h3>
+          <span>服务热线：</span>
+          <a href="tel:4001090633">400-109-0633</a>
+          <a href="https://www.oceanbase.com/contact-us">商务咨询</a>
+          <a href="https://www.oceanbase.com/contact-us">培训认证</a>
+          <a href="https://www.oceanbase.com/contact-us">技术支持</a>
+          <a href="https://www.oceanbase.com/contact-us">媒体合作</a>
+        </section>
+      </nav>
+    </div>
+
+    <div class="container global-footer-legal">
+      <img class="footer-filing-icon" src="assets/footer-beian-police.png" alt="">
+      <img class="footer-filing-icon" src="assets/footer-beian-icp.png" alt="">
+      <span>京公网安备11010802047223号&nbsp; | &nbsp;京ICP备20024574号-1&nbsp; | &nbsp;合字B1.B2-20250395&nbsp; | &nbsp;<a href="https://www.oceanbase.com/">网站服务协议</a>&nbsp; | &nbsp;<a href="https://www.oceanbase.com/">隐私协议</a>&nbsp; | &nbsp;<a href="https://www.oceanbase.com/">安全响应协议</a>&nbsp; | &nbsp;OceanBase 版权所有 © 2026&nbsp; 基础资源和备案服务由阿里云提供</span>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('header');
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+
+    window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 30), { passive: true });
+
+    menuBtn.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('mobile');
+      document.body.classList.toggle('menu-open', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? '关闭导航' : '打开导航');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      navLinks.classList.remove('mobile');
+      document.body.classList.remove('menu-open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }));
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -45px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    const tabs = document.querySelectorAll('.scenario-tab');
+    tabs.forEach(tab => tab.addEventListener('click', () => {
+      tabs.forEach(item => {
+        item.classList.remove('active');
+        item.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.scenario-panel').forEach(panel => panel.classList.remove('active'));
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      document.getElementById(`panel-${tab.dataset.tab}`).classList.add('active');
+    }));
+
+    const capabilityTabs = [...document.querySelectorAll('.capability-showcase-tab')];
+    let capabilityAutoplay;
+    const scheduleNextCapability = () => {
+      window.clearTimeout(capabilityAutoplay);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      capabilityAutoplay = window.setTimeout(() => {
+        const activeIndex = capabilityTabs.findIndex(item => item.classList.contains('active'));
+        activateCapability(capabilityTabs[(activeIndex + 1) % capabilityTabs.length]);
+      }, 10000);
+    };
+    const activateCapability = (tab) => {
+      window.clearTimeout(capabilityAutoplay);
+      capabilityTabs.forEach(item => {
+        item.classList.remove('active');
+        item.setAttribute('aria-selected', 'false');
+        item.tabIndex = -1;
+      });
+      document.querySelectorAll('.capability-showcase-panel').forEach(panel => {
+        panel.classList.remove('active');
+        panel.hidden = true;
+      });
+      // Force the selected tab's 10-second progress bar to restart on every selection.
+      void tab.offsetWidth;
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      tab.tabIndex = 0;
+      const panel = document.getElementById(`capability-panel-${tab.dataset.capability}`);
+      panel.hidden = false;
+      panel.classList.add('active');
+      scheduleNextCapability();
+    };
+    capabilityTabs.forEach((tab, index) => {
+      tab.tabIndex = tab.classList.contains('active') ? 0 : -1;
+      tab.addEventListener('click', () => activateCapability(tab));
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? capabilityTabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + capabilityTabs.length) % capabilityTabs.length;
+        capabilityTabs[nextIndex].focus();
+        activateCapability(capabilityTabs[nextIndex]);
+      });
+    });
+    scheduleNextCapability();
+
+    const faqButtons = document.querySelectorAll('.faq-question');
+    faqButtons.forEach(button => button.addEventListener('click', () => {
+      const selectedItem = button.closest('.faq-item');
+      const shouldOpen = button.getAttribute('aria-expanded') !== 'true';
+
+      faqButtons.forEach(itemButton => {
+        const item = itemButton.closest('.faq-item');
+        const icon = itemButton.querySelector('.faq-toggle-icon');
+        item.classList.remove('open');
+        itemButton.setAttribute('aria-expanded', 'false');
+        icon.src = icon.dataset.closedSrc;
+      });
+
+      if (shouldOpen) {
+        const selectedIcon = button.querySelector('.faq-toggle-icon');
+        selectedItem.classList.add('open');
+        button.setAttribute('aria-expanded', 'true');
+        selectedIcon.src = selectedIcon.dataset.openSrc;
+      }
+    }));
+
+    const consultForm = document.getElementById('consultForm');
+    const consultSuccess = document.getElementById('consultSuccess');
+    consultForm.addEventListener('submit', event => {
+      event.preventDefault();
+      if (!consultForm.reportValidity()) return;
+      consultSuccess.hidden = false;
+      consultForm.reset();
+    });
+
+    consultForm.addEventListener('input', () => {
+      consultSuccess.hidden = true;
+    });
+  </script>
+</body>
+</html>
