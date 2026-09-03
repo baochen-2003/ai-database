@@ -302,6 +302,8 @@
     .capability-showcase-list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
     .capability-showcase-list li { position: relative; padding-left: 24px; color: rgba(0,0,0,.9); font-size: 15px; line-height: 1.7; }
     .capability-showcase-list li::before { position: absolute; left: 0; top: .25em; width: 16px; height: 16px; content: ""; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M9.5501 18L3.8501 12.3L5.2751 10.875L9.5501 15.15L18.7251 5.97498L20.1501 7.39998L9.5501 18Z' fill='%234BC77E'/%3E%3C/svg%3E"); }
+    .capability-showcase-list li b { display: block; margin: 0; font-size: 15px; font-weight: 500; line-height: 24px; }
+    .capability-showcase-list li p { margin: 4px 0 0; color: rgba(0,0,0,.62); font-size: 12px; line-height: 20px; }
     .capability-showcase-visual { position: relative; display: flex; min-width: 0; min-height: 540px; align-items: center; justify-content: center; padding: 28px 42px; overflow: hidden; background-position: center; background-size: cover; }
     .capability-showcase-visual.search,
     .capability-showcase-visual.inference,
@@ -2072,9 +2074,13 @@
           </div>
           <article class="capability-showcase-panel active" id="capability-panel-search" role="tabpanel">
             <div class="capability-showcase-copy">
-              <h3>混合搜索：五路合一，库内融合</h3>
-              <p>不是简单的「向量 + 全文」，而是在同一份实时数据上，让结构化条件、关键词和语义理解共同工作。</p>
-              <ul class="capability-showcase-list"><li>一条 SQL，同时搜索五种数据</li><li>数据库内自动融合排序</li><li>事务级实时一致</li></ul>
+              <h3>一条 SQL，五类检索组合</h3>
+              <p>标量、JSON、全文、向量、空间检索在同一条 SQL 中执行，优化器统一选择计划，融合排序在库内完成——无需在应用层归并多套系统的返回结果。</p>
+              <ul class="capability-showcase-list">
+                <li><b>五类检索在同一条 SQL 中组合</b><p>Btree、多值索引、倒排 BM25、HNSW / IVF、GIS 索引，每种数据类型有匹配的加速路径。</p></li>
+                <li><b>库内融合排序</b><p>内置 RRF、WEIGHT_SUM、MINMAX 归一化，多路召回直接返回排好序的 Top-K。</p></li>
+                <li><b>写入即可见</b><p>事务提交后各类索引立即生效，无需等 CDC 同步到外部搜索服务或向量库。</p></li>
+              </ul>
             </div>
             <div class="capability-showcase-visual search">
               <div class="mesh-gradient-bg" data-mesh-colors="#ccf8ff,#8accff,#3d8eff,#e5ecff" aria-hidden="true"></div>
