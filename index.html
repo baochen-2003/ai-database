@@ -1115,7 +1115,7 @@
     .scenario-bg-ellipse-light { width: 900px; height: 520px; left: -280px; top: 40px; background: #dbeeff; filter: blur(140px); }
     .scenario-panel { position: relative; z-index: 2; display: none; width: 100%; min-height: 530px; margin: 0; padding: 48px 40px; align-items: stretch; gap: 80px; grid-template-columns: minmax(0, 1fr) 556px; grid-template-rows: minmax(0, 1fr); background: transparent; }
     .scenario-panel.active { display: grid; animation: none; }
-    .scenario-copy { display: flex; width: 100%; max-width: 560px; min-height: 0; flex-direction: column; justify-content: space-between; gap: 32px; justify-self: start; }
+    .scenario-copy { display: flex; width: 100%; max-width: 560px; min-height: 0; flex-direction: column; justify-content: flex-start; gap: 24px; justify-self: start; }
     .scenario-intro { display: flex; flex-direction: column; }
     .scenario-copy h3 { margin: 0; color: #071225; font-size: 24px; font-weight: 600; line-height: 30px; letter-spacing: 0; }
     .scenario-copy > .scenario-intro > p { margin: 24px 0 0; color: rgba(0,0,0,.9); font-size: 15px; line-height: 28px; }
@@ -1131,7 +1131,7 @@
 
     @media (min-width: 1024px) {
       .scenario-panel { min-height: 530px; padding: 48px 40px; gap: 40px; grid-template-columns: minmax(0, 1fr) 620px; }
-      .scenario-copy { justify-content: center; gap: 28px; }
+      .scenario-copy { justify-content: flex-start; gap: 24px; }
       .flow { aspect-ratio: 620 / 360; }
     }
 
