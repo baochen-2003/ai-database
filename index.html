@@ -303,9 +303,9 @@
     .capability-showcase-list li { position: relative; padding-left: 24px; color: rgba(0,0,0,.9); font-size: 15px; line-height: 1.7; }
     .capability-showcase-list li::before { position: absolute; left: 0; top: .25em; width: 16px; height: 16px; content: ""; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M9.5501 18L3.8501 12.3L5.2751 10.875L9.5501 15.15L18.7251 5.97498L20.1501 7.39998L9.5501 18Z' fill='%234BC77E'/%3E%3C/svg%3E"); }
     .capability-showcase-visual { position: relative; display: flex; min-width: 0; min-height: 540px; align-items: center; justify-content: center; padding: 28px 42px; overflow: hidden; background-position: center; background-size: cover; }
-    .capability-showcase-visual.search { background-image: url("assets/capability-bg-search.png"); }
-    .capability-showcase-visual.inference { background-image: url("assets/capability-bg-inference.png"); }
-    .capability-showcase-visual.agent { background-image: url("assets/capability-bg-agent.png"); }
+    .capability-showcase-visual.search,
+    .capability-showcase-visual.inference,
+    .capability-showcase-visual.agent { background: #e7f4ff; }
     /* Dependency-free fallback for the Paper Shader mesh gradient used by Lakebase. */
     .capability-showcase-visual::before, .capability-showcase-visual::after { position: absolute; z-index: 0; inset: -18%; content: ""; pointer-events: none; will-change: transform; }
     .capability-showcase-visual::before { opacity: .72; background: radial-gradient(ellipse 40% 46% at 22% 30%, rgba(17,160,255,.95), transparent 68%), radial-gradient(ellipse 44% 40% at 75% 28%, rgba(199,188,255,.86), transparent 70%), radial-gradient(ellipse 46% 50% at 61% 82%, rgba(119,212,255,.82), transparent 70%); animation: capabilityMeshDrift 18s ease-in-out infinite alternate; }
@@ -322,6 +322,14 @@
     .capability-showcase-visual.mesh-ready .code-window { background-color: rgba(17,19,22,.76); backdrop-filter: blur(2px); }
     .capability-showcase-visual.mesh-ready .agent-demo { background-color: rgba(241,242,244,.78); backdrop-filter: blur(2px); }
     @media (prefers-reduced-motion: reduce) { .mesh-gradient-canvas { animation: none; } }
+    .capability-showcase-visual .mesh-gradient-bg { position: absolute; z-index: 0; inset: 0; }
+    .capability-showcase-visual .mesh-gradient-bg::after { position: absolute; top: 0; right: 0; left: 0; height: 66.67%; content: ""; background: linear-gradient(to bottom, #e1f1ff 0%, rgba(225,241,255,0) 100%); pointer-events: none; }
+    .capability-showcase-visual.inference .mesh-gradient-bg::after { background: linear-gradient(to bottom, #f3e8ff 0%, rgba(243,232,255,0) 100%); }
+    .capability-showcase-visual.shader-ready::before,
+    .capability-showcase-visual.shader-ready::after { display: none; }
+    .capability-showcase-visual.shader-ready .search-demo,
+    .capability-showcase-visual.shader-ready .code-window { background-color: #111316; backdrop-filter: none; }
+    .capability-showcase-visual.shader-ready .agent-demo { background-color: #f1f2f4; backdrop-filter: none; }
     .capability-showcase-visual .feature-demo { position: relative; z-index: 1; width: 100%; min-height: 480px; height: 480px; margin: 0; border: 0; border-radius: 2px; box-shadow: 0 25px 80px rgba(3,74,166,.22); }
     .capability-showcase-visual .search-demo { min-height: 480px; padding: 30px; }
     .capability-showcase-visual .code-window { min-height: 480px; }
@@ -2027,6 +2035,7 @@
               <ul class="capability-showcase-list"><li>一条 SQL，同时搜索五种数据</li><li>数据库内自动融合排序</li><li>事务级实时一致</li></ul>
             </div>
             <div class="capability-showcase-visual search">
+              <div class="mesh-gradient-bg" data-mesh-colors="#ccf8ff,#8accff,#3d8eff,#e5ecff" aria-hidden="true"></div>
               <div class="feature-demo search-demo"><div class="demo-label">ONE SQL · FIVE SEARCH ROUTES</div><div class="query-box"><span class="sql">SELECT</span> * <span class="sql">FROM</span> incidents<br><span class="sql">WHERE</span> city = '北京' <span class="sql">AND</span> weather = '雨天' ...</div><div class="search-routes"><div class="route"><div class="route-icon">＝</div><b>标量</b><small>B-tree</small></div><div class="route"><div class="route-icon">Aa</div><b>全文</b><small>BM25</small></div><div class="route"><div class="route-icon">◈</div><b>向量</b><small>HNSW</small></div><div class="route"><div class="route-icon">{ }</div><b>JSON</b><small>Index</small></div><div class="route"><div class="route-icon">⌖</div><b>空间</b><small>GIS</small></div></div><div class="merge-line"></div><div class="rank-box"><b>库内多路召回与融合排序</b><span>RRF · WEIGHT SUM · MINMAX NORMALIZER</span></div><div class="live-badge"><span class="live-dot"></span> 实时索引 · 事务提交后立即可见</div></div>
             </div>
           </article>
@@ -2037,6 +2046,7 @@
               <ul class="capability-showcase-list"><li>权限与事务统一</li><li>审计与血缘完整</li><li>RAG Pipeline in DB</li></ul>
             </div>
             <div class="capability-showcase-visual inference">
+              <div class="mesh-gradient-bg" data-mesh-colors="#77D4FF,#279AFF,#C7BCFF" data-mesh-theme="table" aria-hidden="true"></div>
               <div class="feature-demo code-window"><div class="window-bar"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span class="window-name">rag_pipeline.sql</span></div><div class="code"><div><span class="comment">-- 模型成为数据库对象</span></div><div><span class="kw">CREATE MODEL</span> my_embedding_model</div><div>&nbsp;&nbsp;TYPE <span class="str">'embedding'</span></div><div>&nbsp;&nbsp;PROVIDER <span class="str">'openai'</span>;</div><br><div><span class="comment">-- 文档入库，同时完成向量化</span></div><div><span class="kw">INSERT INTO</span> knowledge_base</div><div><span class="kw">VALUES</span> (title, content,</div><div>&nbsp;&nbsp;<span class="fn">AI_EMBED</span>(content USING my_model));</div><br><div><span class="comment">-- 搜索、重排、答案生成，一条 SQL</span></div><div><span class="kw">SELECT</span> <span class="fn">AI_COMPLETE</span>(</div><div>&nbsp;&nbsp;<span class="fn">AI_RERANK</span>(hybrid_results)</div><div>&nbsp;&nbsp;USING my_llm_model</div><div>) <span class="kw">AS</span> answer;</div></div><div class="security-strip"><div><b>统一</b>权限</div><div><b>ACID</b>事务</div><div><b>完整</b>审计</div><div><b>可追溯</b>血缘</div></div></div>
             </div>
           </article>
@@ -2047,6 +2057,7 @@
               <ul class="capability-showcase-list"><li>逻辑表与五层隔离</li><li>完整上下文召回</li><li>Fork Database 数据沙箱</li></ul>
             </div>
             <div class="capability-showcase-visual agent">
+              <div class="mesh-gradient-bg" data-mesh-colors="#ccf8ff,#8accff,#3d8eff,#e5ecff" aria-hidden="true"></div>
               <div class="feature-demo agent-demo"><div class="agent-core"><div><b>Agent</b><small>Database Native</small></div></div><div class="agent-cards"><div class="agent-card"><span class="n">01 / ISOLATE</span><h4>会繁殖</h4><p>海量实例共享统一 Schema，数据逻辑隔离。</p><div class="metric">百万 / 千万级实例</div></div><div class="agent-card"><span class="n">02 / REMEMBER</span><h4>有记忆</h4><p>关系、文本、向量、JSON 共同构成上下文。</p><div class="metric">一条 SQL 召回</div></div><div class="agent-card"><span class="n">03 / EXPERIMENT</span><h4>会试错</h4><p>共享基线，只记录实验分支增量。</p><div class="metric">Copy-on-Write</div></div></div><div class="isolation"><span>Tenant</span><span>Database</span><span>Namespace</span><span>Table</span><span>Row / Column</span></div></div>
             </div>
           </article>
@@ -2592,7 +2603,7 @@
       const value = Number.parseInt(hex.slice(1), 16);
       return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
     };
-    document.querySelectorAll('.capability-showcase-visual').forEach((visual, visualIndex) => {
+    document.querySelectorAll('.capability-showcase-visual-native-canvas-disabled').forEach((visual, visualIndex) => {
       const canvas = document.createElement('canvas');
       canvas.className = 'mesh-gradient-canvas';
       canvas.setAttribute('aria-hidden', 'true');
@@ -2687,6 +2698,52 @@
 
     consultForm.addEventListener('input', () => {
       consultSuccess.hidden = true;
+    });
+  </script>
+  <script type="module">
+    import {
+      ShaderMount,
+      meshGradientFragmentShader,
+      getShaderColorFromString,
+      ShaderFitOptions
+    } from './assets/paper-shaders.bundle.mjs';
+
+    const DEFAULT_MESH_COLORS = ['#ccf8ff', '#8accff', '#3d8eff', '#e5ecff'];
+    const resolveMeshColors = element => {
+      const raw = element.dataset.meshColors?.trim();
+      if (!raw) return [...DEFAULT_MESH_COLORS];
+      const colors = raw.split(',').map(color => color.trim()).filter(Boolean);
+      return colors.length ? colors : [...DEFAULT_MESH_COLORS];
+    };
+
+    document.querySelectorAll('.mesh-gradient-bg').forEach(element => {
+      const colors = resolveMeshColors(element).map(getShaderColorFromString);
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const mount = new ShaderMount(
+        element,
+        meshGradientFragmentShader,
+        {
+          u_colors: colors,
+          u_colorsCount: colors.length,
+          u_distortion: 0.15,
+          u_swirl: 0.27,
+          u_grainMixer: 0,
+          u_grainOverlay: 0,
+          u_fit: ShaderFitOptions.cover,
+          u_scale: 1.2,
+          u_rotation: 136,
+          u_offsetX: -0.02,
+          u_offsetY: 0.04,
+          u_originX: 0.5,
+          u_originY: 0.5,
+          u_worldWidth: 1280,
+          u_worldHeight: 720
+        },
+        undefined,
+        prefersReducedMotion ? 0 : 1.0
+      );
+      element.paperShaderMount = mount;
+      element.closest('.capability-showcase-visual')?.classList.add('shader-ready');
     });
   </script>
 </body>
