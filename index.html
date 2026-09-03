@@ -1478,6 +1478,14 @@
     }
     .comparison-deployment-grid > article:last-of-type { border-right: 0; }
     .comparison-deployment-grid h3 { padding: 0; font-size: 20px; line-height: 30px; }
+    .comparison-gradient-title {
+      display: inline-block;
+      color: transparent;
+      background: linear-gradient(90deg,#0096fe 0%,#0150fd 50%,#a8b8fe 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
     .comparison-deployment-grid p { margin: 16px 0 0; font-size: 15px; line-height: 28px; }
     @media (max-width: 767px) {
       .comparison-deployment-grid { padding: 0; gap: 0; grid-template-columns: 1fr; }
@@ -2146,11 +2154,11 @@
         <h2 class="section-title comparison-title reveal">告别多系统拼凑，一库跑通 AI 全链路</h2>
         <div class="comparison-deployment-grid reveal" aria-label="传统拼装架构与 OceanBase AI 数据库对比">
           <article>
-            <h3>传统做法：多系统拼接</h3>
+            <h3>传统做法：<span class="comparison-gradient-title">多系统拼接</span></h3>
             <p>传统架构需组合 MySQL、ES、向量库及对象存储等多个独立系统，分别处理结构化数据、关键词搜索、语义检索与文件存储。这种分散模式导致胶水代码繁重、CDC 同步复杂、权限割裂及数据冗余，运维成本高昂。</p>
           </article>
           <article>
-            <h3>OceanBase AI 数据库：一个原生引擎</h3>
+            <h3>OceanBase AI 数据库：<span class="comparison-gradient-title">一个原生引擎</span></h3>
             <p>OceanBase AI 数据库以“一份数据、一套事务、一条 SQL”为核心，在单一引擎内集成多模搜索、库内推理、Agent 原生及 LOB 分层能力。它消除了跨系统集成痛点，大幅简化架构并提升数据一致性与开发效率。</p>
           </article>
         </div>
