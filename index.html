@@ -1451,6 +1451,48 @@
       .comparison-versus { display: none; }
     }
 
+    /* Lakebase core-value card treatment for the architecture comparison floor. */
+    .comparison-deployment-grid {
+      position: static;
+      display: grid;
+      padding: 0;
+      gap: 0;
+      overflow: hidden;
+      border: .5px solid #d0d5dc;
+      border-radius: 4px;
+      background: #fff;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+    .comparison-deployment-grid::before { display: none; }
+    .comparison-deployment-grid > article,
+    .comparison-deployment-grid > article:nth-of-type(1),
+    .comparison-deployment-grid > article:nth-of-type(2) {
+      display: flex;
+      min-height: 220px;
+      padding: 40px;
+      flex-direction: column;
+      border: 0;
+      border-right: .5px solid #d0d5dc;
+      background: #fff;
+      grid-column: auto;
+    }
+    .comparison-deployment-grid > article:last-of-type { border-right: 0; }
+    .comparison-deployment-grid h3 { padding: 0; font-size: 20px; line-height: 30px; }
+    .comparison-deployment-grid p { margin: 16px 0 0; font-size: 15px; line-height: 28px; }
+    @media (max-width: 767px) {
+      .comparison-deployment-grid { padding: 0; gap: 0; grid-template-columns: 1fr; }
+      .comparison-deployment-grid > article,
+      .comparison-deployment-grid > article:nth-of-type(1),
+      .comparison-deployment-grid > article:nth-of-type(2) {
+        min-height: 0;
+        padding: 28px 24px;
+        border-right: 0;
+        border-bottom: .5px solid #d0d5dc;
+        grid-column: 1;
+      }
+      .comparison-deployment-grid > article:last-of-type { border-bottom: 0; }
+    }
+
     /* Architecture diagram restored from architecture-floor-clean */
     .lakebase-architecture-diagram {
       display: grid;
@@ -2103,31 +2145,13 @@
         <div class="eyebrow comparison-eyebrow reveal">架构对比</div>
         <h2 class="section-title comparison-title reveal">告别多系统拼凑，一库跑通 AI 全链路</h2>
         <div class="comparison-deployment-grid reveal" aria-label="传统拼装架构与 OceanBase AI 数据库对比">
-          <div class="mesh-gradient-bg" data-mesh-colors="#77D4FF,#279AFF,#C7BCFF" aria-hidden="true"></div>
-          <span class="comparison-versus" aria-hidden="true">VS</span>
           <article>
-            <h3>传统做法 · 多系统拼接</h3>
-            <div class="comparison-architecture-visual">
-              <div class="old-stack">
-                <div class="system-box">MySQL<br>结构化数据</div>
-                <div class="system-box">ES<br>关键词搜索</div>
-                <div class="system-box">向量库<br>语义搜索</div>
-                <div class="system-box">对象存储<br>文档与图片</div>
-                <div class="glue">应用层胶水代码 · CDC 同步 · 两套权限 · 多份数据</div>
-              </div>
-            </div>
+            <h3>传统做法：多系统拼接</h3>
+            <p>传统架构需组合 MySQL、ES、向量库及对象存储等多个独立系统，分别处理结构化数据、关键词搜索、语义检索与文件存储。这种分散模式导致胶水代码繁重、CDC 同步复杂、权限割裂及数据冗余，运维成本高昂。</p>
           </article>
           <article>
-            <h3>OceanBase AI 数据库 · 一个原生引擎</h3>
-            <div class="comparison-architecture-visual">
-              <div class="new-engine">
-                <div class="engine-copy">
-                  <b>OceanBase AI 数据库</b>
-                  <small>一份数据 · 一套事务 · 一条 SQL</small>
-                </div>
-              </div>
-              <div class="engine-tags"><span>多模搜索</span><span>库内推理</span><span>Agent 原生</span><span>LOB 分层</span></div>
-            </div>
+            <h3>OceanBase AI 数据库：一个原生引擎</h3>
+            <p>OceanBase AI 数据库以“一份数据、一套事务、一条 SQL”为核心，在单一引擎内集成多模搜索、库内推理、Agent 原生及 LOB 分层能力。它消除了跨系统集成痛点，大幅简化架构并提升数据一致性与开发效率。</p>
           </article>
         </div>
       </div>
