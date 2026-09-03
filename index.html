@@ -2396,8 +2396,8 @@
         <div class="scenario-panel active" id="panel-rag">
           <div class="scenario-copy">
             <div class="scenario-intro"><h3>文档入库，答案出库</h3>
-            <p>文档解析、切分、Embedding、双索引、混合搜索、重排和生成全部在数据库内完成。</p></div>
-            <ul class="scenario-list"><li>1 个数据库替代 5 个分散系统</li><li>全文与向量索引实时一致</li><li>权限、事务、审计贯穿全链路</li></ul>
+            <p>文档解析、切分、向量化、混合搜索、重排和生成在同一个数据库内完成，不必再串联文档存储、Embedding 服务、向量库、搜索引擎和编排框架。</p></div>
+            <ul class="scenario-list"><li>替代文档存储、Embedding 服务、向量库、搜索引擎、编排框架五类组件</li><li>全文与向量索引实时一致，权限与审计贯穿全链路</li><li>AI 算子可经 Python UDF 扩展</li></ul>
           </div>
           <div class="flow">
             <div class="flow-title">RAG PIPELINE IN DATABASE</div>
@@ -2413,9 +2413,9 @@
         </div>
         <div class="scenario-panel" id="panel-memory">
           <div class="scenario-copy">
-            <div class="scenario-intro"><h3>完整记忆，实时召回</h3>
-            <p>不再用 Redis、向量库、MySQL 分别保存记忆。所有上下文共享同一份数据和事务。</p></div>
-            <ul class="scenario-list"><li>短期状态与长期语义记忆统一</li><li>刚写入的记忆，下一句话即可搜到</li><li>Namespace 支撑海量 Agent 安全隔离</li></ul>
+            <div class="scenario-intro"><h3>记得住，敢试错</h3>
+            <p>短期状态、语义记忆和业务事实存在同一份数据里，共享同一套事务；需要做对比实验时 Fork 出数据分支，失败即丢弃——不再需要 Redis、向量库和 MySQL 各存一部分上下文。</p></div>
+            <ul class="scenario-list"><li>长期记忆、短期状态、工具调用记录、多模态输入统一存储与召回</li><li>Namespace 级逻辑表支撑千万级 Agent 隔离</li><li>Fork Database 毫秒级实验沙箱，MERGE / DROP 收敛，Bad Case 可回溯到 Prompt、模型与工具链</li><li>沉睡记忆自动沉降到对象存储，RPO=0</li></ul>
           </div>
           <div class="flow">
             <div class="flow-title">COMPLETE AGENT CONTEXT</div>
@@ -2430,9 +2430,9 @@
         </div>
         <div class="scenario-panel" id="panel-media">
           <div class="scenario-copy">
-            <div class="scenario-intro"><h3>文件与数据，不再是两张皮</h3>
-            <p>文档、图片、音频和视频成为数据库对象，与业务字段共享事务、权限和版本。</p></div>
-            <ul class="scenario-list"><li>LOB 按规模自动选择分层存储</li><li>业务属性、关键词和语义组合查询</li><li>一个入口管理多模态数据全生命周期</li></ul>
+            <div class="scenario-intro"><h3>文件也是数据</h3>
+            <p>文件、模型推理结果和业务字段进入同一张表后，可以按业务属性、摘要关键词和画面语义组合查询——例如在一批车载视频里检索“雨天某车辆在某路段的分流口画面”，是一次普通 SQL 查询。</p></div>
+            <ul class="scenario-list"><li>业务属性、摘要关键词、画面语义组合成一次查询</li><li>推理结果回写原表，像普通列一样被查询、索引和 Join</li><li>LOB 三形态自动分层存储（敬请期待）</li></ul>
           </div>
           <div class="flow">
             <div class="flow-title">MULTIMODAL SEARCH</div>
@@ -2447,9 +2447,9 @@
         </div>
         <div class="scenario-panel" id="panel-lakehouse">
           <div class="scenario-copy">
-            <div class="scenario-intro"><h3>实时入仓，即席分析</h3>
-            <p>交易数据、日志与对象存储数据统一进入湖仓分析链路，写入后即可参与实时查询。</p></div>
-            <ul class="scenario-list"><li>流批数据统一存储与计算</li><li>冷热分层降低长期数据成本</li><li>一份数据同时服务实时与离线分析</li></ul>
+            <div class="scenario-intro"><h3>省掉一条双链路</h3>
+            <p>高频实时写入与大批量导入进入同一个引擎，物化视图增量刷新支撑准实时查询，不必再维护 Lambda 架构的两条链路。</p></div>
+            <ul class="scenario-list"><li>流批一体写入，Direct Load 高速导入，物化视图 + MLog 增量加工</li><li>行存、列存、行列混存按需定义，向量化执行较非向量化提升一个数量级</li><li>原生 MPP，节点 - 分区 - 任务多层并行</li><li>兼容 Arrow Flight SQL，原生集成 Spark / Daft / Ray</li><li>Iceberg / Hive / Paimon/湖上查询加速，Unified Catalog 统一元数据</li></ul>
           </div>
           <div class="flow">
             <div class="flow-title">REAL-TIME LAKEHOUSE ANALYTICS</div>
