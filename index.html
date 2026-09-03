@@ -1420,6 +1420,26 @@
       }
       .comparison-architecture-visual .engine-tags { grid-template-columns: repeat(2,1fr); }
     }
+    /* Unified comparison stage: one Lakebase mesh, two high-contrast architecture cards. */
+    .comparison-deployment-grid { position: relative; isolation: isolate; overflow: hidden; padding: 16px; gap: 16px; border-color: #fff; background: #dbeeff; }
+    .comparison-deployment-grid > .mesh-gradient-bg { position: absolute; z-index: 0; inset: 0; }
+    .comparison-deployment-grid::before { position: absolute; z-index: 1; inset: 0; content: ""; pointer-events: none; background: linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.08)); }
+    .comparison-deployment-grid > article { position: relative; z-index: 2; min-height: 0; padding: 0; overflow: hidden; border: 1px solid #fff; border-radius: 4px; background: rgba(255,255,255,.82); backdrop-filter: blur(18px); }
+    .comparison-deployment-grid > article:last-of-type { border-right: 1px solid #fff; }
+    .comparison-deployment-grid h3 { padding: 18px 20px; border-bottom: .5px solid #d0d5dc; background: #fff; }
+    .comparison-architecture-visual { height: 230px; min-height: 230px; margin-top: 0; padding: 20px; border: 0; border-radius: 0; background: transparent; }
+    .comparison-architecture-visual::after { display: none; }
+    .comparison-architecture-visual .system-box,
+    .comparison-architecture-visual .new-engine,
+    .comparison-architecture-visual .engine-tags span { border-color: #d0d5dc; background: rgba(255,255,255,.9); backdrop-filter: none; }
+    .comparison-architecture-visual .glue { border-color: #0496fe; background: rgba(4,150,254,.06); }
+    .comparison-versus { position: absolute; z-index: 4; top: 50%; left: 50%; display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid #fff; border-radius: 50%; color: #fff; background: #04091a; font-size: 11px; font-weight: 600; transform: translate(-50%,-50%); }
+    @media (max-width: 767px) {
+      .comparison-deployment-grid { padding: 12px; gap: 12px; }
+      .comparison-deployment-grid > article { padding: 0; border: 1px solid #fff; }
+      .comparison-architecture-visual { height: 230px; min-height: 230px; }
+      .comparison-versus { display: none; }
+    }
 
     /* Architecture diagram restored from architecture-floor-clean */
     .lakebase-architecture-diagram {
@@ -2073,10 +2093,11 @@
         <div class="eyebrow comparison-eyebrow reveal">传统架构 vs. OceanBase AI 数据库</div>
         <h2 class="section-title comparison-title reveal">传统方案仅能「存」<br>OceanBase「跑通」AI 应用完整链路</h2>
         <div class="comparison-deployment-grid reveal" aria-label="传统拼装架构与 OceanBase AI 数据库对比">
+          <div class="mesh-gradient-bg" data-mesh-colors="#77D4FF,#279AFF,#C7BCFF" aria-hidden="true"></div>
+          <span class="comparison-versus" aria-hidden="true">VS</span>
           <article>
             <h3>传统做法 · 多系统拼接</h3>
             <div class="comparison-architecture-visual">
-              <div class="mesh-gradient-bg" data-mesh-colors="#77D4FF,#279AFF,#C7BCFF" aria-hidden="true"></div>
               <div class="old-stack">
                 <div class="system-box">MySQL<br>结构化数据</div>
                 <div class="system-box">ES<br>关键词搜索</div>
@@ -2089,7 +2110,6 @@
           <article>
             <h3>OceanBase AI 数据库 · 一个原生引擎</h3>
             <div class="comparison-architecture-visual">
-              <div class="mesh-gradient-bg" data-mesh-colors="#77D4FF,#279AFF,#C7BCFF" aria-hidden="true"></div>
               <div class="new-engine">
                 <div class="engine-mark">
                   <svg width="25" height="25" viewBox="0 0 24 24" fill="none" aria-hidden="true">
