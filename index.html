@@ -1432,11 +1432,13 @@
     .comparison-architecture-visual { height: 230px; min-height: 230px; margin-top: 0; padding: 24px; border: 1px solid #fff; border-radius: 4px; background: rgba(255,255,255,.5); backdrop-filter: blur(25px); }
     .comparison-architecture-visual::after { display: none; }
     .comparison-architecture-visual .system-box,
+    .comparison-architecture-visual .glue,
     .comparison-architecture-visual .new-engine,
-    .comparison-architecture-visual .engine-tags span { border-color: #fff; background: rgba(255,255,255,.3); backdrop-filter: none; }
-    .comparison-architecture-visual .system-box,
-    .comparison-architecture-visual .new-engine { border-color: #fff; background: rgba(255,255,255,.3); }
-    .comparison-architecture-visual .glue { border-color: #fff; background: rgba(255,255,255,.3); }
+    .comparison-architecture-visual .engine-tags span { border: .5px solid #fff; border-radius: 4px; color: rgba(0,0,0,.85); background: rgba(255,255,255,.3); backdrop-filter: none; }
+    .comparison-architecture-visual .glue,
+    .comparison-architecture-visual .engine-tags span { height: 36px; min-height: 36px; }
+    .comparison-architecture-visual .engine-tags { margin-top: 8px; }
+    .comparison-architecture-visual .new-engine { justify-content: center; text-align: center; }
     .comparison-versus { position: relative; z-index: 4; display: grid; align-self: center; justify-self: center; color: #04091a; background: transparent; font-size: 13px; font-weight: 600; line-height: 20px; grid-column: 2; grid-row: 1; transform: translateY(28px); }
     @media (max-width: 767px) {
       .comparison-deployment-grid { padding: 12px; gap: 12px; }
@@ -2117,12 +2119,6 @@
             <h3>OceanBase AI 数据库 · 一个原生引擎</h3>
             <div class="comparison-architecture-visual">
               <div class="new-engine">
-                <div class="engine-mark">
-                  <svg width="25" height="25" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M6 6.5C6 4.57 8.69 3 12 3s6 1.57 6 3.5S15.31 10 12 10 6 8.43 6 6.5Z" stroke="white" stroke-width="1.5"/>
-                    <path d="M6 6.5v5C6 13.43 8.69 15 12 15s6-1.57 6-3.5v-5M6 11.5v5C6 18.43 8.69 20 12 20s6-1.57 6-3.5v-5" stroke="white" stroke-width="1.5"/>
-                  </svg>
-                </div>
                 <div class="engine-copy">
                   <b>OceanBase AI 数据库</b>
                   <small>一份数据 · 一套事务 · 一条 SQL</small>
