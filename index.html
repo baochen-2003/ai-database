@@ -470,6 +470,12 @@
     .security-strip div { color: #64748b; border-left-color: #e5eaf0; }
     .security-strip b { color: #0150fd; }
     .agent-demo { border-color: #dce4ee; }
+    @media (min-width: 801px) {
+      .capability-showcase-visual .code-window { display: flex; height: 480px; min-height: 480px; flex-direction: column; overflow: hidden; }
+      .capability-showcase-visual .code-window .code { flex: 1; min-height: 0; padding: 18px 26px; overflow: hidden; font-size: 12px; line-height: 1.55; }
+      .capability-showcase-visual .code-window .security-strip { flex: 0 0 auto; }
+      .capability-showcase-visual .code-window .security-strip div { padding-top: 12px; padding-bottom: 12px; }
+    }
     @keyframes lakebaseLivePulse { 0%,100% { box-shadow: 0 0 0 3px rgba(66,213,139,.1); } 50% { box-shadow: 0 0 0 7px rgba(66,213,139,.18); } }
     @media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
 
