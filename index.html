@@ -2278,9 +2278,10 @@
           <h2 class="section-title">从数据进入，到智能产生<br>一个数据库跑通完整链路</h2>
         </div>
         <div class="scenario-tabs reveal" role="tablist">
-          <button class="scenario-tab active" role="tab" aria-selected="true" data-tab="rag">企业 RAG / 智能客服</button>
-          <button class="scenario-tab" role="tab" aria-selected="false" data-tab="memory">AI Agent 记忆管理</button>
-          <button class="scenario-tab" role="tab" aria-selected="false" data-tab="media">多模态智能搜索</button>
+          <button class="scenario-tab active" role="tab" aria-selected="true" data-tab="rag">企业 RAG 与智能客服</button>
+          <button class="scenario-tab" role="tab" aria-selected="false" data-tab="memory">AI Agent 记忆与评测</button>
+          <button class="scenario-tab" role="tab" aria-selected="false" data-tab="media">多模态数据搜索</button>
+          <button class="scenario-tab" role="tab" aria-selected="false" data-tab="lakehouse">实时数仓与湖仓分析</button>
         </div>
       </div>
       <article class="scenario-card">
@@ -2335,6 +2336,23 @@
               <div class="media-card"><span>▤</span><b>业务文档</b></div>
               <div class="search-bar">⌕&nbsp;&nbsp; 下雨天 · 北京海淀 · 分流口故障图片</div>
             </div>
+          </div>
+        </div>
+        <div class="scenario-panel" id="panel-lakehouse">
+          <div class="scenario-copy">
+            <div class="scenario-intro"><h3>实时入仓，即席分析</h3>
+            <p>交易数据、日志与对象存储数据统一进入湖仓分析链路，写入后即可参与实时查询。</p></div>
+            <ul class="scenario-list"><li>流批数据统一存储与计算</li><li>冷热分层降低长期数据成本</li><li>一份数据同时服务实时与离线分析</li></ul>
+          </div>
+          <div class="flow">
+            <div class="flow-title">REAL-TIME LAKEHOUSE ANALYTICS</div>
+            <div class="flow-row">
+              <div class="flow-node">实时<br>写入</div><span class="flow-arrow">→</span>
+              <div class="flow-node">增量<br>计算</div><span class="flow-arrow">→</span>
+              <div class="flow-node">冷热<br>分层</div><span class="flow-arrow">→</span>
+              <div class="flow-node">即席<br>分析</div>
+            </div>
+            <div class="flow-result"><b>一份数据，实时与离线统一分析</b><span>STREAMING · WAREHOUSE · LAKEHOUSE</span></div>
           </div>
         </div>
       </article>
