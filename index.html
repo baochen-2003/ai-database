@@ -439,6 +439,40 @@
     .isolation { margin-top: 12px; display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; }
     .isolation span { padding: 4px 7px; color: #777; font-size: 9px; background: #e6e7e9; }
 
+    /* Lakebase-style light demo stages: keep the Paper Shader visible around a solid product UI. */
+    .capability-showcase-visual .feature-demo { color: #1e293b; border: .5px solid #dce4ee; background: #fff; box-shadow: 0 20px 55px rgba(1,80,253,.14); }
+    .capability-showcase-visual .search-demo,
+    .capability-showcase-visual .code-window,
+    .capability-showcase-visual .agent-demo,
+    .capability-showcase-visual.shader-ready .search-demo,
+    .capability-showcase-visual.shader-ready .code-window,
+    .capability-showcase-visual.shader-ready .agent-demo { color: #1e293b; background: #fff; background-color: #fff; backdrop-filter: none; }
+    .search-demo::before { display: none; }
+    .demo-label { color: #7b8798; }
+    .query-box { color: #334155; border-color: #dce4ee; background: #f7faff; }
+    .query-box .sql { color: #0150fd; }
+    .route { border-color: #dce4ee; background: #fff; }
+    .route-icon { color: #0496fe; }
+    .route small { color: #8a94a3; }
+    .merge-line::before { background: linear-gradient(90deg, transparent, #0496fe, transparent); }
+    .rank-box { border-color: rgba(4,150,254,.55); background: rgba(4,150,254,.08); }
+    .rank-box span { color: #0150fd; }
+    .live-badge { color: #64748b; }
+    .live-dot { animation: lakebaseLivePulse 1.8s ease-in-out infinite; }
+    .window-bar { border-bottom-color: #e5eaf0; background: #f6f8fb; }
+    .window-dot { background: #cbd3df; }
+    .window-name { color: #64748b; }
+    .code .comment { color: #8a94a3; }
+    .code .kw { color: #0150fd; }
+    .code .fn { color: #7457e8; }
+    .code .str { color: #27854a; }
+    .security-strip { border-top-color: #e5eaf0; background: #f8faff; }
+    .security-strip div { color: #64748b; border-left-color: #e5eaf0; }
+    .security-strip b { color: #0150fd; }
+    .agent-demo { border-color: #dce4ee; }
+    @keyframes lakebaseLivePulse { 0%,100% { box-shadow: 0 0 0 3px rgba(66,213,139,.1); } 50% { box-shadow: 0 0 0 7px rgba(66,213,139,.18); } }
+    @media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
+
     /* Scenarios */
     .scenario-tabs {
       margin-top: 53px; display: grid; grid-template-columns: repeat(3, 1fr);
