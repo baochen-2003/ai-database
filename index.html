@@ -1172,8 +1172,10 @@
     .trust-card h3 { margin: 24px 0 8px; color: #071225; font-size: 15px; font-weight: 600; line-height: 28px; }
     .trust-card p { margin: 0; color: rgba(0,0,0,.72); font-size: 14px; line-height: 24px; }
     .value-grid { display: grid; overflow: hidden; border: .5px solid #d0d5dc; border-radius: 4px 4px 0 0; grid-template-columns: repeat(2,minmax(0,1fr)); }
-    .value-card { display: flex; min-height: 166px; flex-direction: column; gap: 16px; padding: 40px; border-right: .5px solid #d0d5dc; background: #fff; }
+    .value-card { display: flex; min-height: 166px; flex-direction: column; gap: 24px; padding: 40px; border-right: .5px solid #d0d5dc; background: #fff; }
     .value-card:last-child { border-right: 0; }
+    .value-card-image { display: block; width: 100%; height: auto; border-radius: 8px; object-fit: cover; }
+    .value-card-content { display: flex; flex-direction: column; gap: 16px; }
     .value-card-title { display: flex; align-items: center; gap: 12px; }
     .value-card h3 { margin: 0; color: #04091a; font-size: 20px; font-weight: 600; line-height: 30px; }
     .value-card p { margin: 0; color: rgba(0,0,0,.72); font-size: 15px; line-height: 28px; }
@@ -2469,8 +2471,8 @@
           <p class="section-lead">经 16 年生产验证的内核，OceanBase AI 数据库继承全部分布式内核能力，AI 场景零妥协。</p>
         </div>
         <div class="value-grid reveal">
-          <article class="value-card"><div class="value-card-title"><h3>蚂蚁阿福</h3></div><p>亿级用户 AI 助手，OceanBase 承载记忆库 + 知识检索 + 会话隔离，日均千万级对话</p></article>
-          <article class="value-card"><div class="value-card-title"><h3>蚂蚁灵光</h3></div><p>代码智能体平台，Fork Database 支撑海量实验隔离，多模表管理训练数据集</p></article>
+          <article class="value-card"><img class="value-card-image" src="assets/case-afu.png" alt="蚂蚁阿福"><div class="value-card-content"><div class="value-card-title"><h3>蚂蚁阿福</h3></div><p>亿级用户 AI 助手，OceanBase 承载记忆库 + 知识检索 + 会话隔离，日均千万级对话</p></div></article>
+          <article class="value-card"><img class="value-card-image" src="assets/case-lingguang.png" alt="蚂蚁灵光"><div class="value-card-content"><div class="value-card-title"><h3>蚂蚁灵光</h3></div><p>代码智能体平台，Fork Database 支撑海量实验隔离，多模表管理训练数据集</p></div></article>
         </div>
         <div class="value-metrics reveal">
           <div class="mesh-gradient-bg" data-mesh-colors="#ffffff,#d4ecff,#8accff,#3d8eff" aria-hidden="true"></div>
