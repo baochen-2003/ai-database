@@ -8,8 +8,11 @@
         stroke-linecap: round;
         stroke-linejoin: round;
         stroke-dasharray: 3 5;
+        stroke-dashoffset: 0;
         vector-effect: non-scaling-stroke;
-        animation: scenario-arrow-dash-flow 1.2s linear infinite;
+        transform: none;
+        animation: scenario-arrow-dash-flow 1.2s linear infinite normal both;
+        will-change: stroke-dashoffset;
       }
       .scenario-arrow-stroke { stroke: rgba(255,255,255,.92); }
       svg &gt; g[data-figma-bg-blur-radius] {
@@ -28,6 +31,7 @@
       svg.scenario-motion-ready &gt; g[data-figma-bg-blur-radius]:nth-of-type(5) { animation-delay: 270ms; }
       svg.scenario-motion-ready &gt; g[data-figma-bg-blur-radius]:nth-of-type(6) { animation-delay: 360ms; }
       @keyframes scenario-arrow-dash-flow {
+        from { stroke-dashoffset: 0; }
         to { stroke-dashoffset: -8; }
       }
       @keyframes scenario-card-enter {
