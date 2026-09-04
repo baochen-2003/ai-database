@@ -2227,9 +2227,9 @@
               <h3>一条 SQL，五类检索组合</h3>
               <p>标量、JSON、全文、向量、空间检索在同一条 SQL 中执行，优化器统一选择计划，融合排序在库内完成——无需在应用层归并多套系统的返回结果。</p>
               <ul class="capability-showcase-list">
-                <li><b>五类检索在同一条 SQL 中组合</b><p>Btree、多值索引、倒排 BM25、HNSW / IVF、GIS 索引，每种数据类型有匹配的加速路径。</p></li>
-                <li><b>库内融合排序</b><p>内置 RRF、WEIGHT_SUM、MINMAX 归一化，多路召回直接返回排好序的 Top-K。</p></li>
-                <li><b>写入即可见</b><p>事务提交后各类索引立即生效，无需等 CDC 同步到外部搜索服务或向量库。</p></li>
+                <li><b>五类检索在同一条 SQL 中组合</b><p>Btree、多值索引、倒排 BM25、HNSW / IVF、GIS 索引</p></li>
+                <li><b>库内融合排序</b><p>内置 RRF、WEIGHT_SUM、MINMAX，多路召回返回 Top-K</p></li>
+                <li><b>写入即可见</b><p>事务提交后各类索引立即生效，无需等 CDC 同步</p></li>
               </ul>
             </div>
             <div class="capability-showcase-visual search">
