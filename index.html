@@ -1106,14 +1106,14 @@
     .scenario-tabs { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 0 0 24px; border: 0; }
     .scenario-tab { display: flex; flex: 0 0 auto; align-items: center; gap: 12px; padding: 4px 10px; border: 0; border-radius: 4px; color: inherit; background: transparent; font-size: 15px; font-weight: 500; line-height: 28px; white-space: nowrap; }
     .scenario-tab.active { border: 0; color: #fff; background: #04091a; font-weight: 700; }
-    .scenario-card { position: relative; z-index: 0; width: min(1200px, calc(100% - 200px)); margin: 24px auto 0; overflow: hidden; isolation: isolate; border-radius: 4px; background: #dbeeff; }
+    .scenario-card { position: relative; z-index: 0; width: min(1200px, calc(100% - 80px)); margin: 24px auto 0; overflow: hidden; isolation: isolate; border-radius: 4px; background: #dbeeff; }
     .scenario-card-bg { position: absolute; inset: 0; left: 50%; z-index: 0; width: 1440px; pointer-events: none; transform: translateX(-50%); }
     .scenario-card-bg span { position: absolute; border-radius: 50%; pointer-events: none; }
     .scenario-bg-ellipse-purple { width: 820px; height: 380px; left: 720px; top: -80px; background: #c7bcff; filter: blur(140px); transform: rotate(19.22deg); }
     .scenario-bg-ellipse-blue { width: 1200px; height: 640px; left: 280px; top: -40px; background: #279aff; filter: blur(150px); transform: rotate(-20.47deg); }
     .scenario-bg-ellipse-cyan { width: 1200px; height: 320px; left: -200px; top: 200px; background: #77d4ff; filter: blur(140px); transform: rotate(.73deg); }
     .scenario-bg-ellipse-light { width: 900px; height: 520px; left: -280px; top: 40px; background: #dbeeff; filter: blur(140px); }
-    .scenario-panel { position: relative; z-index: 2; display: none; width: 100%; min-height: 530px; margin: 0; padding: 48px 40px; align-items: stretch; gap: 80px; grid-template-columns: minmax(0, 1fr) 556px; grid-template-rows: minmax(0, 1fr); background: transparent; }
+    .scenario-panel { position: relative; z-index: 2; display: none; width: 100%; min-height: 496px; margin: 0; padding: 48px 40px; align-items: stretch; gap: 80px; grid-template-columns: minmax(0, 1fr) 556px; grid-template-rows: minmax(0, 1fr); background: transparent; }
     .scenario-panel.active { display: grid; animation: none; }
     .scenario-copy { display: flex; width: 100%; max-width: 560px; min-height: 0; flex-direction: column; justify-content: flex-start; gap: 24px; justify-self: start; }
     .scenario-intro { display: flex; flex-direction: column; }
@@ -1130,9 +1130,9 @@
     .flow-result { border-left-color: #fff; color: #071225; background: rgba(255,255,255,.42); }
 
     @media (min-width: 1024px) {
-      .scenario-panel { min-height: 530px; padding: 48px 40px; gap: 40px; grid-template-columns: minmax(0, 1fr) 620px; }
+      .scenario-panel { min-height: 496px; padding: 48px 40px; gap: 40px; grid-template-columns: minmax(0, 1fr) 600px; }
       .scenario-copy { justify-content: flex-start; gap: 24px; }
-      .flow { aspect-ratio: 620 / 360; }
+      .flow { width: 600px; height: 400px; aspect-ratio: auto; }
     }
 
     @media (max-width: 1023px) {
