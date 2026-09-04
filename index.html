@@ -1612,12 +1612,14 @@
       background: rgba(4,150,254,.1);
     }
     .lakebase-architecture-diagram .infra-copy b { color: #000; }
-    .lakebase-architecture-diagram .infra-copy span { color: rgba(0,0,0,.65); }
+    .lakebase-architecture-diagram .infra-copy span { color: rgba(0,0,0,.65); font-size: 11px; font-weight: 400; }
     .lakebase-architecture-diagram .infra-tags span {
       border: .5px solid #d0d5dc;
       border-radius: 4px;
-      color: rgba(0,0,0,.72);
+      color: rgba(0,0,0,.85);
       background: rgba(255,255,255,.8);
+      font-size: 11px;
+      font-weight: 400;
     }
     .lakebase-architecture-diagram .infra-connector::before { background: #0496fe; }
     .lakebase-architecture-diagram .infra-connector::after { border-color: #0496fe; }
@@ -1741,6 +1743,7 @@
       background: rgba(255,255,255,.3);
     }
     .architecture-diagram-panel .arch-unit { min-height: 38px; }
+    .architecture-diagram-panel .arch-content.cols-7 .arch-unit { color: rgba(0,0,0,.65); }
     .architecture-diagram-panel .infra-path { gap: 8px; padding: 8px 10px; }
     .architecture-diagram-panel .infra-node,
     .architecture-diagram-panel .infra-node.compute {
@@ -1918,7 +1921,7 @@
       letter-spacing: .12em;
     }
     .architecture-content-layout .arch-benefit h3 {
-      margin: 12px 0 8px;
+      margin: 0 0 8px;
       color: #000;
       font-size: 16px;
       font-weight: 600;
@@ -1927,7 +1930,8 @@
     .architecture-content-layout .arch-benefit p {
       margin: 0;
       color: rgba(0,0,0,.72);
-      font-size: 12px;
+      font-size: 14px;
+      font-weight: 400;
       line-height: 20px;
     }
     @media (max-width: 1023px) {
