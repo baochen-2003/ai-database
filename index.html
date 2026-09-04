@@ -2284,9 +2284,11 @@
       .core-capability-card:last-child .core-capability-list { grid-template-columns: 1fr; }
       .value-card { min-height: 0; padding: 24px; border-right: 0; border-bottom: .5px solid #d0d5dc; }
       .value-card:last-child { border-bottom: 0; }
+      .value-grid { border-bottom: 0; }
+      .value-metrics { border-top: .5px solid #d0d5dc; }
       .value-metrics-content { min-height: 0; padding: 32px 20px; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px 12px; }
       .value-metric, .value-metric:nth-child(odd), .value-metric:nth-child(n+3) {
-        min-height: 104px; padding: 16px 4px; gap: 6px; border: 0;
+        min-height: 104px; padding: 16px 8px; align-items: flex-start; gap: 6px; border: 0; text-align: left;
       }
       .value-metric:nth-child(even), .value-metric:nth-child(n+3) { border: 0; }
       .value-metric strong { max-width: 100%; font-size: clamp(18px,5.5vw,24px); line-height: 1.25; white-space: nowrap; }
