@@ -380,25 +380,25 @@
     }
     .query-box .sql { color: #ff9a76; }
     .search-routes { position: relative; margin-top: 30px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
-    .route { padding: 16px 5px; text-align: center; border: 1px solid rgba(255,255,255,.1); }
-    .route-icon { height: 25px; color: #ff8b62; font-size: 18px; }
-    .route b { display: block; margin-top: 7px; font-size: 12px; }
+    .route { display: flex; padding: 16px 5px; flex-direction: column; align-items: center; gap: 4px; text-align: center; border: 1px solid rgba(255,255,255,.1); }
+    .route-icon { height: 22px; color: #1e293b; font-size: 18px; line-height: 22px; }
+    .route b { display: block; margin-top: 0; font-size: 12px; }
     .route small { color: rgba(255,255,255,.38); font-size: 9px; }
-    .merge-line { height: 40px; position: relative; }
+    .merge-line { display: none; }
     .merge-line::before {
       content: ""; position: absolute; left: 10%; right: 10%; top: 19px; height: 1px;
       background: linear-gradient(90deg, transparent, var(--orange), transparent);
     }
     .rank-box {
-      position: relative; padding: 19px; text-align: center; border: 1px solid rgba(255,91,34,.55);
-      background: rgba(255,91,34,.1);
+      position: relative; margin-top: 24px; padding: 19px; text-align: center; border: 1px solid #dce4ee;
+      background: #fff;
     }
     .rank-box b { display: block; font-size: 14px; }
     .rank-box span { display: block; margin-top: 7px; color: #ffaf92; font-size: 11px; letter-spacing: .05em; }
     .live-badge {
       margin-top: 18px; display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,.66); font-size: 12px;
     }
-    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #42d58b; box-shadow: 0 0 0 5px rgba(66,213,139,.11); }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #1e293b; box-shadow: none; }
 
     /* Code demo */
     .code-window { min-height: 490px; color: #d7dbe2; background: #111316; box-shadow: 0 28px 70px rgba(17,18,20,.15); }
@@ -432,16 +432,16 @@
     .agent-core b { display: block; font-size: 16px; }
     .agent-core small { color: rgba(7,18,37,.55); font-size: 10px; }
     .agent-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .agent-card { display: flex; min-height: 160px; padding: 19px 16px; flex-direction: column; border: 1px solid #dce4ee; border-top: 3px solid var(--orange); background: #fff; }
-    .agent-card:nth-child(2) { border-top-color: var(--blue); }
-    .agent-card:nth-child(3) { border-top-color: var(--purple); }
+    .agent-card { display: flex; min-height: 160px; padding: 19px 16px; flex-direction: column; border: 1px solid #dce4ee; border-top: 3px solid #1e293b; background: #fff; }
+    .agent-card:nth-child(2), .agent-card:nth-child(3) { border-top-color: #1e293b; }
     .agent-card .n { color: #afb2b8; font-size: 11px; }
     .agent-card h4 { margin: 12px 0 9px; font-size: 16px; }
     .agent-card p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.65; }
     .agent-card .metric { margin-top: auto; padding-top: 15px; color: var(--orange); font-size: 11px; font-weight: 650; }
-    .agent-card:nth-child(2) .metric { color: var(--blue); }
-    .agent-card:nth-child(3) .metric { color: var(--purple); }
-    .isolation { margin-top: 16px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    .agent-card .metric,
+    .agent-card:nth-child(2) .metric,
+    .agent-card:nth-child(3) .metric { color: #1e293b; }
+    .isolation { margin-top: 24px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
     .isolation span { min-height: 30px; padding: 6px 10px; border: 1px solid #dce4ee; color: #5f6876; background: #f4f7fb; font-size: 11px; line-height: 16px; }
 
     /* Lakebase-style light demo stages: keep the Paper Shader visible around a solid product UI. */
@@ -457,13 +457,13 @@
     .query-box { color: #334155; border-color: #dce4ee; background: #f7faff; }
     .query-box .sql { color: #0150fd; }
     .route { border-color: #dce4ee; background: #fff; }
-    .route-icon { color: #0496fe; }
+    .route-icon { color: #1e293b; }
     .route small { color: #8a94a3; }
     .merge-line::before { background: linear-gradient(90deg, transparent, #0496fe, transparent); }
-    .rank-box { border-color: rgba(4,150,254,.55); background: rgba(4,150,254,.08); }
-    .rank-box span { color: #0150fd; }
+    .rank-box { border-color: #dce4ee; background: #fff; }
+    .rank-box span { color: #64748b; }
     .live-badge { color: #64748b; }
-    .live-dot { animation: lakebaseLivePulse 1.8s ease-in-out infinite; }
+    .live-dot { animation: none; }
     #capability-panel-search .capability-showcase-visual { min-height: 540px; }
     #capability-panel-search .search-demo { height: 480px; min-height: 480px; padding: 16px 30px 28px; }
     #capability-panel-search .query-box { height: 220px; min-height: 220px; margin-top: 8px; padding: 14px 18px; overflow: hidden; }
@@ -2324,7 +2324,7 @@
       #capability-panel-search .rank-box b { font-size: 9px; line-height: 12px; }
       #capability-panel-search .rank-box span { margin-top: 0; font-size: 7px; line-height: 9px; }
       #capability-panel-search .live-badge { margin-top: 8px; gap: 6px; font-size: 8px; line-height: 10px; }
-      #capability-panel-search .live-dot { width: 5px; height: 5px; flex: 0 0 5px; box-shadow: 0 0 0 3px rgba(66,213,139,.11); }
+      #capability-panel-search .live-dot { width: 5px; height: 5px; flex: 0 0 5px; box-shadow: none; }
       #capability-panel-inference .code-window { display: flex; height: 205px; min-height: 205px; flex-direction: column; overflow: hidden; }
       #capability-panel-inference .window-bar { height: 30px; padding: 0 10px; }
       #capability-panel-inference .window-dot { width: 5px; height: 5px; }
