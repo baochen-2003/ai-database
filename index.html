@@ -1075,7 +1075,7 @@
       .capability-showcase-copy { padding: 24px 16px 28px; }
       .capability-showcase-visual { min-height: 0; padding: 12px 12px 16px; }
       .capability-showcase-visual .feature-demo { min-height: 205px; height: 205px; box-shadow: none; }
-      .capability-showcase-tab { height: 48px; padding: 0 4px; font-size: 12px; }
+      .capability-showcase-tab { height: 56px; padding: 0 8px; font-size: 13px; }
     }
 
     @media (max-width: 1023px) {
@@ -2306,34 +2306,41 @@
       .capability-showcase-list { margin-top: 0; }
       .capability-showcase-visual { order: 2; min-height: 0; height: auto; padding: 16px; }
       #capability-panel-search .capability-showcase-visual { min-height: 0; }
-      #capability-panel-search .search-demo { height: 340px; min-height: 340px; padding: 8px 14px 14px; }
-      #capability-panel-search .demo-label { font-size: 9px; }
-      #capability-panel-search .query-box { height: 170px; min-height: 170px; margin-top: 4px; padding: 8px 10px; }
-      .hybrid-sql-code { font-size: 9px; line-height: 1.4; }
-      #capability-panel-search .search-routes { margin-top: 10px; gap: 4px; }
-      #capability-panel-search .route { padding: 4px 2px; }
-      #capability-panel-search .route-icon { display: block; height: 14px; font-size: 12px; }
-      #capability-panel-search .route b { margin-top: 1px; font-size: 10px; line-height: 14px; }
-      #capability-panel-search .route small { font-size: 8px; line-height: 11px; }
-      #capability-panel-search .merge-line { height: 14px; }
-      #capability-panel-search .merge-line::before { top: 6px; }
-      #capability-panel-search .rank-box { padding: 5px; }
-      #capability-panel-search .rank-box b { font-size: 10px; line-height: 14px; }
-      #capability-panel-search .rank-box span { margin-top: 1px; font-size: 8px; line-height: 11px; }
-      #capability-panel-search .live-badge { margin-top: 10px; gap: 5px; font-size: 9px; line-height: 12px; }
-      #capability-panel-inference .code-window { display: flex; height: 360px; min-height: 360px; flex-direction: column; overflow: hidden; }
-      #capability-panel-inference .code { flex: 1; min-height: 0; padding: 14px 16px; overflow: hidden; font-size: 10px; line-height: 1.55; }
+      #capability-panel-search .search-demo { height: 205px; min-height: 205px; padding: 8px 10px; }
+      #capability-panel-search .demo-label { font-size: 8px; line-height: 10px; }
+      #capability-panel-search .query-box { height: 72px; min-height: 72px; margin-top: 4px; padding: 5px 7px; }
+      .hybrid-sql-code { font-size: 7px; line-height: 1.3; }
+      #capability-panel-search .search-routes { margin-top: 5px; gap: 3px; }
+      #capability-panel-search .route { padding: 2px; }
+      #capability-panel-search .route-icon { display: none; }
+      #capability-panel-search .route b { margin-top: 0; font-size: 9px; line-height: 12px; }
+      #capability-panel-search .route small { font-size: 7px; line-height: 9px; }
+      #capability-panel-search .merge-line { height: 8px; }
+      #capability-panel-search .merge-line::before { top: 3px; }
+      #capability-panel-search .rank-box { padding: 3px; }
+      #capability-panel-search .rank-box b { font-size: 9px; line-height: 12px; }
+      #capability-panel-search .rank-box span { margin-top: 0; font-size: 7px; line-height: 9px; }
+      #capability-panel-search .live-badge { margin-top: 5px; gap: 4px; font-size: 8px; line-height: 10px; }
+      #capability-panel-inference .code-window { display: flex; height: 205px; min-height: 205px; flex-direction: column; overflow: hidden; }
+      #capability-panel-inference .window-bar { height: 30px; padding: 0 10px; }
+      #capability-panel-inference .window-dot { width: 5px; height: 5px; }
+      #capability-panel-inference .window-name { font-size: 8px; }
+      #capability-panel-inference .code { flex: 1; min-height: 0; padding: 8px 10px; overflow: hidden; font-size: 8px; line-height: 1.35; }
       #capability-panel-inference .security-strip { flex: 0 0 auto; }
-      #capability-panel-inference .security-strip div { padding: 8px 3px; }
-      #capability-panel-agent .agent-demo { height: auto; min-height: 560px; padding: 16px; overflow: hidden; }
-      #capability-panel-agent .agent-core { width: 96px; height: 96px; margin: 0 auto 16px; }
-      #capability-panel-agent .agent-cards { gap: 8px; }
-      #capability-panel-agent .agent-card { min-height: 104px; padding: 12px; }
-      #capability-panel-agent .agent-card h4 { margin: 6px 0 4px; font-size: 14px; }
-      #capability-panel-agent .agent-card p { font-size: 10px; line-height: 1.5; }
-      #capability-panel-agent .agent-card .metric { padding-top: 8px; }
-      #capability-panel-agent .isolation { margin-top: 12px; gap: 5px; }
-      #capability-panel-agent .isolation span { min-height: 26px; padding: 4px 7px; font-size: 9px; line-height: 16px; }
+      #capability-panel-inference .security-strip div { padding: 5px 2px; font-size: 7px; }
+      #capability-panel-inference .security-strip b { margin-bottom: 1px; font-size: 8px; }
+      #capability-panel-agent .agent-demo { height: 205px; min-height: 205px; padding: 6px; overflow: hidden; }
+      #capability-panel-agent .agent-core { width: 44px; height: 44px; margin: 0 auto 6px; border-width: 2px; }
+      #capability-panel-agent .agent-core b { font-size: 9px; line-height: 12px; }
+      #capability-panel-agent .agent-core small { font-size: 6px; line-height: 8px; }
+      #capability-panel-agent .agent-cards { gap: 4px; grid-template-columns: repeat(3,1fr); }
+      #capability-panel-agent .agent-card { min-height: 112px; padding: 6px; }
+      #capability-panel-agent .agent-card .n { font-size: 6px; line-height: 8px; }
+      #capability-panel-agent .agent-card h4 { margin: 3px 0 2px; font-size: 10px; line-height: 14px; }
+      #capability-panel-agent .agent-card p { font-size: 8px; line-height: 1.35; }
+      #capability-panel-agent .agent-card .metric { padding-top: 4px; font-size: 7px; line-height: 10px; }
+      #capability-panel-agent .isolation { margin-top: 6px; gap: 3px; flex-wrap: nowrap; }
+      #capability-panel-agent .isolation span { min-height: 18px; padding: 1px 4px; font-size: 7px; line-height: 14px; white-space: nowrap; }
 
       /* Architecture floor: benefits stack, decorative blobs must not force overflow */
       .architecture-content-layout { margin-top: 28px; gap: 16px; grid-template-columns: 1fr; }
