@@ -1101,8 +1101,8 @@
     /* Application scenarios restored from LakebasePage.tsx / lakebase.module.scss */
     .scenario-section { padding: 120px 0 60px; background: #fff; }
     .scenario-section-head { width: min(1200px, calc(100% - 200px)); margin: 0 auto; }
-    .scenario-section .center { width: min(1200px, 100%); margin: 0 auto 40px; text-align: center; }
-    .scenario-section .section-title { white-space: nowrap; }
+    .scenario-section .center { display: flex; width: 100%; margin: 0 auto 40px; align-items: center; flex-direction: column; text-align: center; }
+    .scenario-section .section-title { width: 100%; margin-right: auto; margin-left: auto; white-space: nowrap; text-align: center; }
     .scenario-section .center .eyebrow { margin-bottom: 16px; }
     .scenario-tabs { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 0 0 24px; border: 0; }
     .scenario-tab { display: flex; flex: 0 0 auto; align-items: center; gap: 12px; padding: 4px 10px; border: 0; border-radius: 4px; color: inherit; background: transparent; font-size: 15px; font-weight: 500; line-height: 28px; white-space: nowrap; }
@@ -1222,6 +1222,7 @@
     .lakebase-hero .product-overview-inner { position: relative; z-index: 3; display: flex; width: min(1000px, 100%); flex-direction: column; align-items: center; text-align: center; }
     .lakebase-hero .product-overview-title { margin: 0; color: #071225; font-size: 44px; font-weight: 600; line-height: 1.4; letter-spacing: 0; }
     .lakebase-hero .product-overview-title > span { display: block; }
+    .lakebase-hero .product-overview-title .hero-gradient-text { display: inline-block; color: transparent; background: linear-gradient(90deg,#0096fe 0%,#0150fd 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .lakebase-hero .product-overview-desc { max-width: 760px; margin: 24px 0 0; color: rgba(0,0,0,.85); font-size: 16px; font-weight: 500; line-height: 30px; }
     .lakebase-hero .product-overview-actions { margin-top: 42px; gap: 14px; }
     .lakebase-hero .product-overview-cta { display: inline-flex; min-width: 212px; min-height: 52px; align-items: center; justify-content: center; border-radius: 4px; color: #fff; background: #04091a; font-size: 16px; font-weight: 500; }
@@ -2373,7 +2374,7 @@
     <section class="product-overview lakebase-hero" aria-labelledby="product-overview-title">
       <div class="lakebase-hero-flow-bg" id="lakebaseHeroFlowBg" aria-hidden="true"></div>
       <div class="product-overview-inner">
-        <h1 class="product-overview-title" id="product-overview-title">OceanBase AI 数据库<span>面向 AI 应用与 Agent 的多模数据库</span></h1>
+        <h1 class="product-overview-title" id="product-overview-title">OceanBase <b class="hero-gradient-text">AI 数据库</b><span>面向 AI 应用与 Agent 的多模数据库</span></h1>
         <p class="product-overview-desc">
           OceanBase AI 数据库在一个引擎中提供标量、JSON、全文、向量与多模态数据的存储与检索，支持库内 AI 推理、Agent 记忆管理与数据分支，替代 MySQL、搜索引擎、向量库与数据湖的多系统组合。
         </p>
@@ -2686,10 +2687,10 @@
         <div class="value-metrics reveal">
           <div class="mesh-gradient-bg" data-mesh-colors="#ffffff,#d4ecff,#8accff,#3d8eff" aria-hidden="true"></div>
           <div class="value-metrics-content">
-            <div class="value-metric"><strong>客户核心系统上线</strong><span>4000+</span></div>
-            <div class="value-metric"><strong>TPC-C 打破世界纪录</strong><span>7.07 亿 tpmC</span></div>
-            <div class="value-metric"><strong>TPC-H 全球登顶</strong><span>1526 万 QphH</span></div>
-            <div class="value-metric"><strong>极致高可用</strong><span>RTO &lt; 8 秒&nbsp;&nbsp;RPO=0</span></div>
+            <div class="value-metric"><strong>4000+</strong><span>客户核心系统上线</span></div>
+            <div class="value-metric"><strong>7.07 亿 tpmC</strong><span>TPC-C 打破世界纪录</span></div>
+            <div class="value-metric"><strong>1526 万 QphH</strong><span>TPC-H 全球登顶</span></div>
+            <div class="value-metric"><strong>RTO &lt; 8 秒&nbsp;&nbsp;RPO=0</strong><span>极致高可用</span></div>
           </div>
         </div>
       </div>
