@@ -1186,8 +1186,10 @@
     .value-card h3 { margin: 0; color: #04091a; font-size: 20px; font-weight: 600; line-height: 30px; }
     .value-card p { margin: 0; color: rgba(0,0,0,.72); font-size: 15px; line-height: 28px; }
     .value-metrics { position: relative; overflow: hidden; min-height: 200px; border: .5px solid #d0d5dc; border-top: 0; border-radius: 0 0 4px 4px; background: #e7f4ff; }
-    .value-metrics::after { position: absolute; z-index: 1; inset: 0; content: ""; pointer-events: none; background: linear-gradient(180deg,#fff 0%,rgba(255,255,255,.96) 32%,rgba(255,255,255,.82) 52%,rgba(255,255,255,.48) 72%,rgba(255,255,255,.12) 88%,rgba(255,255,255,0) 100%); }
-    .value-metrics > .mesh-gradient-bg { position: absolute; z-index: 0; inset: 0; }
+    .value-metrics::after { position: absolute; z-index: 1; inset: 0; content: ""; pointer-events: none; background: linear-gradient(180deg,#fff 0%,#fff 58%,rgba(255,255,255,.9) 70%,rgba(255,255,255,.5) 85%,rgba(255,255,255,0) 100%); }
+    /* Keep the animated blue below the metric text: the mesh starts under the copy
+       and the veil above stays opaque across the band the numbers occupy. */
+    .value-metrics > .mesh-gradient-bg { position: absolute; z-index: 0; inset: 55% 0 0; }
     .value-metrics-content { position: relative; z-index: 3; display: grid; min-height: 200px; padding: 52px 16px; align-items: center; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 0; }
     .value-metric { display: flex; min-width: 0; min-height: 96px; align-items: center; flex-direction: column; justify-content: center; gap: 8px; padding: 0 24px; border-left: .5px solid rgba(4,9,26,.2); text-align: center; }
     .value-metric:first-child { border-left: 0; }
@@ -3034,6 +3036,9 @@ for i, id_ in enumerate(results["ids"][0]):
   </footer>
 
   <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+
     const header = document.getElementById('header');
     const menuBtn = document.getElementById('menuBtn');
     const navLinks = document.getElementById('navLinks');
@@ -3111,29 +3116,38 @@ for i, id_ in enumerate(results["ids"][0]):
     /* Every capability panel shows the same kind of code window, so one typewriter
        drives all of them. The reveal is budgeted by total duration rather than a
        per-character delay, which keeps a long snippet inside the 10s tab window.
-       Chinese runs are pre-wrapped in .code-zh so they can be tinted blue while
-       the animation only ever edits text-node values. */
+       Tokens are pre-wrapped in the spans the hand-written demo used - .code-zh
+       for Chinese, .fn for call names - so the animation only ever edits
+       text-node values and the highlighting survives it. */
     const CAPABILITY_TYPING_MS = 8400;
-    const CJK_RUN = /([\u3000-\u303f\u4e00-\u9fff\uff00-\uffef]+)/;
+    const CODE_TOKENS = /([\u3000-\u303f\u4e00-\u9fff\uff00-\uffef]+)|([A-Za-z_][\w.]*(?=\())/g;
     const createCapabilityTypewriter = pre => {
       const source = pre?.textContent.replace(/^\n+/, '').replace(/\s+$/, '') || '';
       if (!source) return null;
       const scroller = pre.closest('.code');
       const segments = [];
       pre.textContent = '';
-      source.split(CJK_RUN).forEach((chunk, index) => {
-        if (!chunk) return;
-        const node = document.createTextNode(chunk);
-        if (index % 2) {
+      const appendRun = (text, className) => {
+        const node = document.createTextNode(text);
+        if (className) {
           const span = document.createElement('span');
-          span.className = 'code-zh';
+          span.className = className;
           span.appendChild(node);
           pre.appendChild(span);
         } else {
           pre.appendChild(node);
         }
-        segments.push({ node, text: chunk });
-      });
+        segments.push({ node, text });
+      };
+      let cursor = 0;
+      let token;
+      CODE_TOKENS.lastIndex = 0;
+      while ((token = CODE_TOKENS.exec(source)) !== null) {
+        if (token.index > cursor) appendRun(source.slice(cursor, token.index), '');
+        appendRun(token[0], token[1] ? 'code-zh' : 'fn');
+        cursor = token.index + token[0].length;
+      }
+      if (cursor < source.length) appendRun(source.slice(cursor), '');
       const render = visibleCount => {
         let remaining = visibleCount;
         segments.forEach(segment => {
