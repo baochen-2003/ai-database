@@ -1121,7 +1121,7 @@
     .scenario-copy > .scenario-intro > p { margin: 24px 0 0; color: rgba(0,0,0,.9); font-size: 15px; line-height: 28px; }
     .scenario-list { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; }
     .scenario-list li { display: flex; align-items: center; gap: 8px; padding: 0; color: rgba(0,0,0,.9); font-size: 15px; line-height: 28px; }
-    .scenario-list li::before { width: 16px; height: 16px; position: static; flex: 0 0 16px; content: ""; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M9.5501 18L3.8501 12.3L5.2751 10.875L9.5501 15.15L18.7251 5.97498L20.1501 7.39998L9.5501 18Z' fill='%234BC77E'/%3E%3C/svg%3E"); }
+    .scenario-list li::before { width: 15px; height: 15px; position: static; flex: 0 0 15px; content: ""; background: center / contain no-repeat url("assets/scenario-check-icon.png"); }
     .flow { box-sizing: border-box; display: flex; align-self: center; width: 100%; min-height: 0; aspect-ratio: 556 / 426; align-items: center; justify-content: center; padding: 24px; overflow: hidden; border: .5px solid #fff; border-radius: 4px; color: #071225; background: rgba(255,255,255,.3); box-shadow: none; backdrop-filter: blur(25px); }
     .scenario-architecture-image { display: block; width: 100%; height: 100%; max-width: 552px; max-height: 353px; object-fit: contain; }
     .flow-title { color: #071225; }
@@ -2398,7 +2398,7 @@
           <div class="scenario-copy">
             <div class="scenario-intro"><h3>文档入库，答案出库</h3>
             <p>文档解析、切分、向量化、混合搜索、重排和生成在同一个数据库内完成，不必再串联文档存储、Embedding 服务、向量库、搜索引擎和编排框架。</p></div>
-            <ul class="scenario-list"><li>替代文档存储、Embedding 服务、向量库、搜索引擎、编排框架五类组件</li><li>全文与向量索引实时一致，权限与审计贯穿全链路</li><li>AI 算子可经 Python UDF 扩展</li></ul>
+            <ul class="scenario-list"><li>替代文档存储、Embedding、向量库、搜索引擎、编排框架等组件</li><li>全文与向量索引实时一致，权限与审计贯穿全链路</li><li>AI 算子可经 Python UDF 扩展</li></ul>
           </div>
           <div class="flow"><object class="scenario-architecture-image" data="assets/scenario-rag.svg" type="image/svg+xml" role="img" aria-label="企业 RAG 与智能客服架构图"></object></div>
         </div>
@@ -2422,7 +2422,7 @@
           <div class="scenario-copy">
             <div class="scenario-intro"><h3>省掉一条双链路</h3>
             <p>高频实时写入与大批量导入进入同一个引擎，物化视图增量刷新支撑准实时查询，不必再维护 Lambda 架构的两条链路。</p></div>
-            <ul class="scenario-list"><li>流批一体写入，Direct Load 高速导入，物化视图 + MLog 增量加工</li><li>行存、列存、行列混存按需定义，向量化执行较非向量化提升一个数量级</li><li>原生 MPP，节点 - 分区 - 任务多层并行</li><li>兼容 Arrow Flight SQL，原生集成 Spark / Daft / Ray</li><li>Iceberg / Hive / Paimon/湖上查询加速，Unified Catalog 统一元数据</li></ul>
+            <ul class="scenario-list"><li>流批一体写入，Direct Load 高速导入，物化视图 + MLog 增量加工</li><li>行存、列存、行列混存按需定义，向量化执行较非向量化大幅提升</li><li>原生 MPP，节点 - 分区 - 任务多层并行</li><li>兼容 Arrow Flight SQL，原生集成 Spark / Daft / Ray</li><li>Iceberg / Hive / Paimon 湖上查询加速，统一元数据。</li></ul>
           </div>
           <div class="flow"><object class="scenario-architecture-image" data="assets/scenario-lakehouse.svg" type="image/svg+xml" role="img" aria-label="实时数仓与湖仓分析架构图"></object></div>
         </div>
