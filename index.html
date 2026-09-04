@@ -431,13 +431,13 @@
     .agent-core b { display: block; font-size: 16px; }
     .agent-core small { color: rgba(7,18,37,.55); font-size: 10px; }
     .agent-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .agent-card { min-height: 160px; padding: 19px 16px; border: 1px solid #dce4ee; border-top: 3px solid var(--orange); background: #fff; }
+    .agent-card { display: flex; min-height: 160px; padding: 19px 16px; flex-direction: column; border: 1px solid #dce4ee; border-top: 3px solid var(--orange); background: #fff; }
     .agent-card:nth-child(2) { border-top-color: var(--blue); }
     .agent-card:nth-child(3) { border-top-color: var(--purple); }
     .agent-card .n { color: #afb2b8; font-size: 11px; }
     .agent-card h4 { margin: 12px 0 9px; font-size: 16px; }
     .agent-card p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.65; }
-    .agent-card .metric { margin-top: 15px; color: var(--orange); font-size: 11px; font-weight: 650; }
+    .agent-card .metric { margin-top: auto; padding-top: 15px; color: var(--orange); font-size: 11px; font-weight: 650; }
     .agent-card:nth-child(2) .metric { color: var(--blue); }
     .agent-card:nth-child(3) .metric { color: var(--purple); }
     .isolation { margin-top: 16px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
@@ -2306,21 +2306,34 @@
       .capability-showcase-list { margin-top: 0; }
       .capability-showcase-visual { order: 2; min-height: 0; height: auto; padding: 16px; }
       #capability-panel-search .capability-showcase-visual { min-height: 0; }
-      #capability-panel-search .search-demo { height: 205px; min-height: 205px; padding: 10px; }
+      #capability-panel-search .search-demo { height: 340px; min-height: 340px; padding: 14px; }
       #capability-panel-search .demo-label { font-size: 9px; }
-      #capability-panel-search .query-box { height: 70px; min-height: 70px; margin-top: 6px; padding: 6px 8px; }
-      .hybrid-sql-code { font-size: 8px; line-height: 1.35; }
-      #capability-panel-search .search-routes { margin-top: 6px; gap: 4px; }
-      #capability-panel-search .route { padding: 2px; }
-      #capability-panel-search .route-icon { display: none; }
-      #capability-panel-search .route b { margin-top: 0; font-size: 10px; line-height: 14px; }
+      #capability-panel-search .query-box { height: 170px; min-height: 170px; margin-top: 8px; padding: 8px 10px; }
+      .hybrid-sql-code { font-size: 9px; line-height: 1.4; }
+      #capability-panel-search .search-routes { margin-top: 8px; gap: 4px; }
+      #capability-panel-search .route { padding: 4px 2px; }
+      #capability-panel-search .route-icon { display: block; height: 14px; font-size: 12px; }
+      #capability-panel-search .route b { margin-top: 1px; font-size: 10px; line-height: 14px; }
       #capability-panel-search .route small { font-size: 8px; line-height: 11px; }
-      #capability-panel-search .merge-line { height: 8px; }
-      #capability-panel-search .merge-line::before { top: 3px; }
-      #capability-panel-search .rank-box { padding: 3px; }
+      #capability-panel-search .merge-line { height: 10px; }
+      #capability-panel-search .merge-line::before { top: 4px; }
+      #capability-panel-search .rank-box { padding: 5px; }
       #capability-panel-search .rank-box b { font-size: 10px; line-height: 14px; }
-      #capability-panel-search .rank-box span { margin-top: 0; font-size: 8px; line-height: 11px; }
-      #capability-panel-search .live-badge { margin-top: 5px; gap: 5px; font-size: 9px; line-height: 12px; }
+      #capability-panel-search .rank-box span { margin-top: 1px; font-size: 8px; line-height: 11px; }
+      #capability-panel-search .live-badge { margin-top: 6px; gap: 5px; font-size: 9px; line-height: 12px; }
+      #capability-panel-inference .code-window { display: flex; height: 360px; min-height: 360px; flex-direction: column; overflow: hidden; }
+      #capability-panel-inference .code { flex: 1; min-height: 0; padding: 14px 16px; overflow: hidden; font-size: 10px; line-height: 1.55; }
+      #capability-panel-inference .security-strip { flex: 0 0 auto; }
+      #capability-panel-inference .security-strip div { padding: 8px 3px; }
+      #capability-panel-agent .agent-demo { height: auto; min-height: 560px; padding: 16px; overflow: hidden; }
+      #capability-panel-agent .agent-core { width: 96px; height: 96px; margin: 0 auto 16px; }
+      #capability-panel-agent .agent-cards { gap: 8px; }
+      #capability-panel-agent .agent-card { min-height: 104px; padding: 12px; }
+      #capability-panel-agent .agent-card h4 { margin: 6px 0 4px; font-size: 14px; }
+      #capability-panel-agent .agent-card p { font-size: 10px; line-height: 1.5; }
+      #capability-panel-agent .agent-card .metric { padding-top: 8px; }
+      #capability-panel-agent .isolation { margin-top: 12px; gap: 5px; }
+      #capability-panel-agent .isolation span { min-height: 26px; padding: 4px 7px; font-size: 9px; line-height: 16px; }
 
       /* Architecture floor: benefits stack, decorative blobs must not force overflow */
       .architecture-content-layout { margin-top: 28px; gap: 16px; grid-template-columns: 1fr; }
@@ -3071,12 +3084,48 @@ FROM
       hybridSqlCode.scrollTop = 0;
       const startedAt = performance.now();
       const typeFrame = now => {
-        const characterCount = Math.min(hybridSqlSource.length, Math.floor((now - startedAt) / 6));
+        const characterCount = Math.min(hybridSqlSource.length, Math.floor((now - startedAt) / 8));
         hybridSqlCode.textContent = hybridSqlSource.slice(0, characterCount);
         hybridSqlCode.scrollTop = hybridSqlCode.scrollHeight;
         if (characterCount < hybridSqlSource.length) hybridTypingFrame = window.requestAnimationFrame(typeFrame);
       };
       hybridTypingFrame = window.requestAnimationFrame(typeFrame);
+    };
+
+    const inferenceCode = document.querySelector('#capability-panel-inference .code');
+    const inferenceTextNodes = [];
+    if (inferenceCode) {
+      const walker = document.createTreeWalker(inferenceCode, NodeFilter.SHOW_TEXT);
+      while (walker.nextNode()) inferenceTextNodes.push({ node: walker.currentNode, text: walker.currentNode.nodeValue || '' });
+    }
+    const inferenceTextLength = inferenceTextNodes.reduce((total, item) => total + item.text.length, 0);
+    let inferenceTypingFrame = 0;
+    const stopInferenceTyping = () => window.cancelAnimationFrame(inferenceTypingFrame);
+    const renderInferenceCharacters = characterCount => {
+      let remaining = characterCount;
+      inferenceTextNodes.forEach(item => {
+        const visibleCount = Math.max(0, Math.min(item.text.length, remaining));
+        item.node.nodeValue = item.text.slice(0, visibleCount);
+        remaining -= visibleCount;
+      });
+    };
+    const startInferenceTyping = () => {
+      if (!inferenceCode || !inferenceTextLength) return;
+      stopInferenceTyping();
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        renderInferenceCharacters(inferenceTextLength);
+        return;
+      }
+      renderInferenceCharacters(0);
+      inferenceCode.scrollTop = 0;
+      const startedAt = performance.now();
+      const typeFrame = now => {
+        const characterCount = Math.min(inferenceTextLength, Math.floor((now - startedAt) / 18));
+        renderInferenceCharacters(characterCount);
+        inferenceCode.scrollTop = inferenceCode.scrollHeight;
+        if (characterCount < inferenceTextLength) inferenceTypingFrame = window.requestAnimationFrame(typeFrame);
+      };
+      inferenceTypingFrame = window.requestAnimationFrame(typeFrame);
     };
 
     const capabilityTabs = [...document.querySelectorAll('.capability-showcase-tab')];
@@ -3110,6 +3159,8 @@ FROM
       panel.classList.add('active');
       if (tab.dataset.capability === 'search') startHybridTyping();
       else stopHybridTyping();
+      if (tab.dataset.capability === 'inference') startInferenceTyping();
+      else stopInferenceTyping();
       scheduleNextCapability();
     };
     capabilityTabs.forEach((tab, index) => {
@@ -3124,7 +3175,9 @@ FROM
       });
     });
     const capabilitySectionObserver = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting) && document.getElementById('capability-panel-search')?.classList.contains('active')) startHybridTyping();
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      if (document.getElementById('capability-panel-search')?.classList.contains('active')) startHybridTyping();
+      if (document.getElementById('capability-panel-inference')?.classList.contains('active')) startInferenceTyping();
     }, { threshold: .25 });
     const capabilitySection = document.getElementById('capabilities');
     if (capabilitySection) capabilitySectionObserver.observe(capabilitySection);
