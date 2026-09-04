@@ -2408,7 +2408,7 @@
             <p>短期状态、语义记忆和业务事实存在同一份数据里，共享同一套事务；需要做对比实验时 Fork 出数据分支，失败即丢弃——不再需要 Redis、向量库和 MySQL 各存一部分上下文。</p></div>
             <ul class="scenario-list"><li>长期记忆、短期状态、工具调用记录、多模态输入统一存储与召回</li><li>Namespace 级逻辑表支撑千万级 Agent 隔离</li><li>Fork Database 毫秒级实验沙箱，MERGE / DROP 收敛，Bad Case 可回溯到 Prompt、模型与工具链</li><li>沉睡记忆自动沉降到对象存储，RPO=0</li></ul>
           </div>
-          <div class="flow"><object class="scenario-architecture-image" data="assets/scenario-memory.svg" type="image/svg+xml" role="img" aria-label="AI Agent 记忆与评测架构图"></object></div>
+          <div class="flow"><object class="scenario-architecture-image" data-src="assets/scenario-memory.svg" type="image/svg+xml" role="img" aria-label="AI Agent 记忆与评测架构图"></object></div>
         </div>
         <div class="scenario-panel" id="panel-media">
           <div class="scenario-copy">
@@ -2416,7 +2416,7 @@
             <p>文件、模型推理结果和业务字段进入同一张表后，可以按业务属性、摘要关键词和画面语义组合查询——例如在一批车载视频里检索“雨天某车辆在某路段的分流口画面”，是一次普通 SQL 查询。</p></div>
             <ul class="scenario-list"><li>业务属性、摘要关键词、画面语义组合成一次查询</li><li>推理结果回写原表，像普通列一样被查询、索引和 Join</li><li>LOB 三形态自动分层存储（敬请期待）</li></ul>
           </div>
-          <div class="flow"><object class="scenario-architecture-image" data="assets/scenario-media.svg" type="image/svg+xml" role="img" aria-label="多模态数据搜索架构图"></object></div>
+          <div class="flow"><object class="scenario-architecture-image" data-src="assets/scenario-media.svg" type="image/svg+xml" role="img" aria-label="多模态数据搜索架构图"></object></div>
         </div>
         <div class="scenario-panel" id="panel-lakehouse">
           <div class="scenario-copy">
@@ -2424,7 +2424,7 @@
             <p>高频实时写入与大批量导入进入同一个引擎，物化视图增量刷新支撑准实时查询，不必再维护 Lambda 架构的两条链路。</p></div>
             <ul class="scenario-list"><li>流批一体写入，Direct Load 高速导入，物化视图 + MLog 增量加工</li><li>行存、列存、行列混存按需定义，向量化执行较非向量化大幅提升</li><li>原生 MPP，节点 - 分区 - 任务多层并行</li><li>兼容 Arrow Flight SQL，原生集成 Spark / Daft / Ray</li><li>Iceberg / Hive / Paimon 湖上查询加速，统一元数据。</li></ul>
           </div>
-          <div class="flow"><object class="scenario-architecture-image" data="assets/scenario-lakehouse.svg" type="image/svg+xml" role="img" aria-label="实时数仓与湖仓分析架构图"></object></div>
+          <div class="flow"><object class="scenario-architecture-image" data-src="assets/scenario-lakehouse.svg" type="image/svg+xml" role="img" aria-label="实时数仓与湖仓分析架构图"></object></div>
         </div>
       </article>
     </section>
@@ -2685,6 +2685,10 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     const tabs = document.querySelectorAll('.scenario-tab');
+    const loadScenarioDiagram = diagram => {
+      if (!diagram || diagram.data || !diagram.dataset.src) return;
+      diagram.data = diagram.dataset.src;
+    };
     const restartScenarioDiagram = diagram => {
       if (!diagram || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       const svg = diagram.contentDocument?.documentElement;
@@ -2697,6 +2701,19 @@
       diagram.addEventListener('load', () => restartScenarioDiagram(diagram));
       if (diagram.contentDocument?.documentElement) restartScenarioDiagram(diagram);
     });
+    const deferredScenarioDiagrams = [...document.querySelectorAll('.scenario-architecture-image[data-src]')];
+    const preloadScenarioDiagrams = deadline => {
+      const diagram = deferredScenarioDiagrams.shift();
+      if (diagram) loadScenarioDiagram(diagram);
+      if (deferredScenarioDiagrams.length) {
+        if ('requestIdleCallback' in window) requestIdleCallback(preloadScenarioDiagrams, { timeout: 1200 });
+        else setTimeout(preloadScenarioDiagrams, 160);
+      }
+    };
+    window.addEventListener('load', () => {
+      if ('requestIdleCallback' in window) requestIdleCallback(preloadScenarioDiagrams, { timeout: 1200 });
+      else setTimeout(preloadScenarioDiagrams, 160);
+    }, { once: true });
     tabs.forEach(tab => tab.addEventListener('click', () => {
       tabs.forEach(item => {
         item.classList.remove('active');
@@ -2708,7 +2725,8 @@
       const panel = document.getElementById(`panel-${tab.dataset.tab}`);
       panel.classList.add('active');
       const diagram = panel.querySelector('.scenario-architecture-image');
-      restartScenarioDiagram(diagram);
+      loadScenarioDiagram(diagram);
+      if (diagram.contentDocument?.documentElement) restartScenarioDiagram(diagram);
     }));
 
     const capabilityTabs = [...document.querySelectorAll('.capability-showcase-tab')];
