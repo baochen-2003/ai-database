@@ -1968,10 +1968,10 @@
     .closing-mesh-wrap {
       position: absolute;
       z-index: 0;
-      top: 50%;
+      top: 0;
       left: 50%;
       width: 100vw;
-      height: 200vh;
+      height: 100%;
       pointer-events: none;
       transform: translateX(-50%);
     }
@@ -1982,7 +1982,7 @@
       top: 0;
       right: 0;
       left: 0;
-      height: 66.67%;
+      height: 52%;
       content: "";
       pointer-events: none;
       background: linear-gradient(to bottom, #fff 0%, rgba(255,255,255,0) 100%);
@@ -2485,10 +2485,10 @@
     </section>
 
     <div class="closing-band">
+    <div class="closing-mesh-wrap" aria-hidden="true">
+      <div class="mesh-gradient-bg closing-mesh-gradient" data-mesh-colors="#77D4FF,#279AFF,#C7BCFF"></div>
+    </div>
     <section class="section faq-section" id="faq" aria-labelledby="faq-title">
-      <div class="closing-mesh-wrap" aria-hidden="true">
-        <div class="mesh-gradient-bg closing-mesh-gradient" data-mesh-colors="#77D4FF,#279AFF,#C7BCFF"></div>
-      </div>
       <div class="container">
         <div class="faq-shell">
           <div class="faq-intro reveal">
