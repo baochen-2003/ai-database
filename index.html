@@ -461,17 +461,19 @@
     .rank-box span { color: #0150fd; }
     .live-badge { color: #64748b; }
     .live-dot { animation: lakebaseLivePulse 1.8s ease-in-out infinite; }
-    #capability-panel-search .capability-showcase-visual { min-height: 680px; }
-    #capability-panel-search .search-demo { height: 620px; min-height: 620px; padding: 28px 30px; }
-    #capability-panel-search .query-box { height: 330px; min-height: 330px; margin-top: 16px; padding: 18px 20px; overflow: hidden; }
+    #capability-panel-search .capability-showcase-visual { min-height: 540px; }
+    #capability-panel-search .search-demo { height: 480px; min-height: 480px; padding: 28px 30px; }
+    #capability-panel-search .query-box { height: 220px; min-height: 220px; margin-top: 16px; padding: 14px 18px; overflow: hidden; }
     .hybrid-sql-code { height: 100%; margin: 0; overflow: hidden; color: #334155; font: 12px/1.55 "SFMono-Regular",Consolas,"Liberation Mono",monospace; white-space: pre; tab-size: 2; }
-    #capability-panel-search .search-routes { margin-top: 18px; grid-template-columns: repeat(4,1fr); gap: 8px; }
-    #capability-panel-search .route { padding: 10px 5px; }
-    #capability-panel-search .route-icon { height: 22px; }
-    #capability-panel-search .merge-line { height: 24px; }
-    #capability-panel-search .merge-line::before { top: 11px; }
-    #capability-panel-search .rank-box { padding: 12px; }
-    #capability-panel-search .live-badge { margin-top: 12px; }
+    #capability-panel-search .search-routes { margin-top: 12px; grid-template-columns: repeat(4,1fr); gap: 8px; }
+    #capability-panel-search .route { padding: 4px 5px; }
+    #capability-panel-search .route-icon { height: 18px; font-size: 16px; }
+    #capability-panel-search .route b { margin-top: 2px; }
+    #capability-panel-search .merge-line { height: 16px; }
+    #capability-panel-search .merge-line::before { top: 7px; }
+    #capability-panel-search .rank-box { padding: 8px; }
+    #capability-panel-search .rank-box span { margin-top: 2px; }
+    #capability-panel-search .live-badge { margin-top: 8px; }
     .window-bar { border-bottom-color: #e5eaf0; background: #f6f8fb; }
     .window-dot { background: #cbd3df; }
     .window-name { color: #64748b; }
@@ -2302,10 +2304,21 @@
       .capability-showcase-list { margin-top: 0; }
       .capability-showcase-visual { order: 2; min-height: 0; height: auto; padding: 16px; }
       #capability-panel-search .capability-showcase-visual { min-height: 0; }
-      #capability-panel-search .search-demo { height: 500px; min-height: 500px; padding: 20px 16px; }
-      #capability-panel-search .query-box { height: 280px; min-height: 280px; padding: 14px; }
-      .hybrid-sql-code { font-size: 10px; line-height: 1.5; }
-      #capability-panel-search .route { padding: 8px 2px; }
+      #capability-panel-search .search-demo { height: 205px; min-height: 205px; padding: 10px; }
+      #capability-panel-search .demo-label { font-size: 9px; }
+      #capability-panel-search .query-box { height: 70px; min-height: 70px; margin-top: 6px; padding: 6px 8px; }
+      .hybrid-sql-code { font-size: 8px; line-height: 1.35; }
+      #capability-panel-search .search-routes { margin-top: 6px; gap: 4px; }
+      #capability-panel-search .route { padding: 2px; }
+      #capability-panel-search .route-icon { display: none; }
+      #capability-panel-search .route b { margin-top: 0; font-size: 10px; line-height: 14px; }
+      #capability-panel-search .route small { font-size: 8px; line-height: 11px; }
+      #capability-panel-search .merge-line { height: 8px; }
+      #capability-panel-search .merge-line::before { top: 3px; }
+      #capability-panel-search .rank-box { padding: 3px; }
+      #capability-panel-search .rank-box b { font-size: 10px; line-height: 14px; }
+      #capability-panel-search .rank-box span { margin-top: 0; font-size: 8px; line-height: 11px; }
+      #capability-panel-search .live-badge { margin-top: 5px; gap: 5px; font-size: 9px; line-height: 12px; }
 
       /* Architecture floor: benefits stack, decorative blobs must not force overflow */
       .architecture-content-layout { margin-top: 28px; gap: 16px; grid-template-columns: 1fr; }
