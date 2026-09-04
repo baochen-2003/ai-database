@@ -1248,7 +1248,8 @@
     .faq-label span { color: #0496fe; }
     .center .eyebrow, .comparison-eyebrow, .capability-showcase-header .eyebrow, .scenario-section .center .eyebrow, #technology .center .eyebrow { margin-bottom: 16px; }
     .section-lead { max-width: 760px; margin-top: 16px; font-size: 15px; line-height: 28px; }
-    .comparison-section { padding: 120px 0 60px !important; }
+    /* Keep the visual gap from the hero edge to the comparison eyebrow at 120px. */
+    .lakebase-hero + .comparison-section { margin-top: 0; padding: 120px 0 60px !important; }
     .comparison-title { margin-bottom: 40px; }
     .architecture-section { padding: 60px 0; }
     .architecture-section .center { width: 100%; margin: 0 auto 40px; }
