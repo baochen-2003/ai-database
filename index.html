@@ -2187,7 +2187,7 @@
         <div class="capability-showcase-shell reveal">
           <div class="capability-showcase-tabs" role="tablist" aria-label="核心能力">
             <button class="capability-showcase-tab active" type="button" role="tab" aria-selected="true" aria-controls="capability-panel-search" data-capability="search"><span class="capability-tab-label">混合搜索</span><span class="capability-tab-track" aria-hidden="true"><span class="capability-tab-fill"></span></span></button>
-            <button class="capability-showcase-tab" type="button" role="tab" aria-selected="false" aria-controls="capability-panel-inference" data-capability="inference"><span class="capability-tab-label">库内推理</span><span class="capability-tab-track" aria-hidden="true"><span class="capability-tab-fill"></span></span></button>
+            <button class="capability-showcase-tab" type="button" role="tab" aria-selected="false" aria-controls="capability-panel-inference" data-capability="inference"><span class="capability-tab-label">多模态数据处理</span><span class="capability-tab-track" aria-hidden="true"><span class="capability-tab-fill"></span></span></button>
             <button class="capability-showcase-tab" type="button" role="tab" aria-selected="false" aria-controls="capability-panel-agent" data-capability="agent"><span class="capability-tab-label">Agent 原生</span><span class="capability-tab-track" aria-hidden="true"><span class="capability-tab-fill"></span></span></button>
           </div>
           <article class="capability-showcase-panel active" id="capability-panel-search" role="tabpanel">
@@ -2208,10 +2208,10 @@
           <article class="capability-showcase-panel" id="capability-panel-inference" role="tabpanel" hidden>
             <div class="capability-showcase-copy">
               <h3>从只存不算，到即存即算</h3>
-              <p>模型注册为数据库对象，SQL 中直接调用解析、切分、向量化算子，推理结果写回原表并自动建立索引——不必在应用层维护模型调用、结果回写和索引同步。</p>
+              <p>模型注册为数据库对象，SQL 中直接调用切分、向量化算子，推理结果写回原表并自动建立索引——不必在应用层维护模型调用、结果回写和索引同步。</p>
               <ul class="capability-showcase-list">
                 <li><b>Model in DB</b><p><code>DBMS_AI_SERVICE</code> 注册嵌入式、生成式、多模态、重排序模型。模型作为数据库对象，纳入版本管理、权限控制、血缘追踪与审计。</p></li>
-                <li><b>AI 算子</b><p>解析 → 摘要 → 切分 → 向量化在 SQL 内完成，结果入表后自动创建全文与向量索引，像普通列一样被查询、索引和 Join。支持 Python UDF 扩展。</p></li>
+                <li><b>AI 算子</b><p>摘要 → 切分 → 向量化在 SQL 内完成，结果入表后自动创建全文与向量索引，像普通列一样被查询、索引和 Join。支持 Python UDF 扩展。</p></li>
                 <li><b>多模表</b><p>文档、图片、音视频作为 LOB 入表，按大小与访问模式自动路由到 InRow / OutRow / 对象存储，对应用透明。文件与业务字段同一事务提交或回滚、共享一致快照、统一权限。</p></li>
               </ul>
             </div>
