@@ -2257,10 +2257,10 @@
               <h3>能隔离、有记忆、会试错</h3>
               <p>千万级 Agent 实例共享一套物理表，记忆用一条 SQL 召回，对比实验在 Fork 出的数据分支上运行——不必为每个 Agent 建表，也不必复制整库来做实验。</p>
               <ul class="capability-showcase-list">
-                <li><b>五层隔离</b><p>租户级（独立资源配额与权限边界）、Database 级、Namespace 级逻辑表、表级、行 / 列级 RLS。同一套物理表支撑千万级实例，元数据不随实例数膨胀。</p></li>
-                <li><b>记忆召回</b><p>长期记忆（向量 · 文本 · JSON）、短期状态、工具调用记录、多模态输入统一存储，标量过滤 + 全文 + 向量 + JSON 过滤在一条 SQL 内完成。</p></li>
-                <li><b>Fork Database</b><p>Copy-on-Write 共享基线、只存增量，毫秒级创建数据分支，支持 MERGE 与 DROP。分支间增量变更互不影响，实验结果可跨分支查询对比。</p></li>
-                <li><b>冷热分层</b><p>沉睡实例数据自动沉降到对象存储，被唤醒时从共享存储加载，RPO=0。</p></li>
+                <li><b>五层隔离</b><p>租户级、Database 级、Namespace 级逻辑表、表级、行 / 列级</p></li>
+                <li><b>记忆召回</b><p>长期、短期记忆、工具调用、多模态统一存储，混合搜索一条 SQL 内完成</p></li>
+                <li><b>Fork Database</b><p>Copy-on-Write 只存增量，毫秒级建分支，支持 MERGE 与 DROP</p></li>
+                <li><b>冷热分层：</b><p>沉睡实例数据自动沉降到对象存储，被唤醒时从共享存储加载，RPO=0</p></li>
               </ul>
             </div>
             <div class="capability-showcase-visual agent">
