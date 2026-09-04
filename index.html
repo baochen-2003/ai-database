@@ -2284,13 +2284,15 @@
       .core-capability-card:last-child .core-capability-list { grid-template-columns: 1fr; }
       .value-card { min-height: 0; padding: 24px; border-right: 0; border-bottom: .5px solid #d0d5dc; }
       .value-card:last-child { border-bottom: 0; }
-      .value-metrics-content { padding: 24px 36px; grid-template-columns: 1fr; gap: 0; }
+      .value-metrics-content { min-height: 0; padding: 24px; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0; }
       .value-metric, .value-metric:nth-child(odd), .value-metric:nth-child(n+3) {
-        min-height: 136px; padding: 32px 0; gap: 10px; border-left: 0; border-top: .5px solid rgba(4,9,26,.2);
+        min-height: 120px; padding: 24px 8px; gap: 8px; border-left: 0; border-top: 0;
       }
-      .value-metric:first-child { border-top: 0; }
-      .value-metric strong { font-size: 32px; line-height: 1.25; white-space: nowrap; }
-      .value-metric span { font-size: 14px; line-height: 22px; }
+      .value-metric:nth-child(even) { border-left: .5px solid rgba(4,9,26,.2); }
+      .value-metric:nth-child(n+3) { border-top: .5px solid rgba(4,9,26,.2); }
+      .value-metric strong { font-size: 26px; line-height: 1.25; white-space: nowrap; }
+      .value-metric:nth-child(4) strong { font-size: 20px; }
+      .value-metric span { font-size: 13px; line-height: 20px; }
       .trust-card, .trust-card:nth-child(3), .trust-card:nth-child(4) {
         min-height: 0; padding: 24px; border-left: 0; border-top: .5px solid #d0d5dc;
       }
@@ -2727,7 +2729,7 @@ FROM
       <div class="scenario-section-head">
         <div class="center reveal">
           <div class="eyebrow">应用场景</div>
-          <h2 class="section-title" style="white-space: nowrap;">从数据进入，到智能产生，一个数据库跑通完整链路</h2>
+          <h2 class="section-title" style="white-space: nowrap;">构建 AI 应用与 Agent 数据底座</h2>
         </div>
         <div class="scenario-tabs reveal" role="tablist">
           <button class="scenario-tab active" role="tab" aria-selected="true" data-tab="rag">企业 RAG 与智能客服</button>
