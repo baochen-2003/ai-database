@@ -1994,7 +1994,9 @@
     .architecture-content-layout {
       display: grid;
       width: 100%;
-      margin-top: 54px;
+      /* Gap to the heading block is owned by .architecture-section .center's
+         40px bottom margin; keep this at 0 so the two do not compound. */
+      margin-top: 0;
       gap: 16px;
       align-items: stretch;
       grid-template-columns: minmax(0,1fr) 264px;
