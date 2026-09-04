@@ -409,11 +409,12 @@
     .window-dot { width: 8px; height: 8px; border-radius: 50%; background: #41454c; }
     .window-name { margin-left: 8px; color: #6f747c; font-size: 11px; font-family: monospace; }
     .code { min-height: 0; flex: 1; padding: 27px 30px; overflow: auto; font: 12.5px/1.9 "SFMono-Regular", Consolas, monospace; }
-    .inference-sql-code { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
+    .capability-code { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
     .code .comment { color: #60666e; }
     .code .kw { color: #ff8459; }
     .code .fn { color: #7ea0ff; }
     .code .str { color: #95cf8b; }
+    .code .code-zh { color: #7ea0ff; }
     .security-strip {
       display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255,255,255,.08);
     }
@@ -465,20 +466,6 @@
     .rank-box span { color: #64748b; }
     .live-badge { color: #64748b; }
     .live-dot { animation: none; }
-    #capability-panel-search .capability-showcase-visual { min-height: 540px; }
-    #capability-panel-search .search-demo { height: 480px; min-height: 480px; padding: 16px 30px 28px; }
-    #capability-panel-search .query-box { height: 220px; min-height: 220px; margin-top: 8px; padding: 14px 18px; overflow: hidden; }
-    .hybrid-sql-code { height: 100%; margin: 0; overflow: hidden; color: #334155; font: 12px/1.55 "SFMono-Regular",Consolas,"Liberation Mono",monospace; white-space: pre; tab-size: 2; }
-    #capability-panel-search .search-routes { margin-top: 20px; grid-template-columns: repeat(4,1fr); gap: 8px; }
-    #capability-panel-search .route { padding: 4px 5px; }
-    #capability-panel-search .route-icon { height: 18px; font-size: 16px; }
-    #capability-panel-search .route b { margin-top: 2px; }
-    #capability-panel-search .merge-line { height: 24px; }
-    #capability-panel-search .merge-line::before { top: 11px; }
-    #capability-panel-search .rank-box { padding: 10px 8px; }
-    #capability-panel-search .rank-box span { margin-top: 2px; }
-    #capability-panel-search .rank-box { margin-top: 20px; }
-    #capability-panel-search .live-badge { margin-top: 20px; }
     .window-bar { border-bottom-color: #e5eaf0; background: #f6f8fb; }
     .window-dot { background: #cbd3df; }
     .window-name { color: #64748b; }
@@ -486,6 +473,7 @@
     .code .kw { color: #0150fd; }
     .code .fn { color: #7457e8; }
     .code .str { color: #27854a; }
+    .code .code-zh { color: #0150fd; }
     .security-strip { border-top-color: #e5eaf0; background: #f8faff; }
     .security-strip div { color: #64748b; border-left-color: #e5eaf0; }
     .security-strip b { color: #0150fd; }
@@ -2312,43 +2300,12 @@
       .capability-showcase-copy > p { margin-bottom: 24px; }
       .capability-showcase-list { margin-top: 0; }
       .capability-showcase-visual { order: 2; min-height: 0; height: auto; padding: 16px; }
-      #capability-panel-search .capability-showcase-visual { min-height: 0; }
-      #capability-panel-search .search-demo { height: 205px; min-height: 205px; padding: 8px 10px; }
-      #capability-panel-search .demo-label { font-size: 8px; line-height: 10px; }
-      #capability-panel-search .query-box { height: 68px; min-height: 68px; margin-top: 4px; padding: 5px 7px; }
-      .hybrid-sql-code { font-size: 7px; line-height: 1.3; }
-      #capability-panel-search .search-routes { width: 100%; margin-top: 5px; gap: 3px; grid-template-columns: repeat(4,minmax(0,1fr)); }
-      #capability-panel-search .route { min-width: 0; padding: 2px; }
-      #capability-panel-search .route:nth-child(4) { transform: none; }
-      #capability-panel-search .route-icon { display: none; }
-      #capability-panel-search .route b { margin-top: 0; font-size: 9px; line-height: 12px; }
-      #capability-panel-search .route small { font-size: 7px; line-height: 9px; }
-      #capability-panel-search .merge-line { display: none; }
-      #capability-panel-search .rank-box { margin-top: 8px; padding: 3px; }
-      #capability-panel-search .rank-box b { font-size: 9px; line-height: 12px; }
-      #capability-panel-search .rank-box span { margin-top: 0; font-size: 7px; line-height: 9px; }
-      #capability-panel-search .live-badge { margin-top: 8px; gap: 6px; font-size: 8px; line-height: 10px; }
-      #capability-panel-search .live-dot { width: 4px; height: 4px; flex: 0 0 4px; box-shadow: none; }
-      #capability-panel-inference .code-window { display: flex; height: 205px; min-height: 205px; flex-direction: column; overflow: hidden; }
-      #capability-panel-inference .window-bar { height: 30px; padding: 0 10px; }
-      #capability-panel-inference .window-dot { width: 5px; height: 5px; }
-      #capability-panel-inference .window-name { font-size: 8px; }
-      #capability-panel-inference .code { flex: 1; min-height: 0; padding: 8px 10px; overflow: hidden; font-size: 8px; line-height: 1.35; }
-      #capability-panel-inference .security-strip { flex: 0 0 auto; }
-      #capability-panel-inference .security-strip div { padding: 5px 2px; font-size: 7px; }
-      #capability-panel-inference .security-strip b { margin-bottom: 1px; font-size: 8px; }
-      #capability-panel-agent .agent-demo { height: 205px; min-height: 205px; padding: 6px; overflow: hidden; }
-      #capability-panel-agent .agent-core { width: 58px; height: 58px; margin: 0 auto 6px; border-width: 2px; }
-      #capability-panel-agent .agent-core b { font-size: 10px; line-height: 13px; }
-      #capability-panel-agent .agent-core small { display: block; font-size: 6px; line-height: 8px; white-space: nowrap; }
-      #capability-panel-agent .agent-cards { gap: 4px; grid-template-columns: repeat(3,1fr); }
-      #capability-panel-agent .agent-card { min-width: 0; min-height: 98px; padding: 5px 6px; overflow: hidden; }
-      #capability-panel-agent .agent-card .n { font-size: 6px; line-height: 8px; }
-      #capability-panel-agent .agent-card h4 { margin: 3px 0 2px; font-size: 10px; line-height: 14px; }
-      #capability-panel-agent .agent-card p { font-size: 8px; line-height: 1.35; }
-      #capability-panel-agent .agent-card .metric { padding-top: 4px; font-size: 7px; line-height: 10px; }
-      #capability-panel-agent .isolation { margin-top: 9px; gap: 3px; flex-wrap: nowrap; }
-      #capability-panel-agent .isolation span { min-width: 0; min-height: 17px; padding: 1px 3px; font-size: 6px; line-height: 13px; white-space: nowrap; }
+      /* All three capability demos are the same code window, so size them as one. */
+      .capability-showcase-visual .code-window { display: flex; height: 205px; min-height: 205px; flex-direction: column; overflow: hidden; }
+      .capability-showcase-visual .window-bar { height: 30px; padding: 0 10px; }
+      .capability-showcase-visual .window-dot { width: 5px; height: 5px; }
+      .capability-showcase-visual .window-name { font-size: 8px; }
+      .capability-showcase-visual .code { flex: 1; min-height: 0; padding: 8px 10px; overflow: hidden; font-size: 8px; line-height: 1.35; }
 
       /* Architecture floor: benefits stack, decorative blobs must not force overflow */
       .architecture-content-layout { margin-top: 28px; gap: 16px; grid-template-columns: 1fr; }
@@ -2507,9 +2464,7 @@
             </div>
             <div class="capability-showcase-visual search">
               <div class="mesh-gradient-bg" data-mesh-colors="#ccf8ff,#8accff,#3d8eff,#e5ecff" aria-hidden="true"></div>
-              <div class="feature-demo search-demo">
-                <div class="demo-label">ONE SQL · FOUR SEARCH ROUTES</div>
-                <div class="query-box"><pre class="hybrid-sql-code" id="hybridSqlCode" aria-label="混合搜索 SQL 示例">SELECT
+              <div class="feature-demo code-window"><div class="window-bar"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span class="window-name">hybrid_search.sql</span></div><div class="code"><pre class="capability-code" aria-label="混合搜索 SQL 示例">SELECT
   id,
   title,
   __score
@@ -2551,10 +2506,7 @@ FROM
       },
       "size": 10
     }'
-  );</pre></div>
-                <div class="search-routes"><div class="route"><div class="route-icon">＝</div><b>标量</b><small>B-tree</small></div><div class="route"><div class="route-icon">Aa</div><b>全文</b><small>BM25</small></div><div class="route"><div class="route-icon">◈</div><b>向量</b><small>HNSW</small></div><div class="route"><div class="route-icon">{ }</div><b>JSON</b><small>Index</small></div></div>
-                <div class="merge-line"></div><div class="rank-box"><b>库内多路召回与融合排序</b><span>RRF · WEIGHT SUM · MINMAX NORMALIZER</span></div><div class="live-badge"><span class="live-dot"></span> 实时索引 · 事务提交后立即可见</div>
-              </div>
+  );</pre></div></div>
             </div>
           </article>
           <article class="capability-showcase-panel" id="capability-panel-inference" role="tabpanel" hidden>
@@ -2569,7 +2521,7 @@ FROM
             </div>
             <div class="capability-showcase-visual inference">
               <div class="mesh-gradient-bg" data-mesh-colors="#f3eeff,#ddd2ff,#c7bcff,#956eff" data-mesh-theme="table" aria-hidden="true"></div>
-              <div class="feature-demo code-window"><div class="window-bar"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span class="window-name">rag_pipeline.sql</span></div><div class="code"><pre class="inference-sql-code">CALL DBMS_AI_SERVICE.REGISTER_PROVIDER('aliyun', '{
+              <div class="feature-demo code-window"><div class="window-bar"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span class="window-name">rag_pipeline.sql</span></div><div class="code"><pre class="capability-code" aria-label="多模态数据处理 SQL 示例">CALL DBMS_AI_SERVICE.REGISTER_PROVIDER('aliyun', '{
   "access_key": "sk-xxxx"
 }');
 
@@ -2613,7 +2565,51 @@ SELECT AI_COMPLETE('aliyun/qwen-plus',
             </div>
             <div class="capability-showcase-visual agent">
               <div class="mesh-gradient-bg" data-mesh-colors="#ccf8ff,#8accff,#3d8eff,#e5ecff" aria-hidden="true"></div>
-              <div class="feature-demo agent-demo"><div class="agent-core"><div><b>Agent</b><small>Database Native</small></div></div><div class="agent-cards"><div class="agent-card"><span class="n">01 / ISOLATE</span><h4>会繁殖</h4><p>海量实例共享统一 Schema，数据逻辑隔离。</p><div class="metric">百万 / 千万级实例</div></div><div class="agent-card"><span class="n">02 / REMEMBER</span><h4>有记忆</h4><p>关系、文本、向量、JSON 共同构成上下文。</p><div class="metric">一条 SQL 召回</div></div><div class="agent-card"><span class="n">03 / EXPERIMENT</span><h4>会试错</h4><p>共享基线，只记录实验分支增量。</p><div class="metric">Copy-on-Write</div></div></div><div class="isolation"><span>Tenant</span><span>Database</span><span>Namespace</span><span>Table</span><span>Row / Column</span></div></div>
+              <div class="feature-demo code-window"><div class="window-bar"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span class="window-name">agent_namespace.py</span></div><div class="code"><pre class="capability-code" aria-label="Agent 原生 pyseekdb 示例">-- 导入 pyseekdb 模块
+from pyseekdb import Schema, VectorIndexConfig, IVFConfiguration, FulltextIndexConfig
+
+-- 创建带 IVF 向量索引与全文索引的 Collection
+collection = client.create_collection(
+    name="tech_docs",
+    schema=Schema(
+        vector_index=VectorIndexConfig(
+            ivf=IVFConfiguration(dimension=384, distance="cosine", centroids_fresh_mode="spfresh"),
+        ),
+        fulltext_index=FulltextIndexConfig(analyzer="ik"),
+    ),
+    use_namespace=True,
+)
+
+-- 创建 Namespace，系统自动分配 namespace_id
+ns = collection.create_namespace("my_knowledge")
+print(f"namespace_id: {ns.namespace_id}")
+
+-- 批量写入文档（本示例只传文本，由 SDK 自动生成向量）
+ns.add(
+    ids=["doc1", "doc2", "doc3"],
+    documents=[
+        "OceanBase AI 数据库是蚂蚁集团自研的分布式数据库，支持 HTAP 混合负载",
+        "Agent 混合搜索场景是 OceanBase AI 数据库面向 AI Agent 的多租户向量搜索方案",
+        "pyseekdb 是 OceanBase AI 数据库的 Python SDK，提供向量存储与混合搜索能力"
+    ],
+    metadatas=[
+        {"category": "database", "version": "4.0"},
+        {"category": "ai", "version": "4.6"},
+        {"category": "sdk", "version": "1.2"},
+    ],
+)
+
+-- 用自然语言做向量搜索，返回最相似的 2 条并打印结果
+results = ns.query(
+    query_texts=["分布式数据库"],
+    n_results=2,
+    include=["documents", "metadatas", "distances"],
+)
+
+for i, id_ in enumerate(results["ids"][0]):
+    print(f"id: {id_}")
+    print(f"  document: {results['documents'][0][i]}")
+    print(f"  distance: {results['distances'][0][i]:.4f}")</pre></div></div>
             </div>
           </article>
         </div>
@@ -3112,63 +3108,72 @@ SELECT AI_COMPLETE('aliyun/qwen-plus',
       if (diagram.contentDocument?.documentElement) restartScenarioDiagram(diagram);
     }));
 
-    const hybridSqlCode = document.getElementById('hybridSqlCode');
-    const hybridSqlSource = hybridSqlCode?.textContent.trim() || '';
-    let hybridTypingFrame = 0;
-    const stopHybridTyping = () => window.cancelAnimationFrame(hybridTypingFrame);
-    const startHybridTyping = () => {
-      if (!hybridSqlCode || !hybridSqlSource) return;
-      stopHybridTyping();
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        hybridSqlCode.textContent = hybridSqlSource;
-        return;
-      }
-      hybridSqlCode.textContent = '';
-      hybridSqlCode.scrollTop = 0;
-      const startedAt = performance.now();
-      const typeFrame = now => {
-        const characterCount = Math.min(hybridSqlSource.length, Math.floor((now - startedAt) / 8));
-        hybridSqlCode.textContent = hybridSqlSource.slice(0, characterCount);
-        hybridSqlCode.scrollTop = hybridSqlCode.scrollHeight;
-        if (characterCount < hybridSqlSource.length) hybridTypingFrame = window.requestAnimationFrame(typeFrame);
-      };
-      hybridTypingFrame = window.requestAnimationFrame(typeFrame);
-    };
-
-    const inferenceCode = document.querySelector('#capability-panel-inference .code');
-    const inferenceTextNodes = [];
-    if (inferenceCode) {
-      const walker = document.createTreeWalker(inferenceCode, NodeFilter.SHOW_TEXT);
-      while (walker.nextNode()) inferenceTextNodes.push({ node: walker.currentNode, text: walker.currentNode.nodeValue || '' });
-    }
-    const inferenceTextLength = inferenceTextNodes.reduce((total, item) => total + item.text.length, 0);
-    let inferenceTypingFrame = 0;
-    const stopInferenceTyping = () => window.cancelAnimationFrame(inferenceTypingFrame);
-    const renderInferenceCharacters = characterCount => {
-      let remaining = characterCount;
-      inferenceTextNodes.forEach(item => {
-        const visibleCount = Math.max(0, Math.min(item.text.length, remaining));
-        item.node.nodeValue = item.text.slice(0, visibleCount);
-        remaining -= visibleCount;
+    /* Every capability panel shows the same kind of code window, so one typewriter
+       drives all of them. The reveal is budgeted by total duration rather than a
+       per-character delay, which keeps a long snippet inside the 10s tab window.
+       Chinese runs are pre-wrapped in .code-zh so they can be tinted blue while
+       the animation only ever edits text-node values. */
+    const CAPABILITY_TYPING_MS = 8400;
+    const CJK_RUN = /([\u3000-\u303f\u4e00-\u9fff\uff00-\uffef]+)/;
+    const createCapabilityTypewriter = pre => {
+      const source = pre?.textContent.replace(/^\n+/, '').replace(/\s+$/, '') || '';
+      if (!source) return null;
+      const scroller = pre.closest('.code');
+      const segments = [];
+      pre.textContent = '';
+      source.split(CJK_RUN).forEach((chunk, index) => {
+        if (!chunk) return;
+        const node = document.createTextNode(chunk);
+        if (index % 2) {
+          const span = document.createElement('span');
+          span.className = 'code-zh';
+          span.appendChild(node);
+          pre.appendChild(span);
+        } else {
+          pre.appendChild(node);
+        }
+        segments.push({ node, text: chunk });
       });
-    };
-    const startInferenceTyping = () => {
-      if (!inferenceCode || !inferenceTextLength) return;
-      stopInferenceTyping();
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        renderInferenceCharacters(inferenceTextLength);
-        return;
-      }
-      renderInferenceCharacters(0);
-      inferenceCode.scrollTop = 0;
-      const startedAt = performance.now();
-      const typeFrame = now => {
-        const characterCount = Math.min(inferenceTextLength, Math.floor((now - startedAt) / 18));
-        renderInferenceCharacters(characterCount);
-        inferenceCode.scrollTop = inferenceCode.scrollHeight;
-        if (characterCount < inferenceTextLength) inferenceTypingFrame = window.requestAnimationFrame(typeFrame);
+      const render = visibleCount => {
+        let remaining = visibleCount;
+        segments.forEach(segment => {
+          const shown = Math.max(0, Math.min(segment.text.length, remaining));
+          segment.node.nodeValue = segment.text.slice(0, shown);
+          remaining -= shown;
+        });
       };
-      inferenceTypingFrame = window.requestAnimationFrame(typeFrame);
+      let frame = 0;
+      const stop = () => window.cancelAnimationFrame(frame);
+      const start = () => {
+        stop();
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          render(source.length);
+          return;
+        }
+        render(0);
+        if (scroller) scroller.scrollTop = 0;
+        const startedAt = performance.now();
+        const typeFrame = now => {
+          const progress = (now - startedAt) / CAPABILITY_TYPING_MS;
+          const visibleCount = Math.min(source.length, Math.ceil(progress * source.length));
+          render(visibleCount);
+          if (scroller) scroller.scrollTop = scroller.scrollHeight;
+          if (visibleCount < source.length) frame = window.requestAnimationFrame(typeFrame);
+        };
+        frame = window.requestAnimationFrame(typeFrame);
+      };
+      return { start, stop };
+    };
+    const capabilityTypewriters = new Map();
+    document.querySelectorAll('.capability-showcase-panel').forEach(panel => {
+      const typewriter = createCapabilityTypewriter(panel.querySelector('.capability-code'));
+      if (typewriter) capabilityTypewriters.set(panel.id, typewriter);
+    });
+    const playCapabilityCode = activePanelId => {
+      capabilityTypewriters.forEach((typewriter, panelId) => {
+        if (panelId === activePanelId) typewriter.start();
+        else typewriter.stop();
+      });
     };
 
     const capabilityTabs = [...document.querySelectorAll('.capability-showcase-tab')];
@@ -3200,10 +3205,7 @@ SELECT AI_COMPLETE('aliyun/qwen-plus',
       const panel = document.getElementById(`capability-panel-${tab.dataset.capability}`);
       panel.hidden = false;
       panel.classList.add('active');
-      if (tab.dataset.capability === 'search') startHybridTyping();
-      else stopHybridTyping();
-      if (tab.dataset.capability === 'inference') startInferenceTyping();
-      else stopInferenceTyping();
+      playCapabilityCode(panel.id);
       scheduleNextCapability();
     };
     capabilityTabs.forEach((tab, index) => {
@@ -3219,8 +3221,8 @@ SELECT AI_COMPLETE('aliyun/qwen-plus',
     });
     const capabilitySectionObserver = new IntersectionObserver(entries => {
       if (!entries.some(entry => entry.isIntersecting)) return;
-      if (document.getElementById('capability-panel-search')?.classList.contains('active')) startHybridTyping();
-      if (document.getElementById('capability-panel-inference')?.classList.contains('active')) startInferenceTyping();
+      const activePanel = document.querySelector('.capability-showcase-panel.active');
+      if (activePanel) playCapabilityCode(activePanel.id);
     }, { threshold: .25 });
     const capabilitySection = document.getElementById('capabilities');
     if (capabilitySection) capabilitySectionObserver.observe(capabilitySection);
