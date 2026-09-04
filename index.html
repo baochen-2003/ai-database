@@ -461,6 +461,17 @@
     .rank-box span { color: #0150fd; }
     .live-badge { color: #64748b; }
     .live-dot { animation: lakebaseLivePulse 1.8s ease-in-out infinite; }
+    #capability-panel-search .capability-showcase-visual { min-height: 680px; }
+    #capability-panel-search .search-demo { height: 620px; min-height: 620px; padding: 28px 30px; }
+    #capability-panel-search .query-box { height: 330px; min-height: 330px; margin-top: 16px; padding: 18px 20px; overflow: hidden; }
+    .hybrid-sql-code { height: 100%; margin: 0; overflow: hidden; color: #334155; font: 12px/1.55 "SFMono-Regular",Consolas,"Liberation Mono",monospace; white-space: pre; tab-size: 2; }
+    #capability-panel-search .search-routes { margin-top: 18px; grid-template-columns: repeat(4,1fr); gap: 8px; }
+    #capability-panel-search .route { padding: 10px 5px; }
+    #capability-panel-search .route-icon { height: 22px; }
+    #capability-panel-search .merge-line { height: 24px; }
+    #capability-panel-search .merge-line::before { top: 11px; }
+    #capability-panel-search .rank-box { padding: 12px; }
+    #capability-panel-search .live-badge { margin-top: 12px; }
     .window-bar { border-bottom-color: #e5eaf0; background: #f6f8fb; }
     .window-dot { background: #cbd3df; }
     .window-name { color: #64748b; }
@@ -2290,6 +2301,11 @@
       .capability-showcase-copy > p { margin-bottom: 24px; }
       .capability-showcase-list { margin-top: 0; }
       .capability-showcase-visual { order: 2; min-height: 0; height: auto; padding: 16px; }
+      #capability-panel-search .capability-showcase-visual { min-height: 0; }
+      #capability-panel-search .search-demo { height: 500px; min-height: 500px; padding: 20px 16px; }
+      #capability-panel-search .query-box { height: 280px; min-height: 280px; padding: 14px; }
+      .hybrid-sql-code { font-size: 10px; line-height: 1.5; }
+      #capability-panel-search .route { padding: 8px 2px; }
 
       /* Architecture floor: benefits stack, decorative blobs must not force overflow */
       .architecture-content-layout { margin-top: 28px; gap: 16px; grid-template-columns: 1fr; }
@@ -2448,7 +2464,54 @@
             </div>
             <div class="capability-showcase-visual search">
               <div class="mesh-gradient-bg" data-mesh-colors="#ccf8ff,#8accff,#3d8eff,#e5ecff" aria-hidden="true"></div>
-              <div class="feature-demo search-demo"><div class="demo-label">ONE SQL · FIVE SEARCH ROUTES</div><div class="query-box"><span class="sql">SELECT</span> * <span class="sql">FROM</span> incidents<br><span class="sql">WHERE</span> city = '北京' <span class="sql">AND</span> weather = '雨天' ...</div><div class="search-routes"><div class="route"><div class="route-icon">＝</div><b>标量</b><small>B-tree</small></div><div class="route"><div class="route-icon">Aa</div><b>全文</b><small>BM25</small></div><div class="route"><div class="route-icon">◈</div><b>向量</b><small>HNSW</small></div><div class="route"><div class="route-icon">{ }</div><b>JSON</b><small>Index</small></div><div class="route"><div class="route-icon">⌖</div><b>空间</b><small>GIS</small></div></div><div class="merge-line"></div><div class="rank-box"><b>库内多路召回与融合排序</b><span>RRF · WEIGHT SUM · MINMAX NORMALIZER</span></div><div class="live-badge"><span class="live-dot"></span> 实时索引 · 事务提交后立即可见</div></div>
+              <div class="feature-demo search-demo">
+                <div class="demo-label">ONE SQL · FOUR SEARCH ROUTES</div>
+                <div class="query-box"><pre class="hybrid-sql-code" id="hybridSqlCode" aria-label="混合搜索 SQL 示例">SELECT
+  id,
+  title,
+  __score
+FROM
+  HYBRID_SEARCH(
+    TABLE articles,
+    '{
+      "knn": {
+        "field": "embedding",
+        "query_vector": "[0.1, 0.2, 0.3, 0.4]",
+        "k": 10,
+        "filter": {
+          "bool": {
+            "must": [
+              {"range": {"id": {"gte": 1, "lte": 10}}},
+              {"term": {"status": "published"}}
+            ],
+            "filter": [
+              {"json_contains": {"metadata": {"candidate": "{\"category\":\"tech\"}", "path": "$.category"}}},
+              {"json_member_of": {"tags": {"candidate": "database", "path": "$.tech_stack"}}}
+            ]
+          }
+        }
+      },
+      "query": {
+        "bool": {
+          "must": [
+            {"match": {"title": "数据库优化"}}
+          ],
+          "filter": [
+            {"range": {"publish_date": {"gte": "2024-01-01", "lte": "2026-12-31"}}},
+            {"json_overlaps": {"labels": {"candidate": "[\"AI\", \"DB\"]", "path": "$.topics"}}},
+            {"term": {"lang": "zh"}}
+          ]
+        }
+      },
+      "rank": {
+        "rrf": {"rank_constant": 60}
+      },
+      "size": 10
+    }'
+  );</pre></div>
+                <div class="search-routes"><div class="route"><div class="route-icon">＝</div><b>标量</b><small>B-tree</small></div><div class="route"><div class="route-icon">Aa</div><b>全文</b><small>BM25</small></div><div class="route"><div class="route-icon">◈</div><b>向量</b><small>HNSW</small></div><div class="route"><div class="route-icon">{ }</div><b>JSON</b><small>Index</small></div></div>
+                <div class="merge-line"></div><div class="rank-box"><b>库内多路召回与融合排序</b><span>RRF · WEIGHT SUM · MINMAX NORMALIZER</span></div><div class="live-badge"><span class="live-dot"></span> 实时索引 · 事务提交后立即可见</div>
+              </div>
             </div>
           </article>
           <article class="capability-showcase-panel" id="capability-panel-inference" role="tabpanel" hidden>
@@ -2978,6 +3041,29 @@
       if (diagram.contentDocument?.documentElement) restartScenarioDiagram(diagram);
     }));
 
+    const hybridSqlCode = document.getElementById('hybridSqlCode');
+    const hybridSqlSource = hybridSqlCode?.textContent.trim() || '';
+    let hybridTypingFrame = 0;
+    const stopHybridTyping = () => window.cancelAnimationFrame(hybridTypingFrame);
+    const startHybridTyping = () => {
+      if (!hybridSqlCode || !hybridSqlSource) return;
+      stopHybridTyping();
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        hybridSqlCode.textContent = hybridSqlSource;
+        return;
+      }
+      hybridSqlCode.textContent = '';
+      hybridSqlCode.scrollTop = 0;
+      const startedAt = performance.now();
+      const typeFrame = now => {
+        const characterCount = Math.min(hybridSqlSource.length, Math.floor((now - startedAt) / 6));
+        hybridSqlCode.textContent = hybridSqlSource.slice(0, characterCount);
+        hybridSqlCode.scrollTop = hybridSqlCode.scrollHeight;
+        if (characterCount < hybridSqlSource.length) hybridTypingFrame = window.requestAnimationFrame(typeFrame);
+      };
+      hybridTypingFrame = window.requestAnimationFrame(typeFrame);
+    };
+
     const capabilityTabs = [...document.querySelectorAll('.capability-showcase-tab')];
     let capabilityAutoplay;
     const scheduleNextCapability = () => {
@@ -3007,6 +3093,8 @@
       const panel = document.getElementById(`capability-panel-${tab.dataset.capability}`);
       panel.hidden = false;
       panel.classList.add('active');
+      if (tab.dataset.capability === 'search') startHybridTyping();
+      else stopHybridTyping();
       scheduleNextCapability();
     };
     capabilityTabs.forEach((tab, index) => {
@@ -3020,6 +3108,11 @@
         activateCapability(capabilityTabs[nextIndex]);
       });
     });
+    const capabilitySectionObserver = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting) && document.getElementById('capability-panel-search')?.classList.contains('active')) startHybridTyping();
+    }, { threshold: .25 });
+    const capabilitySection = document.getElementById('capabilities');
+    if (capabilitySection) capabilitySectionObserver.observe(capabilitySection);
     scheduleNextCapability();
 
     // Dependency-free animated mesh background for the capability panels.
