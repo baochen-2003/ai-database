@@ -424,22 +424,24 @@
     .agent-core {
       width: 130px; height: 130px; margin: 7px auto 35px; position: relative;
       display: grid; place-items: center; text-align: center; border-radius: 50%;
-      color: #fff; background: var(--ink); box-shadow: 0 0 0 12px #e4e5e8, 0 0 0 13px #d7d9dd;
+      border: 3px solid transparent; color: #071225;
+      background: linear-gradient(#fff,#fff) padding-box,linear-gradient(135deg,#0096fe 0%,#0150fd 52%,#c49ffe 100%) border-box;
+      box-shadow: none;
     }
     .agent-core b { display: block; font-size: 16px; }
-    .agent-core small { color: rgba(255,255,255,.5); font-size: 10px; }
+    .agent-core small { color: rgba(7,18,37,.55); font-size: 10px; }
     .agent-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .agent-card { min-height: 160px; padding: 19px 16px; background: #fff; border-top: 3px solid var(--orange); }
-    .agent-card:nth-child(2) { border-color: var(--blue); }
-    .agent-card:nth-child(3) { border-color: var(--purple); }
+    .agent-card { min-height: 160px; padding: 19px 16px; border: 1px solid #dce4ee; border-top: 3px solid var(--orange); background: #fff; }
+    .agent-card:nth-child(2) { border-top-color: var(--blue); }
+    .agent-card:nth-child(3) { border-top-color: var(--purple); }
     .agent-card .n { color: #afb2b8; font-size: 11px; }
     .agent-card h4 { margin: 12px 0 9px; font-size: 16px; }
     .agent-card p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.65; }
     .agent-card .metric { margin-top: 15px; color: var(--orange); font-size: 11px; font-weight: 650; }
     .agent-card:nth-child(2) .metric { color: var(--blue); }
     .agent-card:nth-child(3) .metric { color: var(--purple); }
-    .isolation { margin-top: 12px; display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; }
-    .isolation span { padding: 4px 7px; color: #777; font-size: 9px; background: #e6e7e9; }
+    .isolation { margin-top: 16px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    .isolation span { min-height: 30px; padding: 6px 10px; border: 1px solid #dce4ee; color: #5f6876; background: #f4f7fb; font-size: 11px; line-height: 16px; }
 
     /* Lakebase-style light demo stages: keep the Paper Shader visible around a solid product UI. */
     .capability-showcase-visual .feature-demo { color: #1e293b; border: .5px solid #dce4ee; background: #fff; box-shadow: 0 20px 55px rgba(1,80,253,.14); }
