@@ -1101,7 +1101,8 @@
     /* Application scenarios restored from LakebasePage.tsx / lakebase.module.scss */
     .scenario-section { padding: 120px 0 60px; background: #fff; }
     .scenario-section-head { width: min(1200px, calc(100% - 200px)); margin: 0 auto; }
-    .scenario-section .center { width: min(760px, 100%); margin: 0 auto 40px; text-align: center; }
+    .scenario-section .center { width: min(1200px, 100%); margin: 0 auto 40px; text-align: center; }
+    .scenario-section .section-title { white-space: nowrap; }
     .scenario-section .center .eyebrow { margin-bottom: 16px; }
     .scenario-tabs { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 0 0 24px; border: 0; }
     .scenario-tab { display: flex; flex: 0 0 auto; align-items: center; gap: 12px; padding: 4px 10px; border: 0; border-radius: 4px; color: inherit; background: transparent; font-size: 15px; font-weight: 500; line-height: 28px; white-space: nowrap; }
@@ -1139,6 +1140,7 @@
     @media (max-width: 1023px) {
       .scenario-section { padding-top: 80px; }
       .scenario-section-head, .scenario-card { width: min(1200px, calc(100% - 80px)); }
+      .scenario-section .section-title { white-space: normal; }
       .scenario-panel { grid-template-columns: 1fr; min-height: 0; padding: 32px 24px; gap: 32px; }
       .scenario-copy { max-width: none; }
       .flow { width: 100%; max-width: none; }
@@ -1147,6 +1149,7 @@
       .scenario-section { padding-top: 80px; }
       .scenario-section-head, .scenario-card { width: calc(100% - 32px); }
       .scenario-section .center { margin-bottom: 28px; }
+      .scenario-section .section-title { white-space: normal; }
       .scenario-tabs { justify-content: center; gap: 8px; overflow-x: auto; }
       .scenario-tab { padding: 4px 8px; font-size: 13px; }
       .scenario-panel { padding: 24px 16px; gap: 24px; }
@@ -2390,7 +2393,7 @@
       <div class="scenario-section-head">
         <div class="center reveal">
           <div class="eyebrow">应用场景</div>
-          <h2 class="section-title">从数据进入，到智能产生<br>一个数据库跑通完整链路</h2>
+          <h2 class="section-title">从数据进入，到智能产生 一个数据库跑通完整链路</h2>
         </div>
         <div class="scenario-tabs reveal" role="tablist">
           <button class="scenario-tab active" role="tab" aria-selected="true" data-tab="rag">企业 RAG 与智能客服</button>
