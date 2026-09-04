@@ -308,11 +308,12 @@
     .capability-showcase-visual.search,
     .capability-showcase-visual.inference,
     .capability-showcase-visual.agent { background: #e7f4ff; }
+    .capability-showcase-visual.inference { background: #eee9ff; }
     /* Dependency-free fallback for the Paper Shader mesh gradient used by Lakebase. */
     .capability-showcase-visual::before, .capability-showcase-visual::after { position: absolute; z-index: 0; inset: -18%; content: ""; pointer-events: none; will-change: transform; }
     .capability-showcase-visual::before { opacity: .72; background: radial-gradient(ellipse 40% 46% at 22% 30%, rgba(17,160,255,.95), transparent 68%), radial-gradient(ellipse 44% 40% at 75% 28%, rgba(199,188,255,.86), transparent 70%), radial-gradient(ellipse 46% 50% at 61% 82%, rgba(119,212,255,.82), transparent 70%); animation: capabilityMeshDrift 18s ease-in-out infinite alternate; }
     .capability-showcase-visual::after { opacity: .5; background: radial-gradient(ellipse 38% 44% at 78% 72%, rgba(48,131,255,.78), transparent 70%), radial-gradient(ellipse 42% 42% at 31% 68%, rgba(255,255,255,.68), transparent 74%); mix-blend-mode: soft-light; animation: capabilityMeshDriftReverse 22s ease-in-out infinite alternate; }
-    .capability-showcase-visual.inference::before { background: radial-gradient(ellipse 42% 44% at 22% 30%, rgba(199,188,255,.96), transparent 68%), radial-gradient(ellipse 44% 46% at 76% 32%, rgba(17,160,255,.83), transparent 70%), radial-gradient(ellipse 48% 50% at 62% 82%, rgba(149,110,255,.76), transparent 72%); }
+    .capability-showcase-visual.inference::before { background: radial-gradient(ellipse 46% 48% at 20% 30%, rgba(231,221,255,.98), transparent 70%), radial-gradient(ellipse 48% 46% at 78% 28%, rgba(199,188,255,.9), transparent 72%), radial-gradient(ellipse 54% 54% at 58% 84%, rgba(149,110,255,.82), transparent 74%); }
     .capability-showcase-visual.agent::before { background: radial-gradient(ellipse 43% 45% at 24% 32%, rgba(119,212,255,.92), transparent 68%), radial-gradient(ellipse 44% 44% at 75% 30%, rgba(48,131,255,.7), transparent 70%), radial-gradient(ellipse 48% 50% at 58% 80%, rgba(199,188,255,.72), transparent 72%); }
     @keyframes capabilityMeshDrift { from { transform: translate3d(-3%, -2%, 0) scale(1); } to { transform: translate3d(4%, 3%, 0) scale(1.1); } }
     @keyframes capabilityMeshDriftReverse { from { transform: translate3d(4%, 3%, 0) scale(1.08); } to { transform: translate3d(-3%, -2%, 0) scale(1); } }
@@ -2563,7 +2564,7 @@ FROM
               </ul>
             </div>
             <div class="capability-showcase-visual inference">
-              <div class="mesh-gradient-bg" data-mesh-colors="#77D4FF,#279AFF,#C7BCFF" data-mesh-theme="table" aria-hidden="true"></div>
+              <div class="mesh-gradient-bg" data-mesh-colors="#f3eeff,#ddd2ff,#c7bcff,#956eff" data-mesh-theme="table" aria-hidden="true"></div>
               <div class="feature-demo code-window"><div class="window-bar"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span class="window-name">rag_pipeline.sql</span></div><div class="code"><div><span class="comment">-- 模型成为数据库对象</span></div><div><span class="kw">CREATE MODEL</span> my_embedding_model</div><div>&nbsp;&nbsp;TYPE <span class="str">'embedding'</span></div><div>&nbsp;&nbsp;PROVIDER <span class="str">'openai'</span>;</div><br><div><span class="comment">-- 文档入库，同时完成向量化</span></div><div><span class="kw">INSERT INTO</span> knowledge_base</div><div><span class="kw">VALUES</span> (title, content,</div><div>&nbsp;&nbsp;<span class="fn">AI_EMBED</span>(content USING my_model));</div><br><div><span class="comment">-- 搜索、重排、答案生成，一条 SQL</span></div><div><span class="kw">SELECT</span> <span class="fn">AI_COMPLETE</span>(</div><div>&nbsp;&nbsp;<span class="fn">AI_RERANK</span>(hybrid_results)</div><div>&nbsp;&nbsp;USING my_llm_model</div><div>) <span class="kw">AS</span> answer;</div></div><div class="security-strip"><div><b>统一</b>权限</div><div><b>ACID</b>事务</div><div><b>完整</b>审计</div><div><b>可追溯</b>血缘</div></div></div>
             </div>
           </article>
