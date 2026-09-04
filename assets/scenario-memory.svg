@@ -1,4 +1,36 @@
 <svg width="552" height="353" viewBox="0 0 552 353" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+      [stroke-dasharray] {
+        animation: scenario-dash-flow 1.2s linear infinite;
+      }
+      svg &gt; g[data-figma-bg-blur-radius] {
+        opacity: 0;
+        transform: translateY(14px) scale(.96);
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: scenario-card-enter .42s cubic-bezier(.22,1,.36,1) forwards;
+      }
+      svg &gt; g[data-figma-bg-blur-radius]:nth-of-type(1) { animation-delay: 450ms; }
+      svg &gt; g[data-figma-bg-blur-radius]:nth-of-type(2) { animation-delay: 0ms; }
+      svg &gt; g[data-figma-bg-blur-radius]:nth-of-type(3) { animation-delay: 90ms; }
+      svg &gt; g[data-figma-bg-blur-radius]:nth-of-type(4) { animation-delay: 180ms; }
+      svg &gt; g[data-figma-bg-blur-radius]:nth-of-type(5) { animation-delay: 270ms; }
+      svg &gt; g[data-figma-bg-blur-radius]:nth-of-type(6) { animation-delay: 360ms; }
+      @keyframes scenario-dash-flow {
+        to { stroke-dashoffset: -11.44; }
+      }
+      @keyframes scenario-card-enter {
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        [stroke-dasharray],
+        svg &gt; g[data-figma-bg-blur-radius] {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
 <foreignObject x="-19.0476" y="277.952" width="590.095" height="94.0952"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(9.52px);clip-path:url(#bgblur_0_1580_3865_clip_path);height:100%;width:100%"></div></foreignObject><g data-figma-bg-blur-radius="19.0476">
 <path d="M7.61914 297.477H544.381C548.326 297.477 551.523 300.674 551.523 304.619V345.381C551.523 349.326 548.326 352.523 544.381 352.523H7.61914C3.67425 352.523 0.476562 349.326 0.476562 345.381V304.619C0.476562 300.674 3.67425 297.477 7.61914 297.477Z" fill="white" fill-opacity="0.6"/>
 <path d="M7.61914 297.477H544.381C548.326 297.477 551.523 300.674 551.523 304.619V345.381C551.523 349.326 548.326 352.523 544.381 352.523H7.61914C3.67425 352.523 0.476562 349.326 0.476562 345.381V304.619C0.476562 300.674 3.67425 297.477 7.61914 297.477Z" stroke="white" stroke-width="0.952381"/>
