@@ -1208,10 +1208,12 @@
     }
 
     /* Hero restored from LakebasePage.tsx / lakebase.module.scss */
-    .lakebase-hero { position: relative; display: flex; min-height: 531px; margin-top: 60px; align-items: center; justify-content: center; padding: 100px; overflow: hidden; background: #dbeeff; }
-    .lakebase-hero-gradient { position: absolute; z-index: 0; top: 50%; left: 50%; width: max(100%, 960px); aspect-ratio: 1; min-height: 100%; transform: translate(-50%, -50%); background: radial-gradient(ellipse 48% 48% at 17% 82%, rgba(26,113,255,.56), transparent 68%), radial-gradient(ellipse 46% 50% at 84% 58%, rgba(157,141,214,.5), transparent 70%), radial-gradient(ellipse 52% 44% at 54% 100%, rgba(120,152,255,.56), transparent 72%), #dbeeff; }
-    .lakebase-hero-mask { position: absolute; z-index: 1; inset: 0; pointer-events: none; background: radial-gradient(ellipse 85% 115% at 50% 0%, #c5e6ff 0%, #c5e6ff 20%, rgba(197,230,255,.5) 55%, rgba(197,230,255,0) 90%); }
-    .lakebase-hero-scene { display: none; }
+    .lakebase-hero { position: relative; display: flex; min-height: 531px; margin-top: 60px; align-items: center; justify-content: center; padding: 100px; overflow: hidden; background: #d7ecff; }
+    .lakebase-hero-flow-bg { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: cover; }
+    .lakebase-hero-flow-bg canvas { display: block; width: 100%; height: 100%; background: transparent; transform: translateZ(0); }
+    .lakebase-hero-flow-bg::before, .lakebase-hero-flow-bg::after { position: absolute; z-index: 1; width: 920px; height: 400px; border-radius: 50%; content: ""; background: #fff; filter: blur(150px); pointer-events: none; }
+    .lakebase-hero-flow-bg::after { top: -20px; left: 80px; }
+    .lakebase-hero-flow-bg::before { top: 60px; left: 160px; }
     .lakebase-hero .product-overview-inner { position: relative; z-index: 3; display: flex; width: min(1000px, 100%); flex-direction: column; align-items: center; text-align: center; }
     .lakebase-hero .product-overview-title { margin: 0; color: #071225; font-size: 44px; font-weight: 600; line-height: 1.4; letter-spacing: 0; }
     .lakebase-hero .product-overview-title > span { display: block; }
@@ -2135,9 +2137,7 @@
 
   <main id="top">
     <section class="product-overview lakebase-hero" aria-labelledby="product-overview-title">
-      <div class="lakebase-hero-gradient" aria-hidden="true"></div>
-      <div class="lakebase-hero-mask" aria-hidden="true"></div>
-      <div class="lakebase-hero-scene" aria-hidden="true"></div>
+      <div class="lakebase-hero-flow-bg" id="lakebaseHeroFlowBg" aria-hidden="true"></div>
       <div class="product-overview-inner">
         <h1 class="product-overview-title" id="product-overview-title">OceanBase AI 数据库<span>面向 AI 应用与 Agent 的多模数据库</span></h1>
         <p class="product-overview-desc">
@@ -2880,6 +2880,19 @@
     consultForm.addEventListener('input', () => {
       consultSuccess.hidden = true;
     });
+  </script>
+  <script type="module">
+    import { mountHeroFlowBg } from './assets/hero-flow-bg.js';
+
+    const heroFlowElement = document.getElementById('lakebaseHeroFlowBg');
+    if (heroFlowElement) {
+      mountHeroFlowBg(heroFlowElement, './assets/hero-flow-bg.png', {
+        amplitudePx: 15,
+        offset: 2,
+        repeat: 2,
+        speed: 0.7
+      });
+    }
   </script>
   <script type="module">
     import {
