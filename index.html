@@ -401,14 +401,15 @@
     .live-dot { width: 5px; height: 5px; border-radius: 50%; background: #1e293b; box-shadow: none; }
 
     /* Code demo */
-    .code-window { min-height: 490px; color: #d7dbe2; background: #111316; box-shadow: 0 28px 70px rgba(17,18,20,.15); }
+    .code-window { display: flex; min-height: 490px; flex-direction: column; overflow: hidden; color: #d7dbe2; background: #111316; box-shadow: 0 28px 70px rgba(17,18,20,.15); }
     .window-bar {
       height: 46px; display: flex; align-items: center; gap: 7px; padding: 0 18px;
       border-bottom: 1px solid rgba(255,255,255,.08);
     }
     .window-dot { width: 8px; height: 8px; border-radius: 50%; background: #41454c; }
     .window-name { margin-left: 8px; color: #6f747c; font-size: 11px; font-family: monospace; }
-    .code { padding: 27px 30px; overflow: auto; font: 12.5px/1.9 "SFMono-Regular", Consolas, monospace; }
+    .code { min-height: 0; flex: 1; padding: 27px 30px; overflow: auto; font: 12.5px/1.9 "SFMono-Regular", Consolas, monospace; }
+    .inference-sql-code { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
     .code .comment { color: #60666e; }
     .code .kw { color: #ff8459; }
     .code .fn { color: #7ea0ff; }
@@ -2568,7 +2569,35 @@ FROM
             </div>
             <div class="capability-showcase-visual inference">
               <div class="mesh-gradient-bg" data-mesh-colors="#f3eeff,#ddd2ff,#c7bcff,#956eff" data-mesh-theme="table" aria-hidden="true"></div>
-              <div class="feature-demo code-window"><div class="window-bar"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span class="window-name">rag_pipeline.sql</span></div><div class="code"><div><span class="comment">-- 模型成为数据库对象</span></div><div><span class="kw">CREATE MODEL</span> my_embedding_model</div><div>&nbsp;&nbsp;TYPE <span class="str">'embedding'</span></div><div>&nbsp;&nbsp;PROVIDER <span class="str">'openai'</span>;</div><br><div><span class="comment">-- 文档入库，同时完成向量化</span></div><div><span class="kw">INSERT INTO</span> knowledge_base</div><div><span class="kw">VALUES</span> (title, content,</div><div>&nbsp;&nbsp;<span class="fn">AI_EMBED</span>(content USING my_model));</div><br><div><span class="comment">-- 搜索、重排、答案生成，一条 SQL</span></div><div><span class="kw">SELECT</span> <span class="fn">AI_COMPLETE</span>(</div><div>&nbsp;&nbsp;<span class="fn">AI_RERANK</span>(hybrid_results)</div><div>&nbsp;&nbsp;USING my_llm_model</div><div>) <span class="kw">AS</span> answer;</div></div><div class="security-strip"><div><b>统一</b>权限</div><div><b>ACID</b>事务</div><div><b>完整</b>审计</div><div><b>可追溯</b>血缘</div></div></div>
+              <div class="feature-demo code-window"><div class="window-bar"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span class="window-name">rag_pipeline.sql</span></div><div class="code"><pre class="inference-sql-code">CALL DBMS_AI_SERVICE.REGISTER_PROVIDER('aliyun', '{
+  "access_key": "sk-xxxx"
+}');
+
+CREATE TABLE knowledge_base (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255),
+  content TEXT,
+  embedding TEXT
+);
+
+INSERT INTO knowledge_base (title, content) VALUES
+  ('向量搜索', '向量搜索可以用于语义搜索，找到相似的内容。');
+
+UPDATE knowledge_base
+SET embedding = AI_EMBED('aliyun/text-embedding-v3', content);
+
+SET @query = "什么是向量搜索？";
+SET @query_vector = AI_EMBED('aliyun/text-embedding-v3', @query);
+
+-- 构建字符串数组格式的文档列表
+SET @candidate_docs = '["OceanBase 是一个强大的数据库系统，支持向量搜索和 AI 函数。", "向量搜索可以用于语义搜索，找到相似的内容。"]';
+
+SELECT AI_RERANK('aliyun/gte-rerank-v2', @query, @candidate_docs) AS ranked_results;
+SELECT AI_COMPLETE('aliyun/qwen-plus',
+  AI_PROMPT('基于以下文档内容，回答用户的问题。
+用户问题：{0}
+相关文档：{1}
+请基于以上文档内容，简洁准确地回答用户的问题。', @query, CAST(JSON_EXTRACT(@candidate_docs, '$[1]') AS CHAR))) AS answer;</pre></div></div>
             </div>
           </article>
           <article class="capability-showcase-panel" id="capability-panel-agent" role="tabpanel" hidden>
